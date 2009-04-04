@@ -1,0 +1,21 @@
+=head1 SYNOPSIS
+
+Master's of Computer Science Intelligent Systems track thesis.
+
+=head1 DESCRIPTION
+
+This repository is to document and track all of my work towards my thesis and
+it's defense. This is also a primarily useful tool for communicating to my
+advisor my progress in an easy to use interface.
+
+None of the work here should be considered complete or functional at any point
+unless documented otherwise.
+
+All work contained in this repository is copyrighted and owned by the author of
+the repository at the time of publication.
+
+=head1 AUTHOR
+
+Jason Switzer <jswitzer at gmail dot com>
+
+=cut
