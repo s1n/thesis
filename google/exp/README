@@ -1,0 +1,22 @@
+=head1 SYNOPSIS
+
+Experimental scripts that are used to test ideas for plausibility.
+
+=head1 DESCRIPTION
+
+This part of the repository is a collection of experimental scripts to see how
+plausible an idea. Consider them "experimental" or "exploritory".
+
+None of the work here should be considered complete or functional at any point
+unless documented otherwise. Generally, none of them are intended to be useful
+beyond a proof of concept and there is no guarantee of fitness (compile or
+runtime).
+
+All work contained in this repository is copyrighted and owned by the author of
+the repository at the time of publication.
+
+=head1 AUTHOR
+
+Jason Switzer <jswitzer at gmail dot com>
+
+=cut
