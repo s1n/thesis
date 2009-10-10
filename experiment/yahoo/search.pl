@@ -3,7 +3,7 @@
 use Modern::Perl;
 use Yahoo::Search;
 
-my $search = Yahoo::Search->new();
+my $search = Yahoo::Search->new(AppId=>'cqL55Q_V34F4bh5L9TOepTBv3l39KWPBC5tH5M8VBUfKXZccpy0NubA7k7CR_cj.CqHRRiIH');
 #pass a higher count?
 my $request = $search->Request(Doc => 'Jason Switzer');
 my $response = $request->Fetch();
