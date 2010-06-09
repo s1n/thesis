@@ -1,0 +1,18 @@
+=head1 SYNOPSIS
+
+Experimentation area.
+
+=head1 DESCRIPTION
+
+This entire directory is designed to be an area where ideas can be toyed with
+without the fear of changing existing work. This will consist mostly of proof of
+concepts that only aim to demonstrate an idea, not provide functionality or
+working code.
+
+In other words, nothing in this directory should be taken serious.
+
+=head1 AUTHOR
+
+Jason Switzer <jswitzer at gmail dot com>
+
+=cut
