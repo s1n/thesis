@@ -1,0 +1,11 @@
+\S+,^dis\S+
+\S+,^im\S+
+\S+,^in\S+
+\S+,^mal\S+
+\S+,^mis\S+
+\S+,^non\S+
+\S+,^un\S+
+\S+,\S+less$
+^l\S+,^ill\S+
+^r\S+,^ir\S+
+\S+less$,\S+ful$
