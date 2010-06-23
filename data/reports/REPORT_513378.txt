@@ -1,0 +1,1 @@
+ON departure; we lost all ground based navigate capabilities. it is possible that we lost this equipment prior to departure. both crew members assumed the other crew member had checked the navigate page of the Flight Management System during PREFLT. the problem was caused by complacency towards company flows.

@@ -1,0 +1,1 @@
+WHILE in training I assigned 13000 to a departing air carrier x and did not realize that a WBOUND air taxi would not be laterally separated before vertical could be achieved.
