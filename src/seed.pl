@@ -1,51 +1,48 @@
 #!/usr/bin/perl
 
-use feature ':5.10';
+package SeedArgs;
+use Modern::Perl;
+use Moose;
+        
+with 'MooseX::Getopt';
 
-#slurp affixes.txt
-open(AFFIX, 'affixes.txt') or
-   die "Unable to open affix pattern file: $!\n";
-@pats = <AFFIX>;
-chomp @pats;
-for $p(@pats) {
-   next if $p =~ /^#/;
-   my @parts = split /,/, $p;
-   my $pp = qr/$parts[0]/;
-   #$patset{$pp} = $parts[1];
-   $patset{$parts[1]} = $parts[0];
-   say "positive: $parts[0]\nnegative: $patset{$parts[0]}";
-}
-close AFFIX;
+has 'dict' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => '/usr/share/dict/words',
+   cmd_flag => 'dict',
+   cmd_aliases => 'd',
+);
 
-#my %words = ('logical' => 0, 'illogical' => 0);
-#slurp the dictionary
-open(DICT, '/usr/share/dict/words') or
-   die "Unable to open dictionary: $!\n";
-while($line = <DICT>) {
-   chomp $line;
-   $dict{$line} = 0;
-}
-close DICT;
+has 'affix' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => 'affix.dat',
+   cmd_flag => 'affix',
+   cmd_aliases => 'a',
+);
 
-open(LOG, '>matches.log') or
-   die "Unable to create match log: $!\n";
+has 'matchlog' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => 'matches.log',
+   cmd_flag => 'matchlog',
+   cmd_aliases => 'm',
+);
+1;
 
-#loop over every word in the dictionary
-while(($key, $sign) = each(%dict)) {
-   #first check if it's a positive word
-   while(($negpat, $pospat) = each(%patset)) {
-      #say "check $key to $pospat" if $key eq 'trust';
-      if($key =~ /$pospat/) {
-         $foo = eval "\"$negpat\"";
-         #say "found $key to $foo" if $key eq 'trust';
-         #now check to see if it's a negative match
-         if(exists $dict{$foo}) {
-            say "positive match of $key to $pospat with $1 finding $foo";
-            say LOG "$key, $foo";
-            $dict{$foo}--;
-            $dict{$key}++;
-         }
-      }
-   }
-}
-close LOG;
+use lib '../lib';
+use AI::Subjectivity::Seed;
+use Data::Dumper;
+
+my $arguments = SeedArgs->new_with_options;
+print Dumper($arguments);
+my $seed = AI::Subjectivity::Seed->new(patterns=>{}, dictionary=>{});
+$seed->args($arguments);
+$seed->read_affixes;
+print Dumper($seed);
+$seed->read_dict;
+$seed->build_asl;
