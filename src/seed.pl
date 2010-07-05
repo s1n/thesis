@@ -21,7 +21,7 @@ has 'affix' => (
    isa => 'Str',
    default => 'affix.dat',
    cmd_flag => 'affix',
-   cmd_aliases => 'a',
+   cmd_aliases => 'x',
 );
 
 has 'matchlog' => (
@@ -32,17 +32,28 @@ has 'matchlog' => (
    cmd_flag => 'matchlog',
    cmd_aliases => 'm',
 );
+
+has 'algo' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => 'ASL',
+   cmd_flag => 'algo',
+   cmd_aliases => 'a',
+);
+
 1;
 
 use lib '../lib';
-use AI::Subjectivity::Seed;
+use AI::Subjectivity::Seed::ASL;
 use Data::Dumper;
+use WordNet::QueryData;
 
 my $arguments = SeedArgs->new_with_options;
-print Dumper($arguments);
-my $seed = AI::Subjectivity::Seed->new(patterns=>{}, dictionary=>{});
+my $seeder = "AI::Subjectivity::Seed::" . $arguments->algo;
+my $seed = $seeder->new(patterns=>{}, dictionary=>{});
 $seed->args($arguments);
 $seed->read_affixes;
 print Dumper($seed);
 $seed->read_dict;
-$seed->build_asl;
+$seed->build;
