@@ -1,0 +1,18 @@
+=head1 SYNOPSIS
+
+Documenation.
+
+=head1 DESCRIPTION
+
+This area stores documentation for this project. Some of the documentation may
+contains the papers for which this work is based. For the papers in which do
+not contain my name, no ownership is implied, inferred, or claimed. Those
+documents were obtained through a Google search and may be removed at the
+request of the original author(s). Their existance here only serves as a
+means of easy access.
+
+=head1 AUTHOR
+
+Jason Switzer <jswitzer at gmail dot com>
+
+=cut
