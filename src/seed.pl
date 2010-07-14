@@ -46,8 +46,8 @@ has 'algo' => (
 
 use lib '../lib';
 use AI::Subjectivity::Seed::ASL;
+use AI::Subjectivity::Seed::WordNet;
 use Data::Dumper;
-use WordNet::QueryData;
 
 my $arguments = SeedArgs->new_with_options;
 my $seeder = "AI::Subjectivity::Seed::" . $arguments->algo;
