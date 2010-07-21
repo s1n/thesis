@@ -24,7 +24,7 @@ sub build {
             my $foo = eval "\"$negpat\"";
             #now check to see if it's a negative match
             if(exists($dictref->{$foo})) {
-               say "positive match of $key to $pospat with $1 finding $foo";
+               #say "positive match of $key to $pospat with $1 finding $foo";
                say LOG "$key, $foo";
                $dictref->{$foo}--;
                $dictref->{$key}++;
