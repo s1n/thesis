@@ -28,7 +28,6 @@ sub build {
 
    #loop over every word in the dictionary
    while(my ($word, $score) = each(%$dictref)) {
-      #first check if it's a positive word
       my @relatedwords;
       for my $pos(qw/n v a/) {
          $self->_trace_word("$word\#$pos", $senses{$pos}, \@relatedwords);
@@ -40,6 +39,7 @@ sub build {
          } else {
             $delta = -1;
          }
+         say "adjusting score $w by $delta";
          my ($trimmed, undef, undef) = split /\#/, $w;
          $dictref->{$trimmed} += $delta;
       }
@@ -69,10 +69,10 @@ sub _trace_word {
 
 sub _query_sense {
    my ($self, $phrase, $sense) = @_;
-   say "query phrase $phrase sense $sense";
+   #say "query phrase $phrase sense $sense";
    my @results = $self->wordnet->querySense($phrase, $sense);
    my $dump = join(", ", @results);
-   say "$sense => $dump" if $dump;
+   #say "$sense => $dump" if $dump;
    @results;
 }
 
@@ -80,7 +80,7 @@ sub _query_word {
    my ($self, $phrase, $word) = @_;
    my @results = $self->wordnet->queryWord($phrase, $word);
    my $dump = join(", ", @results);
-   say "$word => $dump" if $dump;
+   #say "$word => $dump" if $dump;
    @results;
 }
 
