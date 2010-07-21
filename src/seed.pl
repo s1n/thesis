@@ -36,8 +36,8 @@ has 'matchlog' => (
 has 'algo' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
-   isa => 'Str',
-   default => 'ASL',
+   isa => 'ArrayRef',
+   default => sub { ['ASL'] },
    cmd_flag => 'algo',
    cmd_aliases => 'a',
 );
@@ -49,11 +49,22 @@ use AI::Subjectivity::Seed::ASL;
 use AI::Subjectivity::Seed::WordNet;
 use Data::Dumper;
 
+my $readdict = 0;
+my $readpat = 0;
 my $arguments = SeedArgs->new_with_options;
-my $seeder = "AI::Subjectivity::Seed::" . $arguments->algo;
-my $seed = $seeder->new(patterns=>{}, dictionary=>{});
-$seed->args($arguments);
-$seed->read_affixes;
-print Dumper($seed);
-$seed->read_dict;
-$seed->build;
+for my $a(@{$arguments->algo}) {
+   my $seeder = "AI::Subjectivity::Seed::" . $a;
+   say "loading $seeder";
+   my $seed;
+   if(!$readdict && !$readpat) {
+      $seed = $seeder->new(patterns=>{}, dictionary=>{});
+      $seed->args($arguments);
+      $readpat = $seed->read_affixes;
+      $readdict = $seed->read_dict;
+   } else {
+      $seed = $seeder->new(patterns=>$readpat, dictionary=>$readdict);
+      $seed->args($arguments);
+   }
+   #print Dumper($seed);
+   $seed->build;
+}
