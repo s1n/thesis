@@ -23,6 +23,7 @@ sub read_affixes {
       say "+|$parts[0] -|", $parts[1];
    }
    close AFFIX;
+   return $patref;
 }
 
 sub read_dict {
@@ -37,6 +38,7 @@ sub read_dict {
       $dictref->{$line} = 0;
    }
    close DICT;
+   return $dictref;
 }
 
 no Moose;
