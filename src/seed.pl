@@ -6,10 +6,19 @@ use Moose;
         
 with 'MooseX::Getopt';
 
-has 'dict' => (
+has 'thes' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'Str',
+   default => '/usr/share/dict/thesaurus',
+   cmd_flag => 'thes',
+   cmd_aliases => 't',
+);
+
+has 'dict' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'ArrayRef',
    default => '/usr/share/dict/words',
    cmd_flag => 'dict',
    cmd_aliases => 'd',
