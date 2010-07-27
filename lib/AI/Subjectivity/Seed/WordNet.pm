@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package AI::Subjectivity::Seed::WordNet;
 use Modern::Perl;
 use WordNet::QueryData;

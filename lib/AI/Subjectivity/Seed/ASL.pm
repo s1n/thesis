@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package AI::Subjectivity::Seed::ASL;
 use Modern::Perl;
 use Moose;
