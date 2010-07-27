@@ -53,7 +53,7 @@ sub build {
 }
 
 sub _trace_word {
-   my ($self, $root, $sense, $wordref) = @_;
+   my ($self, $root, $sense, $wordsref) = @_;
    #say "tracing $root as $sense";
 
    my @words = $self->_query_sense($root, $sense);
@@ -61,8 +61,8 @@ sub _trace_word {
       my @newwords = $self->_query_sense($w, $sense);
       for my $nw(@newwords) {
          #say "checking newword $nw";
-         push @$wordref, $nw if !grep(/$nw/, @$wordref);
-         #say "dup $nw" if grep(/$nw/, @$wordref);
+         push @$wordsref, $nw if !grep(/$nw/, @$wordsref);
+         #say "dup $nw" if grep(/$nw/, @$wordsref);
       }
    }
 }
