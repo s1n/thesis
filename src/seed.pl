@@ -19,7 +19,7 @@ has 'dict' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'ArrayRef',
-   default => '/usr/share/dict/words',
+   default => sub { ['/usr/share/dict/words'] },
    cmd_flag => 'dict',
    cmd_aliases => 'd',
 );
