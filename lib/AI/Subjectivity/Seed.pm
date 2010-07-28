@@ -9,7 +9,7 @@ has 'args' => (is => 'rw', isa => 'SeedArgs');
 sub read_affixes {
    my $self = shift;
    my $patref = $self->patterns;
-   say "Loading affix patterns from $self->args->affix ...";
+   say "Loading affix patterns from", $self->args->affix, " ...";
    open(AFFIX, $self->args->affix) or
        die "Unable to open affix pattern file ", $self->args->affix, ": $!\n";
    my @pats = <AFFIX>;
