@@ -1,4 +1,5 @@
 package AI::Subjectivity::Seed;
+
 use Modern::Perl;
 use Moose;
 
@@ -41,6 +42,40 @@ sub read_dict {
       close DICT;
    }
    return $dictref;
+}
+
+sub save {
+   my ($self) = @_;
+   my $dictref = $self->dictionary;
+   my $patref = $self->patterns;
+
+   open(LEX, '>' . $self->args->lexicon) or
+      die "Unable to create lexicon: $!\n";
+
+   #loop over every word in the dictionary
+   while(my ($key, $sign) = each(%$dictref)) {
+      say LEX "$key, $sign" if 0 != $sign;
+   }
+
+   close LEX;
+}
+
+sub load {
+   my ($self) = @_;
+   my $dictref = $self->dictionary;
+   my $patref = $self->patterns;
+
+   open(LEX, $self->args->lexicon) or
+      die "Unable to open lexicon: $!\n";
+
+   #loop over every word in the dictionary
+   while(my $line = <LEX>) {
+      my @tokens = split /,/, $line;
+      next if @tokens != 2;
+      $dictref->{$tokens[0]} = $tokens[1];
+   } 
+
+   close LEX;
 }
 
 no Moose;
