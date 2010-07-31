@@ -33,13 +33,13 @@ has 'affix' => (
    cmd_aliases => 'x',
 );
 
-has 'matchlog' => (
+has 'lexicon' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'Str',
-   default => 'matches.log',
-   cmd_flag => 'matchlog',
-   cmd_aliases => 'm',
+   default => 'lexicon.dat',
+   cmd_flag => 'lexicon',
+   cmd_aliases => 'x',
 );
 
 has 'algo' => (
@@ -55,6 +55,7 @@ has 'algo' => (
 
 use lib '../lib';
 use AI::Subjectivity::Seed::ASL;
+use AI::Subjectivity::Seed::MSL;
 use AI::Subjectivity::Seed::WordNet;
 use Data::Dumper;
 
@@ -76,4 +77,5 @@ for my $a(@{$arguments->algo}) {
    }
    #print Dumper($seed);
    $seed->build;
+   $seed->save;
 }
