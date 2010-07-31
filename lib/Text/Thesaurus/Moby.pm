@@ -33,4 +33,18 @@ sub load {
    close THES;
 }
 
+sub synset {
+   my ($self, $rootword) = @_;
+   return @{$self->{thes}->{$rootword}};
+}
+
+sub search {
+   my ($self, $rootword) = @_;
+   my @synset;
+   for my $rw(keys %{$self->{thes}}) {
+      push @synset, $rw if grep { $_ eq $rw } @{$self->{thes}->{$rw}};
+   }
+   return @synset;
+}
+
 1;
