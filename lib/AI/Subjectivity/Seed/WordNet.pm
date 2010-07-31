@@ -1,4 +1,5 @@
 package AI::Subjectivity::Seed::WordNet;
+
 use Modern::Perl;
 use WordNet::QueryData;
 use Moose;
@@ -21,9 +22,6 @@ sub build {
                  'v' => 'syns',
                  'a' => 'also');
 
-   open(LOG, '>' . $self->args->matchlog) or
-      die "Unable to create match log: $!\n";
-
    #loop over every word in the dictionary
    while(my ($word, $score) = each(%$dictref)) {
       my @relatedwords;
@@ -31,23 +29,12 @@ sub build {
          $self->_trace_word("$word\#$pos", $senses{$pos}, \@relatedwords);
       }
       for my $w(@relatedwords) {
-         my $delta = 0;
-         if($score == abs($score)) {
-            $delta = 1;
-         } else {
-            $delta = -1;
-         }
-         say "adjusting score $w by $delta";
+         my $delta = $score == abs($score) ? 1 : -1;
+         #say "adjusting score $w by $delta";
          my ($trimmed, undef, undef) = split /\#/, $w;
          $dictref->{$trimmed} += $delta;
       }
    }
-
-   while(my ($word, $score) = each(%$dictref)) {
-      say LOG "$word, $score";
-   }
-
-   close LOG;
 }
 
 sub _trace_word {
