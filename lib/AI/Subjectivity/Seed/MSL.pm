@@ -20,15 +20,10 @@ sub build {
    my $dictref = $self->dictionary;
    my $patref = $self->patterns;
 
-   open(LOG, '>' . $self->args->matchlog) or
-      die "Unable to create match log: $!\n";
-
    #loop over every word in the dictionary
    while(my ($word, $score) = each(%$dictref)) {
       my @relatedwords;
-      for my $pos(qw/n v a/) {
-         $self->_trace_word("$word\#$pos", $senses{$pos}, \@relatedwords);
-      }
+      $self->_trace_word($word, \@relatedwords);
       for my $w(@relatedwords) {
          my $delta = $score == abs($score) ? 1 : -1;
          say "adjusting score $w by $delta";
@@ -36,12 +31,6 @@ sub build {
          $dictref->{$trimmed} += $delta;
       }
    }
-
-   while(my ($word, $score) = each(%$dictref)) {
-      say LOG "$word, $score";
-   }
-
-   close LOG;
 }
 
 sub _trace_word {
