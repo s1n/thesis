@@ -2,6 +2,7 @@ package Text::Thesaurus::Moby;
 
 use warnings;
 use strict;
+use Data::Dumper;
 use Carp;
 use Text::CSV;
 
@@ -31,11 +32,13 @@ sub load {
       }
    }
    close THES;
+   #print Dumper($self->{thes}->{'freedom'});
 }
 
 sub synset {
    my ($self, $rootword) = @_;
-   return @{$self->{thes}->{$rootword}};
+   #print $self->{thes}->{$rootword} . "\n";
+   return $self->{thes}->{$rootword};
 }
 
 sub search {

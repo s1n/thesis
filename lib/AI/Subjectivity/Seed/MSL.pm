@@ -20,13 +20,16 @@ sub build {
    my $dictref = $self->dictionary;
    my $patref = $self->patterns;
 
+   #load the thesaurus
+   $self->mobyobj->load($self->args->thes);
+
    #loop over every word in the dictionary
    while(my ($word, $score) = each(%$dictref)) {
       my @relatedwords;
       $self->_trace_word($word, \@relatedwords);
       for my $w(@relatedwords) {
-         my $delta = $score == abs($score) ? 1 : -1;
-         say "adjusting score $w by $delta";
+         my $delta = ($score == abs($score)) ? 1 : -1;
+         say "adjusting score $w by $delta" if $delta < 0;
          my ($trimmed, undef, undef) = split /\#/, $w;
          $dictref->{$trimmed} += $delta;
       }
@@ -49,12 +52,15 @@ sub _trace_word {
 }
 
 sub _query_word {
-   my ($self, $phrase, $word) = @_;
+   my ($self, $word) = @_;
 #FIXME integrate Text::Thesaurus::Moby
-   my @results;# = $self->wordnet->queryWord($phrase, $word);
-   my $dump = join(", ", @results);
+   #my @results = $self->wordnet->queryWord($phrase, $word);
+   my $results = $self->mobyobj->synset($word);
+   #my $dump = join(", ", @results);
    #say "$word => $dump" if $dump;
-   @results;
+   return @$results if $results;
+   my @junk;
+   return @junk;
 }
 
 no Moose;
