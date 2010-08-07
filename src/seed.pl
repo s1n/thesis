@@ -64,18 +64,29 @@ my $readpat = 0;
 my $arguments = SeedArgs->new_with_options;
 for my $a(@{$arguments->algo}) {
    my $seeder = "AI::Subjectivity::Seed::" . $a;
-   say "loading $seeder";
+   say "Preparing lexicon based on algorithm: $a ...";
    my $seed;
    if(!$readdict && !$readpat) {
       $seed = $seeder->new(patterns=>{}, dictionary=>{});
       $seed->args($arguments);
       $readpat = $seed->read_affixes;
-      $readdict = $seed->read_dict;
+      if(!-e $arguments->lexicon) {
+         $readdict = $seed->read_dict;
+      } else {
+         eval { $seed->load };
+         $readdict = $seed->dictionary;
+      }
    } else {
       $seed = $seeder->new(patterns=>$readpat, dictionary=>$readdict);
       $seed->args($arguments);
    }
+   eval { $seed->load };
+   if($@) {
+      say "Skipping prior data load of ", $arguments->lexicon;
+   }
    #print Dumper($seed);
+   say "Building lexicon subjectivity scores with algorithm: $a ...";
    $seed->build;
    $seed->save;
+   undef $seed;
 }
