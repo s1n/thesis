@@ -70,6 +70,7 @@ sub load {
 
    #loop over every word in the dictionary
    while(my $line = <LEX>) {
+      chomp $line;
       my @tokens = split /,/, $line;
       next if @tokens != 2;
       $dictref->{$tokens[0]} = $tokens[1];
