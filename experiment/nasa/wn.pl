@@ -8,9 +8,18 @@ my $wn = WordNet::QueryData->new("/usr/share/wordnet/dict/");
 my @words;
 for my $word(@ARGV) {
    my $sense = "also";
+   my %senses = ('n' => 'syns',
+                 'v' => 'syns',
+                 'a' => 'also');
    for my $pos(qw/n a v/) {
-      trace_word($wn, "$word\#$pos", $sense, \@words);
+      trace_word($wn, "$word\#$pos", $senses{$pos}, \@words);
    }
+}
+
+my @cleanwords;
+for my $w(@words) {
+   my ($trimmed, undef, undef) = split /\#/, $w;
+   push @cleanwords, $trimmed;
 }
 
 sub trace_word {
@@ -37,7 +46,7 @@ sub trace_word {
 #   }
 #}
 say "related words:";
-print Dumper(\@words);
+print Dumper(\@cleanwords);
 
 ###
 ### Queries a WordNet synset.
