@@ -34,10 +34,11 @@ sub build {
          next if !$w;
          my $delta = ($dictref->{$root} && 
                       $dictref->{$root} == abs($dictref->{$root})) ? 1 : -1;
-         #say "adjusting score $w by $delta";
-         if($w !~ /\S+/) {
-            say "JUNK: $line";
+
+         if($w eq $self->args->trace || $root eq $self->args->trace) {
+            say "adjusting score $root -> $w by $delta";
          }
+
          $dictref->{$root} += $delta;
       }
       @words = undef;
