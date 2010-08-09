@@ -6,6 +6,15 @@ use Moose;
         
 with 'MooseX::Getopt';
 
+has 'trace' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => '',
+   cmd_flag => 'trace',
+   cmd_aliases => 't',
+);
+
 has 'thes' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
