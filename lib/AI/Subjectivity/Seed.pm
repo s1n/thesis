@@ -73,6 +73,10 @@ sub load {
       chomp $line;
       my @tokens = split /,/, $line;
       next if @tokens != 2;
+      $tokens[0] =~ s/^\s+//;
+      $tokens[0] =~ s/.\s+$//;
+      $tokens[1] =~ s/^\s+//;
+      $tokens[1] =~ s/\s+//;
       $dictref->{$tokens[0]} = $tokens[1];
    } 
 
