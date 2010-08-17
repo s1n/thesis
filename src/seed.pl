@@ -78,7 +78,7 @@ for my $a(@{$arguments->algo}) {
    if(!$readdict && !$readpat) {
       $seed = $seeder->new(patterns=>{}, dictionary=>{});
       $seed->args($arguments);
-      $readpat = $seed->read_affixes;
+      eval { $readpat = $seed->read_affixes };
       if(!-e $arguments->lexicon) {
          $readdict = $seed->read_dict;
       } else {
