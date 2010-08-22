@@ -47,7 +47,6 @@ sub read_dict {
 sub save {
    my ($self) = @_;
    my $dictref = $self->dictionary;
-   my $patref = $self->patterns;
 
    open(LEX, '>' . $self->args->lexicon) or
       die "Unable to create lexicon: $!\n";
@@ -63,7 +62,6 @@ sub save {
 sub load {
    my ($self) = @_;
    my $dictref = $self->dictionary;
-   my $patref = $self->patterns;
 
    open(LEX, $self->args->lexicon) or
       die "Unable to open lexicon: $!\n";
@@ -81,6 +79,27 @@ sub load {
    } 
 
    close LEX;
+}
+
+sub accuracy {
+   my ($self, $other) = @_;
+   my $dictref = $self->dictionary;
+   my $otherdictref = $other->dictionary;
+
+   my ($correct, $total) = (0, 0);
+   #loop over every word in the dictionary
+   while(my ($key, $sign) = each(%$dictref)) {
+      next if(!defined $otherdictref->{$key});
+      $total++;
+      $correct++ if(_sign($sign) == _sign($otherdictref->{$key}));
+   }
+   return $correct / $total;
+}
+
+sub _sign {
+   my $value = shift;
+   return 1 if($value == abs($value));
+   return -1;
 }
 
 no Moose;
