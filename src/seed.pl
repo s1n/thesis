@@ -66,6 +66,7 @@ use lib '../lib';
 use AI::Subjectivity::Seed::ASL;
 use AI::Subjectivity::Seed::MSL;
 use AI::Subjectivity::Seed::WordNet;
+use AI::Subjectivity::Seed::GI;
 use Data::Dumper;
 
 my $readdict = 0;
@@ -99,3 +100,13 @@ for my $a(@{$arguments->algo}) {
    $seed->save;
    undef $seed;
 }
+
+say "Verifying against GI...";
+my $gi = AI::Subjectivity::Seed::GI->new(patterns=>{}, dictionary=>{});
+my $seed = AI::Subjectivity::Seed->new(patterns=>{}, dictionary=>{});
+$gi->args($arguments);
+$gi->build;
+$seed->args($arguments);
+$seed->load;
+my $acc = $seed->accuracy($gi);
+say "Current ", $arguments->lexicon, " accuracy: $acc";
