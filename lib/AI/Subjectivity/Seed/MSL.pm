@@ -35,8 +35,8 @@ sub build {
          next if !$w;
 
          my $delta = 0;
-         if($dictref->{$w}) {
-            $delta = $dictref->{$w} == abs($dictref->{$w}) ? 1 : -1;
+         if(defined $dictref->{$w}) {
+            $delta = $self->signed($dictref->{$w});
          }
 
          if($w eq $self->args->trace || $root eq $self->args->trace) {
@@ -46,7 +46,12 @@ sub build {
          #$dictref->{$root} += $delta;
          $newscores{$root} += $delta;
       }
-      @words = undef;
+
+      my $delta = $self->signed($dictref->{$root});
+      for my $w(@words) {
+         $newscores{$w} += $delta;
+      }
+      undef @words;
    }
 
    while(my ($key, $sign) = each(%newscores)) {
@@ -55,7 +60,7 @@ sub build {
       }
       $dictref->{$key} += $sign;
    }
-   %newscores = undef;
+   undef %newscores;
 }
 
 no Moose;
