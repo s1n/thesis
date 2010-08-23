@@ -55,7 +55,8 @@ has 'algo' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'ArrayRef',
-   default => sub { ['ASL'] },
+   default => sub { [ ] },
+   #default => sub { ['ASL'] },
    cmd_flag => 'algo',
    cmd_aliases => 'a',
 );
