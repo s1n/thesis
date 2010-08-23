@@ -91,13 +91,19 @@ sub accuracy {
    while(my ($key, $sign) = each(%$dictref)) {
       next if(!defined $otherdictref->{$key});
       $total++;
-      $correct++ if(_sign($sign) == _sign($otherdictref->{$key}));
+      #$correct++ if(_sign($sign) == _sign($otherdictref->{$key}));
+      if($self->signed($sign) == $self->signed($otherdictref->{$key})) {
+         $correct++;
+      } else {
+         say "MISLABEL: $key => $sign / $otherdictref->{$key}";
+      }
    }
    return $correct / $total;
 }
 
-sub _sign {
-   my $value = shift;
+sub signed {
+   my ($self, $value) = @_;
+   return 0 if !$value;
    return 1 if($value == abs($value));
    return -1;
 }
