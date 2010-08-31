@@ -31,6 +31,7 @@ sub build {
       @words = undef && next if !$root;
       chomp @words;
       #say "rescoring root: $root";
+      my $rdelta = $self->signed($dictref->{$root});
       for my $w(@words) {
          next if !$w;
 
@@ -43,16 +44,16 @@ sub build {
             say "adjusting score $root -> $w by $delta";
          }
 
-         #$dictref->{$root} += $delta;
-         $newscores{$root} += $delta;
+         $rdelta += $delta;
       }
 
-      my $delta = $self->signed($dictref->{$root});
+      my $delta = $self->signed($rdelta);
       for my $w(@words) {
-         $newscores{$w} += $delta;
+         $newscores{$w} = $delta;
       }
       undef @words;
    }
+   undef $self->{mobyobj};
 
    while(my ($key, $sign) = each(%newscores)) {
       if($key eq $self->args->trace) {
