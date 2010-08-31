@@ -101,13 +101,3 @@ for my $a(@{$arguments->algo}) {
    $seed->save;
    undef $seed;
 }
-
-say "Verifying against GI...";
-my $gi = AI::Subjectivity::Seed::GI->new(patterns=>{}, dictionary=>{});
-my $seed = AI::Subjectivity::Seed->new(patterns=>{}, dictionary=>{});
-$gi->args($arguments);
-$gi->build;
-$seed->args($arguments);
-$seed->load;
-my $acc = $seed->accuracy($gi);
-say "Current ", $arguments->lexicon, " accuracy: $acc";
