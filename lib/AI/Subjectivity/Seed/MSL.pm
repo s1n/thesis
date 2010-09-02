@@ -49,25 +49,27 @@ sub build {
             $delta = $self->signed($lexref->{$w});
          }
 
-         if($w eq $trace || $root eq $trace) {
-            say "adjusting score $root -> $w by $delta";
-         }
-
          $rdelta += $delta;
       }
 
+#FIXME this seems to be wrong. --trace upset, should be -1
       my $delta = $self->signed($rdelta);
+      $newscores{$root} += $delta;
+      say "adjusting score $root to $delta ($newscores{$root})" if $root eq $trace;
       for my $w(@words) {
-         $newscores{$w} = $delta;
+         $newscores{$w} += $delta;
+         if($w eq $trace) {
+            say "adjusting score $root -> $w to $delta ($newscores{$w})";
+         } elsif($root eq $trace) {
+            say "adjusting score $root -> $w to $delta ($newscores{$root})";
+         }
       }
       undef @words;
    }
    undef $self->{mobyobj};
 
    while(my ($key, $sign) = each(%newscores)) {
-      if($key eq $trace) {
-         say "adjusting score $key to $sign";
-      }
+      say "adjusting lexicot $key to $sign" if $key eq $trace;
       $lexref->{$key} += $sign;
    }
    undef %newscores;
