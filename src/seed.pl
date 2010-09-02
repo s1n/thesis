@@ -70,34 +70,26 @@ use AI::Subjectivity::Seed::WordNet;
 use AI::Subjectivity::Seed::GI;
 use Data::Dumper;
 
+my $flag = 0;
 my $readdict = 0;
 my $readpat = 0;
 my $arguments = SeedArgs->new_with_options;
 for my $a(@{$arguments->algo}) {
    my $seeder = "AI::Subjectivity::Seed::" . $a;
+#FIXME should be able to require $a but it fails
+   #require $seeder;
    say "Preparing lexicon based on algorithm: $a ...";
    my $seed;
-   if(!$readdict && !$readpat) {
-      $seed = $seeder->new(patterns=>{}, dictionary=>{});
-      $seed->args($arguments);
-      eval { $readpat = $seed->read_affixes };
-      if(!-e $arguments->lexicon) {
-         $readdict = $seed->read_dict;
-      } else {
-         eval { $seed->load };
-         $readdict = $seed->dictionary;
-      }
-   } else {
-      $seed = $seeder->new(patterns=>$readpat, dictionary=>$readdict);
-      $seed->args($arguments);
-   }
-   eval { $seed->load };
+   $seed = $seeder->new;
+   eval { $seed->load($arguments->lexicon); };
    if($@) {
-      say "Skipping prior data load of ", $arguments->lexicon;
+      say "Failed to load lexicon ", $arguments->lexicon, " skipping";
    }
-   #print Dumper($seed);
+   $seed->read_data_files({thes => $arguments->thes,
+                           dict => $arguments->dict,
+                           affix => $arguments->affix});
    say "Building lexicon subjectivity scores with algorithm: $a ...";
-   $seed->build;
-   $seed->save;
+   $seed->build($arguments->trace);
+   $seed->save($arguments->lexicon);
    undef $seed;
 }

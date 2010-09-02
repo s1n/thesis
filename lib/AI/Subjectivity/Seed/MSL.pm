@@ -3,7 +3,6 @@ package AI::Subjectivity::Seed::MSL;
 use Modern::Perl;
 use Text::Thesaurus::Moby;
 use Moose;
-use Devel::Cycle;
 
 extends 'AI::Subjectivity::Seed';
 with 'AI::Subjectivity::Seeder';
@@ -15,14 +14,24 @@ has 'mobyobj' => (
    default => sub { Text::Thesaurus::Moby->new }
 );
 
-sub build {
-   my $self = shift;
-   my $dictref = $self->dictionary;
-   my $patref = $self->patterns;
-   my %newscores;
+has 'thes' => (
+   is => 'rw',
+   isa => 'Str',
+   default => sub { "" },
+);
 
-   #load the thesaurus
-   $self->mobyobj->load($self->args->thes);
+sub read_data_files {
+   my ($self, $filesref) = @_;
+   if($filesref->{thes}) {
+      $self->mobyobj->load($filesref->{thes});
+   }
+   return 1;
+}
+
+sub build {
+   my ($self, $trace) = @_;
+   my $lexref = $self->lexicon;
+   my %newscores;
 
    for my $line(@{$self->mobyobj->rawdata}) {
       chomp $line;
@@ -31,16 +40,16 @@ sub build {
       @words = undef && next if !$root;
       chomp @words;
       #say "rescoring root: $root";
-      my $rdelta = $self->signed($dictref->{$root});
+      my $rdelta = $self->signed($lexref->{$root});
       for my $w(@words) {
          next if !$w;
 
          my $delta = 0;
-         if(defined $dictref->{$w}) {
-            $delta = $self->signed($dictref->{$w});
+         if(defined $lexref->{$w}) {
+            $delta = $self->signed($lexref->{$w});
          }
 
-         if($w eq $self->args->trace || $root eq $self->args->trace) {
+         if($w eq $trace || $root eq $trace) {
             say "adjusting score $root -> $w by $delta";
          }
 
@@ -56,10 +65,10 @@ sub build {
    undef $self->{mobyobj};
 
    while(my ($key, $sign) = each(%newscores)) {
-      if($key eq $self->args->trace) {
+      if($key eq $trace) {
          say "adjusting score $key to $sign";
       }
-      $dictref->{$key} += $sign;
+      $lexref->{$key} += $sign;
    }
    undef %newscores;
 }

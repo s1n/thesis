@@ -14,16 +14,19 @@ has 'giobj' => (
    default => sub { Text::Thesaurus::GI->new }
 );
 
+sub read_data_files {
+   return 1;
+}
+
 sub build {
-   my $self = shift;
-   $self->build_tags("Pos", 1);
-   $self->build_tags("Neg", -1);
+   my ($self, $trace) = @_;
+   $self->build_tags("Pos", 1, $trace);
+   $self->build_tags("Neg", -1, $trace);
 }
 
 sub build_tags {
-   my ($self, $tag, $delta) = @_;
-   my $dictref = $self->dictionary;
-   my $patref = $self->patterns;
+   my ($self, $tag, $delta, $trace) = @_;
+   my $lexref = $self->lexicon;
    my %newscores;
 
    #load the thesaurus
@@ -34,9 +37,9 @@ sub build_tags {
       my $text = $link->text;
       my @tokens = split /\#/, $text;
       $text = lc shift @tokens;
-      $dictref->{$text} += $delta;
+      $lexref->{$text} += $delta;
 
-      if($text eq $self->args->trace) {
+      if($text eq $trace) {
          say "adjusting score $text by $delta";
       }
    }

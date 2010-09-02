@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package SeedArgs;
+package ScoreArgs;
 use Modern::Perl;
 use Moose;
         
@@ -28,10 +28,12 @@ has 'other' => (
 
 use lib '../lib';
 use Data::Dumper;
+use AI::Subjectivity::Seed;
 
-my $base = AI::Subjectivity::Seed::GI->new(patterns=>{}, dictionary=>{});
-my $other = AI::Subjectivity::Seed->new(patterns=>{}, dictionary=>{});
-$base->load;
-$other->load;
-my $measure = $base->compare($other);
+my $arguments = ScoreArgs->new_with_options;
+my $base = AI::Subjectivity::Seed->new;
+my $other = AI::Subjectivity::Seed->new;
+$base->load($arguments->base);
+$other->load($arguments->other);
+my $measure = $base->accuracy($other);
 print Dumper($measure);

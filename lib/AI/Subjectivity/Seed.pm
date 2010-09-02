@@ -3,56 +3,27 @@ package AI::Subjectivity::Seed;
 use Modern::Perl;
 use Moose;
 
-has 'patterns' => (is => 'rw', isa => 'HashRef');
-has 'dictionary' => (is => 'rw', isa => 'HashRef');
-has 'args' => (is => 'rw', isa => 'SeedArgs');
+has 'lexicon' => (
+   is => 'rw',
+   isa => 'HashRef',
+   default => sub { { } },
+);
 
-sub read_affixes {
-   my $self = shift;
-   my $patref = $self->patterns;
-   say "Loading affix patterns from ", $self->args->affix, " ...";
-   open(AFFIX, $self->args->affix) or
-       die "Unable to open affix pattern file ", $self->args->affix, ": $!\n";
-   my @pats = <AFFIX>;
-   chomp @pats;
-   for my $p(@pats) {
-      next if $p =~ /^#/;
-      my @parts = split /,/, $p;
-      my $pp = qr/$parts[0]/;
-      $patref->{$parts[1]} = $parts[0];
-      #say "+|$parts[0] -|", $parts[1];
-   }
-   close AFFIX;
-   return $patref;
-}
-
-sub read_dict {
-   my $self = shift;
-   my $dictref = $self->dictionary;
-
-   #slurp the dictionary
-   for my $d(@{$self->args->dict}) {
-      say "Loading dictionary $d ...";
-      open(DICT, $d) or
-         die "Unable to open dictionary ", $d, ": $!\n";
-      while(my $line = <DICT>) {
-         chomp $line;
-         $dictref->{$line} = 0;
-      }
-      close DICT;
-   }
-   return $dictref;
-}
+has 'trace' => (
+   is => 'rw',
+   isa => 'Str',
+   default => sub { "" },
+);
 
 sub save {
-   my ($self) = @_;
-   my $dictref = $self->dictionary;
+   my ($self, $lex) = @_;
+   my $lexref = $self->lexicon;
 
-   open(LEX, '>' . $self->args->lexicon) or
+   open(LEX, ">$lex") or
       die "Unable to create lexicon: $!\n";
 
-   #loop over every word in the dictionary
-   while(my ($key, $sign) = each(%$dictref)) {
+   #loop over every word in the lexicon 
+   while(my ($key, $sign) = each(%$lexref)) {
       say LEX "$key, $sign" if 0 != $sign;
    }
 
@@ -60,13 +31,12 @@ sub save {
 }
 
 sub load {
-   my ($self) = @_;
-   my $dictref = $self->dictionary;
+   my ($self, $lex) = @_;
+   my $lexref = $self->lexicon;
 
-   open(LEX, $self->args->lexicon) or
-      die "Unable to open lexicon: $!\n";
+   open(LEX, $lex) or die "Unable to open lexicon: $!\n";
 
-   #loop over every word in the dictionary
+   #loop over every word in the lexicon
    while(my $line = <LEX>) {
       chomp $line;
       my @tokens = split /,/, $line;
@@ -75,7 +45,7 @@ sub load {
       $tokens[0] =~ s/.\s+$//;
       $tokens[1] =~ s/^\s+//;
       $tokens[1] =~ s/\s+//;
-      $dictref->{$tokens[0]} = $tokens[1];
+      $lexref->{$tokens[0]} = $tokens[1];
    } 
 
    close LEX;
@@ -83,19 +53,20 @@ sub load {
 
 sub accuracy {
    my ($self, $other) = @_;
-   my $dictref = $self->dictionary;
-   my $otherdictref = $other->dictionary;
+   #my $measref = Stats::Measure->new;
+   my $lexref = $self->lexicon;
+   my $otherlexref = $other->lexicon;
 
    my ($correct, $total) = (0, 0);
-   #loop over every word in the dictionary
-   while(my ($key, $sign) = each(%$dictref)) {
-      next if(!defined $otherdictref->{$key});
+   #loop over every word in the lexicon
+   while(my ($key, $sign) = each(%$lexref)) {
+      next if(!defined $otherlexref->{$key});
       $total++;
-      #$correct++ if(_sign($sign) == _sign($otherdictref->{$key}));
-      if($self->signed($sign) == $self->signed($otherdictref->{$key})) {
+      #$correct++ if(_sign($sign) == _sign($otherlexref->{$key}));
+      if($self->signed($sign) == $self->signed($otherlexref->{$key})) {
          $correct++;
       } else {
-         say "MISLABEL: $key => $sign / $otherdictref->{$key}";
+         say "MISLABEL: $key => $sign / $otherlexref->{$key}";
       }
    }
    return $correct / $total;
