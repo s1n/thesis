@@ -15,6 +15,12 @@ sub new {
    return $self;
 }
 
+sub unknown {
+   my ($self, $unk) = @_;
+   $self->{unknown} += $unk if $unk;
+   return $self->{unknown};
+}
+
 sub plan {
    my ($self, $plan) = @_;
    $self->{plan} = $plan if $plan;
