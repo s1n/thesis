@@ -41,6 +41,7 @@ sub build {
       chomp @words;
       #say "rescoring root: $root";
       my $rdelta = $self->signed($lexref->{$root});
+      my $log = '';
       for my $w(@words) {
          next if !$w;
 
@@ -52,24 +53,29 @@ sub build {
          $rdelta += $delta;
       }
 
-#FIXME this seems to be wrong. --trace upset, should be -1
       my $delta = $self->signed($rdelta);
       $newscores{$root} += $delta;
-      say "adjusting score $root to $delta ($newscores{$root})" if $root eq $trace;
       for my $w(@words) {
          $newscores{$w} += $delta;
-         if($w eq $trace) {
-            say "adjusting score $root -> $w to $delta ($newscores{$w})";
-         } elsif($root eq $trace) {
-            say "adjusting score $root -> $w to $delta ($newscores{$root})";
-         }
+         my $temp = $lexref->{$w} // 0;
+         my $upordown = '=';
+         $upordown = '+' if $delta > 0;
+         $upordown = '-' if $delta < 0;
+         $log .= "$w($temp|$newscores{$w}|$upordown), ";
+      }
+      if($trace eq "*" || $root eq $trace || ($log && $log =~ /$trace/)) {
+         my $temp = $lexref->{$root} // 0;
+         my $upordown = '=';
+         $upordown = '+' if $delta > 0;
+         $upordown = '-' if $delta < 0;
+         say "$root($temp|$newscores{$root}|$upordown) $log";
       }
       undef @words;
    }
    undef $self->{mobyobj};
 
    while(my ($key, $sign) = each(%newscores)) {
-      say "adjusting lexicot $key to $sign" if $key eq $trace;
+      say "lexicon adjust $key to $sign" if $key eq $trace;
       $lexref->{$key} += $sign;
    }
    undef %newscores;
