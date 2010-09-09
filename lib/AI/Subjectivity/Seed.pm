@@ -1,5 +1,6 @@
 package AI::Subjectivity::Seed;
 
+use Stats::Measure;
 use Modern::Perl;
 use Moose;
 
@@ -53,23 +54,43 @@ sub load {
 
 sub accuracy {
    my ($self, $other) = @_;
-   #my $measref = Stats::Measure->new;
-   my $lexref = $self->lexicon;
-   my $otherlexref = $other->lexicon;
+   my $measref = Stats::Measure->new;
+   my $reference_lexicon = $self->lexicon;
+   my $check_lexicon = $other->lexicon;
+   while(my ($key, $sign) = each(%$reference_lexicon)) {
+      #false positive, missing results are considered mislabeled
+      if(!defined $check_lexicon->{$key}) {
+         say "unknown: $key";
+         $measref->unknown(1);
+         #$measref->falsenegative(1);
+         next;
+      }
 
-   my ($correct, $total) = (0, 0);
-   #loop over every word in the lexicon
-   while(my ($key, $sign) = each(%$lexref)) {
-      next if(!defined $otherlexref->{$key});
-      $total++;
-      #$correct++ if(_sign($sign) == _sign($otherlexref->{$key}));
-      if($self->signed($sign) == $self->signed($otherlexref->{$key})) {
-         $correct++;
+      my $refsign = $self->signed($sign);
+      my $checksign = $self->signed($check_lexicon->{$key});
+      if(0 < $refsign) {
+         if($refsign == $checksign) {
+            #actual positive, true positive (correct label)
+            say "true positive: $key => $refsign / $checksign";
+            $measref->truepositive(1);
+         } else {
+            #actual positive, false negative (wrong label)
+            say "false negative: $key => $refsign / $checksign";
+            $measref->falsenegative(1);
+         }
       } else {
-         say "MISLABEL: $key => $sign / $otherlexref->{$key}";
+         if($refsign == $checksign) {
+            #actual negative, true negative (correct label)
+            say "true negative: $key => $refsign / $checksign";
+            $measref->truenegative(1);
+         } else {
+            #actual negative, false positive (wrong label)
+            say "false positive: $key => $refsign / $checksign";
+            $measref->falsepositive(1);
+         }
       }
    }
-   return $correct / $total;
+   return $measref;
 }
 
 sub signed {
