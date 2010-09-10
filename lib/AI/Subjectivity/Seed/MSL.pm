@@ -63,7 +63,7 @@ sub build {
          $upordown = '-' if $delta < 0;
          $log .= "$w($temp|$newscores{$w}|$upordown), ";
       }
-      if($trace eq "*" || $root eq $trace || ($log && $log =~ /$trace/)) {
+      if($trace eq "*" || $root eq $trace || ($trace && $log && $log =~ /$trace/)) {
          my $temp = $lexref->{$root} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
