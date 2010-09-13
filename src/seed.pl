@@ -11,6 +11,7 @@ has 'trace' => (
    is => 'ro',
    isa => 'Str',
    default => '',
+   documentation => 'Perform a complete debug trace against a word ("*" for everything).',
    cmd_flag => 'trace',
    cmd_aliases => 't',
 );
@@ -20,8 +21,9 @@ has 'thes' => (
    is => 'ro',
    isa => 'Str',
    default => '/usr/share/dict/thesaurus',
+   documentation => 'Thesaurus file, CSV format with first word as root word.',
    cmd_flag => 'thes',
-   cmd_aliases => 't',
+   cmd_aliases => 'h',
 );
 
 has 'dict' => (
@@ -29,6 +31,7 @@ has 'dict' => (
    is => 'ro',
    isa => 'ArrayRef',
    default => sub { ['/usr/share/dict/words'] },
+   documentation => 'Dictionary file, one word per line',
    cmd_flag => 'dict',
    cmd_aliases => 'd',
 );
@@ -38,8 +41,9 @@ has 'affix' => (
    is => 'ro',
    isa => 'Str',
    default => 'affix.dat',
+   documentation => 'Affix pattern file (negative,positive).',
    cmd_flag => 'affix',
-   cmd_aliases => 'x',
+   cmd_aliases => 'f',
 );
 
 has 'lexicon' => (
@@ -47,8 +51,9 @@ has 'lexicon' => (
    is => 'ro',
    isa => 'Str',
    default => 'lexicon.dat',
+   documentation => 'Lexicon to build upon, if already exists.',
    cmd_flag => 'lexicon',
-   cmd_aliases => 'x',
+   cmd_aliases => 'l',
 );
 
 has 'algo' => (
@@ -56,7 +61,7 @@ has 'algo' => (
    is => 'ro',
    isa => 'ArrayRef',
    default => sub { [ ] },
-   #default => sub { ['ASL'] },
+   documentation => 'Algorithm to use: GI, ASL, MSL, WordNet.',
    cmd_flag => 'algo',
    cmd_aliases => 'a',
 );
@@ -93,3 +98,50 @@ for my $a(@{$arguments->algo}) {
    $seed->save($arguments->lexicon);
    undef $seed;
 }
+
+__END__
+
+=head1 NAME
+
+./seed.pl - Seed and build a subjectivity lexicon.
+
+=head1 SYNOPSIS
+
+ #seed with GI data
+ ./seed.pl --algo GI
+
+ #stack the ASL seeded data on the GI data
+ ./seed.pl --dict /usr/share/dict/words --affix ../data/affixes.txt --algo ASL
+
+ #stack the MSL seeded data on the GI+ASL data and trace the word 'bandit'
+ ./seed.pl --thes ../data/moby/mthesaur.txt --algo MSL --trace bandit
+
+ #seed ASL then stack on MSL data afterwards
+ rm lexicon.dat
+ ./seed.pl --dict /usr/share/dict/words --affix ../data/affixes.txt --algo ASL \
+           --thes ../data/moby/mthesaur.txt --algo MSL
+
+=head1 DESCRIPTION
+
+This program is largely responsible for building the seeded lexicon to indicate
+subjectivity. Lexicons can be built in a progressive manner. That is, if an
+existing lexicon is specified, each successive algorithm will build upon the
+prior lexicon. This is referred to as 'stacking'.
+
+The lexicon files will be of the following format:
+
+word_1,score_1
+...
+word_n,score_n
+
+where word_x is any given seeded word and score_x is its matching seeded score.
+A seeded score may be either positive or negative. Words with a score of zero,
+which indicates inconclusiveness, will be omitted. The lower the negative score,
+the more negative the word and similarly with higher positive scores.
+
+Some of the options are specific to the algorithm that needs them. All algorithm
+specific arguments will be passed to the module and processed on an as-need
+basis. For example, specifying B<--thes> to the ASL algorithm will be ignored.
+
+Each individual module will discuss its options, requirements, and usage
+details.
