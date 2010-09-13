@@ -130,9 +130,9 @@ prior lexicon. This is referred to as 'stacking'.
 
 The lexicon files will be of the following format:
 
-word_1,score_1
-...
-word_n,score_n
+ word_1,score_1
+ ...
+ word_n,score_n
 
 where word_x is any given seeded word and score_x is its matching seeded score.
 A seeded score may be either positive or negative. Words with a score of zero,
