@@ -2,14 +2,17 @@ package Stats::Measure;
 
 use warnings;
 use strict;
-use Carp;
 use Math::Trig ':pi';
 
 sub new {
    my $class = shift;
    $class = ref $class if ref $class;
    my $init = shift;
-   my $self = {plan => $init->{plan},
+   my $self = {truepositive => $init->{truepositive},
+               truenegative => $init->{truenegative},
+               falsepositive => $init->{falsepositive},
+               falsenegative => $init->{falsenegative},
+               unknown => $init->{unknown},
               };
    bless $self, $class;
    return $self;
@@ -19,12 +22,6 @@ sub unknown {
    my ($self, $unk) = @_;
    $self->{unknown} += $unk if $unk;
    return $self->{unknown};
-}
-
-sub plan {
-   my ($self, $plan) = @_;
-   $self->{plan} = $plan if $plan;
-   return $self->{plan};
 }
 
 sub truepositive {
@@ -149,3 +146,114 @@ sub dp {
 
 #FIXME add cosine, lesk, dice
 1;
+
+=pod
+
+=head1 NAME
+
+Stats::Measure - basic accuracy measurements.
+
+=head1 SYNOPSIS
+
+ my $stat = Stats::Measure->new;
+ $stat->falsepositive(10);
+ $stat->falsenegative(102);
+ $stat->truepositive(200);
+ $stat->truenegative(22);
+ say "f1-measure: ", $stat->f_measure;
+ say "f2-measure: ", $stat->f_measure(2);
+ say "youden: ", $stat->youden;
+
+=head1 DESCRIPTION
+
+This package is a basic means of reporting statistical accuracy. It acts
+independent of the means that determines correctness, only tracks true/false
+positives/negatives and reports a number of different metrics.
+
+=head1 METHODS
+
+=head2 new
+
+=head2 truepositive(num) / tp(num)
+
+Increments the current truepositive count by B<num>. B<tp> is a synonym for the
+B<truepositive> method.
+
+=head2 truenegative(num) / tn(num)
+
+Increments the current truenegative count by B<num>. B<tn> is a synonym for the
+B<truenegative> method.
+
+=head2 falsepositive(num) / fp(num)
+
+Increments the current falsepositive count by B<num>. B<fp> is a synonym for the
+B<truepositive> method.
+
+=head2 falsenegative(num) / fn(num)
+
+Increments the current falsenegative count by B<num>. B<fn> is a synonym for the
+B<truepositive> method.
+
+=head2 unknown(num)
+
+Increments the current unknown count by B<num>. If a result cannot be determined
+but still should be tracked, add it here.
+
+=head2 f_measure(beta)
+
+Compute the F measure with any arbibrary B<beta> value. See
+L<http://en.wikipedia.org/wiki/F1_score>.
+
+=head2 f1
+
+Computes the F-1 measure. See L<http://en.wikipedia.org/wiki/F1_score>.
+
+=head2 e_measure
+
+Computes the E measure.
+
+=head2 sensitivity
+
+Computes the sensitivity. See
+L<http://en.wikipedia.org/wiki/Sensitivity_and_specificity>.
+
+=head2 specificity
+
+Computes the specificity. See
+L<http://en.wikipedia.org/wiki/Sensitivity_and_specificity>.
+
+=head2 accuracy
+
+Computes the general accuracy measure.
+
+=head2 precision
+
+Computes the precision. See
+L<http://en.wikipedia.org/wiki/Accuracy_and_precision>.
+
+=head2 recall
+
+Computes the precision. See
+L<http://en.wikipedia.org/wiki/Accuracy_and_precision>.
+
+=head2 youden
+
+Computes Youden's J statistic. See
+L<http://en.wikipedia.org/wiki/Youden's_J_statistic>.
+
+=head2 p_minus
+
+Computes the p+ score.
+
+=head2 p_plus
+
+Computes the p- score.
+
+=head2 discriminant_power / dp
+
+Computes the discriminant power. The B<dp> method is a synonym for the
+B<discriminant_power> method.
+
+=cut
+
+__END__
