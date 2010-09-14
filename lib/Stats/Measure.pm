@@ -254,6 +254,16 @@ Computes the p- score.
 Computes the discriminant power. The B<dp> method is a synonym for the
 B<discriminant_power> method.
 
+=head1 AUTHOR
+
+Jason Switzer <s1n@voidreturn.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Jason Switzer. The entire module may be
+redistributed and/or modified under the terms of the MIT license. See
+L<http://www.opensource.org/licenses/mit-license.php>.
+
 =cut
 
 __END__
