@@ -111,7 +111,26 @@ AI::Subjectivity::Seed - base class for all seeding algorithms.
 
 =head1 SYNOPSIS
 
-FIXME
+ #instantiate a new Seed object
+ my $seed = "AI::Subjectivity::Seed::$seeder"->new;
+
+ #load the previous lexicon file, may throw exception (die) upon failure
+ eval { $seed->load($lexicon_file); };
+ if($@) {
+    say "Failed to load lexicon ", $lexicon_file, " skipping";
+ }
+
+ #load all supported data files (some may not be used)
+ $seed->read_data_files({thes => $thes_file,
+                         dict => $dict_file,
+                         affix => $affix_file});
+
+ #run the build, this may take a while
+ $seed->build($trace_word);
+
+ #write the lexicon back to the file
+ $seed->save($lexicon_file);
+ undef $seed;
 
 =head1 DESCRIPTION
 

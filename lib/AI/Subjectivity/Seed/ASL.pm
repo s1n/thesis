@@ -107,7 +107,7 @@ AI::Subjectivity::Seed::ASL - Affix Seel Lexicon generator.
 
 =head1 SYNOPSIS
 
-FIXME
+See L<AI::Subjectivity::Seed>.
 
 =head1 DESCRIPTION
 

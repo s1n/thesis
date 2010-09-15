@@ -92,7 +92,7 @@ AI::Subjectivity::Seed::MSL - seed algorithm based on Macquarie Seed Lexicon.
 
 =head1 SYNOPSIS
 
-FIXME
+See L<AI::Subjectivity::Seed>.
 
 =head1 DESCRIPTION
 

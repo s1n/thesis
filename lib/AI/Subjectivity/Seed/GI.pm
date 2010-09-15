@@ -56,7 +56,7 @@ AI::Subjectivity::Seed::GI - seeds based on the General Inquirer lexicon.
 
 =head1 SYNOPSIS
 
-FIXME
+See L<AI::Subjectivity::Seed>.
 
 =head1 DESCRIPTION
 
