@@ -111,6 +111,8 @@ AI::Subjectivity::Seed - base class for all seeding algorithms.
 
 =head1 SYNOPSIS
 
+FIXME
+
 =head1 DESCRIPTION
 
 All seeding algorithms should follow the same interaction as they share many

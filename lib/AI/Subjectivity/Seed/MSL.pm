@@ -14,11 +14,11 @@ has 'mobyobj' => (
    default => sub { Text::Thesaurus::Moby->new }
 );
 
-has 'thes' => (
-   is => 'rw',
-   isa => 'Str',
-   default => sub { "" },
-);
+#has 'thes' => (
+#   is => 'rw',
+#   isa => 'Str',
+#   default => sub { "" },
+#);
 
 sub read_data_files {
    my ($self, $filesref) = @_;
@@ -83,3 +83,64 @@ sub build {
 
 no Moose;
 1;
+
+=pod
+
+=head1 NAME
+
+AI::Subjectivity::Seed::MSL - seed algorithm based on Macquarie Seed Lexicon.
+
+=head1 SYNOPSIS
+
+FIXME
+
+=head1 DESCRIPTION
+
+Based on the paper by FIXME to implement a thesaurus based algorithm. The paper
+says that if the score of the entire entry for every word added up results in
+a positive subjectivity, every word on the line is labeled as positive. The
+same applies to negative words.
+
+This module will not modify the I<lexicon> in place until after the entire new
+set of scores has been computed. That is, the lexicon is used as a reference
+for determining the scores of the words on the line and the result will be
+stored in a different object. Each word's lexicon score is only changed by a
+difference of 1 at most per line, regardless of how many positive/negative
+words are associated. After the entire I<thes> has been processed, the temporary
+storage will be written to the I<lexicon>.
+
+=head1 ATTRIBUTES
+
+=head2 mobyobj
+
+The L<Text::Thesaurus::Moby> object that assists with parsing and storing of
+the thesaurus data.
+
+=head1 METHODS
+
+=head2 build(trace)
+
+Builds the lexicon according to the paper by FIXME, as described above.
+
+If a I<trace> word is provided, that word will be traced. Passing '*' will
+trace all words.
+
+=head2 read_data_files(files)
+
+Reads all files that are supported by this seeding algorithm. This should be
+run before B<build> as it's considered a setup function. The I<files> structure
+is a hash with the key value pointing to an accessible local filename.
+
+=head1 AUTHOR
+
+Jason Switzer <s1n@voidreturn.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Jason Switzer. The entire module may be
+redistributed and/or modified under the terms of the MIT license. See
+L<http://www.opensource.org/licenses/mit-license.php>.
+
+=cut
+
+__END__
