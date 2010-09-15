@@ -99,7 +99,7 @@ for my $a(@{$arguments->algo}) {
    undef $seed;
 }
 
-__END__
+=pod
 
 =head1 NAME
 
@@ -120,6 +120,10 @@ __END__
  rm lexicon.dat
  ./seed.pl --dict /usr/share/dict/words --affix ../data/affixes.txt --algo ASL \
            --thes ../data/moby/mthesaur.txt --algo MSL
+
+=head1 OPTIONS
+
+Use the B<--help> option to display all options and their meaning.
 
 =head1 DESCRIPTION
 
@@ -145,3 +149,7 @@ basis. For example, specifying B<--thes> to the ASL algorithm will be ignored.
 
 Each individual module will discuss its options, requirements, and usage
 details.
+
+=cut
+
+__END__

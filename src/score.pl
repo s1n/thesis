@@ -51,7 +51,7 @@ say "         p+: ", $measure->p_plus, "\n";
 say "Raw Data:";
 print Dumper($measure);
 
-__END__
+=pod
 
 =head1 NAME
 
@@ -77,3 +77,7 @@ The GI lexicon can be found at
 L<http://www.wjh.harvard.edu/~inquirer/homecat.htm>. This comparison will report
 all metrics that can be computed by L<Stats::Measure> as indicated here:
 L<http://github.com/s1n/thesis/blob/master/lib/Stats/Measure.pm>.
+
+=cut
+
+__END__
