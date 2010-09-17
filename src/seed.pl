@@ -11,7 +11,7 @@ has 'trace' => (
    is => 'ro',
    isa => 'Str',
    default => '',
-   documentation => 'Perform a complete debug trace against a word ("*" for everything).',
+   documentation => 'Debug trace against a word ("*" for everything).',
    cmd_flag => 'trace',
    cmd_aliases => 't',
 );
@@ -66,6 +66,16 @@ has 'algo' => (
    cmd_aliases => 'a',
 );
 
+has 'depth' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Int',
+   default => sub { 2 },
+   documentation => 'Search depth when tracing WordNet.',
+   cmd_flag => 'depth',
+   cmd_aliases => 'e',
+);
+
 1;
 
 use lib '../lib';
@@ -90,9 +100,10 @@ for my $a(@{$arguments->algo}) {
    if($@) {
       say "Failed to load lexicon ", $arguments->lexicon, " skipping";
    }
-   $seed->read_data_files({thes => $arguments->thes,
-                           dict => $arguments->dict,
-                           affix => $arguments->affix});
+   $seed->init({thes => $arguments->thes,
+                dict => $arguments->dict,
+                affix => $arguments->affix,
+                depth => $arguments->depth});
    say "Building lexicon subjectivity scores with algorithm: $a ...";
    $seed->build($arguments->trace);
    $seed->save($arguments->lexicon);
