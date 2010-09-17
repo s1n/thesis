@@ -14,12 +14,6 @@ has 'mobyobj' => (
    default => sub { Text::Thesaurus::Moby->new }
 );
 
-#has 'thes' => (
-#   is => 'rw',
-#   isa => 'Str',
-#   default => sub { "" },
-#);
-
 sub read_data_files {
    my ($self, $filesref) = @_;
    if($filesref->{thes}) {
@@ -35,42 +29,40 @@ sub build {
 
    for my $line(@{$self->mobyobj->rawdata}) {
       chomp $line;
-      my @words = split /,/, $line;
-      my $root = shift @words;
-      @words = undef && next if !$root;
-      chomp @words;
+      my @relatedwords = split /,/, $line;
+      my $root = shift @relatedwords;
+      @relatedwords = undef && next if !$root;
+      chomp @relatedwords;
       #say "rescoring root: $root";
       my $rdelta = $self->signed($lexref->{$root});
       my $log = '';
-      for my $w(@words) {
+      for my $w(@relatedwords) {
          next if !$w;
-
-         my $delta = 0;
-         if(defined $lexref->{$w}) {
-            $delta = $self->signed($lexref->{$w});
-         }
-
-         $rdelta += $delta;
+         $rdelta += $self->signed($lexref->{$w} // 0);
       }
 
       my $delta = $self->signed($rdelta);
       $newscores{$root} += $delta;
-      for my $w(@words) {
+      for my $w(@relatedwords) {
          $newscores{$w} += $delta;
          my $temp = $lexref->{$w} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
-         $log .= "$w($temp|$newscores{$w}|$upordown), ";
+         if($temp != 0 || $w eq $trace) {
+            $log .= "$w($temp|$newscores{$w}|$delta|$upordown), ";
+         }
       }
-      if($trace eq "*" || $root eq $trace || ($trace && $log && $log =~ /$trace/)) {
+
+      if($trace eq "*" || $root eq $trace ||
+         ($trace && grep {$_ eq $trace} @relatedwords)) {
          my $temp = $lexref->{$root} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
-         say "$root($temp|$newscores{$root}|$upordown) $log";
+         say "$root($temp|$newscores{$root}|$rdelta|$upordown), $log";
       }
-      undef @words;
+      undef @relatedwords;
    }
    undef $self->{mobyobj};
 
@@ -106,8 +98,8 @@ set of scores has been computed. That is, the lexicon is used as a reference
 for determining the scores of the words on the line and the result will be
 stored in a different object. Each word's lexicon score is only changed by a
 difference of 1 at most per line, regardless of how many positive/negative
-words are associated. After the entire I<thes> has been processed, the temporary
-storage will be written to the I<lexicon>.
+words are associated. After the entire thesaurus has been processed, the
+temporary storage will be written to the I<lexicon>.
 
 =head1 ATTRIBUTES
 
