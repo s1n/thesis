@@ -21,8 +21,11 @@ has 'wordnet' => (
    default => sub { WordNet::QueryData->new('/usr/share/wordnet/dict/') },
 );
 
-sub read_data_files {
+sub init {
    my ($self, $filesref) = @_;
+   if($filesref->{depth}) {
+      $self->depth($filesref->{depth});
+   }
    return 1;
 }
 
