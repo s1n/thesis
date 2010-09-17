@@ -14,7 +14,7 @@ has 'giobj' => (
    default => sub { Text::Thesaurus::GI->new }
 );
 
-sub read_data_files {
+sub init {
    return 1;
 }
 
@@ -75,9 +75,9 @@ L<Text::Thesaurus::GI> lexicon object that automates the downloading.
 
 =head1 METHODS
 
-=head2 read_data_files
+=head2 init(options) 
 
-Unused. This module has no input files to load.
+Unused. This module has no options to load.
 
 =head2 build(trace)
 

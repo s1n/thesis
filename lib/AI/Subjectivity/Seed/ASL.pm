@@ -18,7 +18,7 @@ has 'patterns' => (
    default => sub { { } },
 );
 
-sub read_data_files {
+sub init {
    my ($self, $filesref) = @_;
    if($filesref->{affix}) {
       $self->read_affixes($filesref->{affix});
@@ -161,11 +161,11 @@ L<DICT FILE>.
 Reads an affix file and maintains it in the B<thes> attribute. See
 L<AFFIX FILE>.
 
-=head2 read_data_files(files)
+=head2 init(options)
 
 Reads all files that are supported by this seeding algorithm. This should be
-run before B<build> as it's considered a setup function. The I<files> structure
-is a hash with the key value pointing to an accessible local filename.
+run before B<build> as it's considered a setup function. The I<options>
+structure is a hash with the key value pointing to an accessible local filename.
 
 =head1 DICT FILE
 

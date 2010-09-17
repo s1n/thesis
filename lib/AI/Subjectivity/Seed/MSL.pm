@@ -14,7 +14,7 @@ has 'mobyobj' => (
    default => sub { Text::Thesaurus::Moby->new }
 );
 
-sub read_data_files {
+sub init {
    my ($self, $filesref) = @_;
    if($filesref->{thes}) {
       $self->mobyobj->load($filesref->{thes});
@@ -117,11 +117,11 @@ Builds the lexicon according to the paper by FIXME, as described above.
 If a I<trace> word is provided, that word will be traced. Passing '*' will
 trace all words.
 
-=head2 read_data_files(files)
+=head2 init(options)
 
 Reads all files that are supported by this seeding algorithm. This should be
-run before B<build> as it's considered a setup function. The I<files> structure
-is a hash with the key value pointing to an accessible local filename.
+run before B<build> as it's considered a setup function. The I<options>
+structure is a hash with the key value pointing to an accessible local filename.
 
 =head1 AUTHOR
 
