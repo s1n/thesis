@@ -34,7 +34,7 @@ my @senses = qw/also glos syns hype inst hypes hypo hasi hypos mmem
 
 my @words = qw/also ants deri part pert vgrp/;
 #my $wn = WordNet::QueryData->new(noload => 1);
-my $wn = WordNet::QueryData->new(dir => $ENV{WNHOME} // "/usr/share/wordnet", noload => 1);
+my $wn = WordNet::QueryData->new(dir => $ENV{WNHOME} // "/usr/share/wordnet/dict/", noload => 1);
 
 if($opts{querysense}) {
    say "Querying $opts{querysense} for $opts{phrase}";

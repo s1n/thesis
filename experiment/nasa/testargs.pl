@@ -5,6 +5,10 @@ use Moose;
         
 with 'MooseX::Getopt';
 
+has '_patterns' => (
+   is => 'rw',
+   isa => 'HashRef');
+
 has 'dict' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -40,3 +44,5 @@ my $seed = SeedApp->new_with_options;
 say "dict = ", $seed->dict;
 say "affix = ", $seed->affix;
 say "matchlog = ", $seed->matchlog;
+$seed->_patterns({'foo' => 3});
+say "patterns = ", $seed->_patterns()->{'foo'};
