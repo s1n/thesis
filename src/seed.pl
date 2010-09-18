@@ -56,6 +56,17 @@ has 'lexicon' => (
    cmd_aliases => 'l',
 );
 
+has 'wnhome' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => '/usr/share/wordnet/dict/',
+   documentation => 'WordNet data path, same as environment variable WNHOME.',
+   cmd_flag => 'wnhome',
+   cmd_aliases => 'w',
+);
+
+
 has 'algo' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -78,21 +89,16 @@ has 'depth' => (
 
 1;
 
-use lib '../lib';
-use AI::Subjectivity::Seed::ASL;
-use AI::Subjectivity::Seed::MSL;
-use AI::Subjectivity::Seed::WordNet;
-use AI::Subjectivity::Seed::GI;
-use Data::Dumper;
-
 my $flag = 0;
 my $readdict = 0;
 my $readpat = 0;
 my $arguments = SeedArgs->new_with_options;
 for my $a(@{$arguments->algo}) {
+   #determine and load the Seed class
    my $seeder = "AI::Subjectivity::Seed::" . $a;
-#FIXME should be able to require $a but it fails
-   #require $seeder;
+   (my $filename = $seeder . '.pm') =~ s/::/\//g;
+   require $filename;
+
    say "Preparing lexicon based on algorithm: $a ...";
    my $seed;
    $seed = $seeder->new;
@@ -103,6 +109,7 @@ for my $a(@{$arguments->algo}) {
    $seed->init({thes => $arguments->thes,
                 dict => $arguments->dict,
                 affix => $arguments->affix,
+                wnhome => $arguments->wnhome,
                 depth => $arguments->depth});
    say "Building lexicon subjectivity scores with algorithm: $a ...";
    $seed->build($arguments->trace);
@@ -160,6 +167,11 @@ basis. For example, specifying B<--thes> to the ASL algorithm will be ignored.
 
 Each individual module will discuss its options, requirements, and usage
 details.
+
+None of the modules for the seeding algorithms are loaded by default. Only the
+the modules specified by the B<--algo> option will be loaded upon request and
+can only be used once per execution. Seeding algorithms currently supported all
+belong in the B<AI::Subjectivity::Seed> namespace and must be found in @INC.
 
 =cut
 
