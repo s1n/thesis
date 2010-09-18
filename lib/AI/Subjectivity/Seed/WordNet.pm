@@ -17,8 +17,8 @@ has 'depth' => (
 has 'wordnet' => (
    is => 'rw',
    isa => 'WordNet::QueryData',
-   lazy => 1,
-   default => sub { WordNet::QueryData->new('/usr/share/wordnet/dict/') },
+   #lazy => 1,
+   #default => sub { WordNet::QueryData->new('/usr/share/wordnet/dict/') },
 );
 
 sub init {
@@ -26,6 +26,8 @@ sub init {
    if($filesref->{depth}) {
       $self->depth($filesref->{depth});
    }
+   my $home = $filesref->{wnhome} // '/usr/share/wordnet/dict/';
+   $self->wordnet(WordNet::QueryData->new($home));
    return 1;
 }
 
