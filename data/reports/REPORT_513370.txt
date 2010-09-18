@@ -1,1 +1,0 @@
-POSSIBLE error in not signing logbook with change of flight number. 'SEQ' had same aircraft on 2 legs. I may have erred in not signing logbook after no items entered when the flight number changed.

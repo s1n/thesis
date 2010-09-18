@@ -1,1 +1,0 @@
-INBOUND propeller (aircraft Y) to CLE at 9000 feet was first inbound. jet (aircraft x) was given 10000 feet; 10 mile in-trail. transmission was blocked and the jet was mistakenly given 9000 feet. traffic was then issued on the propeller and frequency change to approach control was given.

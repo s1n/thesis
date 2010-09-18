@@ -1,1 +1,0 @@
-UNABLE to control cabin altitude during CLBOUT and LEVELOFF at FL250. tried all modes of electronic pressurization system with no help. elected to reinstate the placarded left pack to avoid oxygen mask deployment in passenger cabin. could not descend below 10000 feet due to high terrain. reinstating the left pack regained control of the cabin.
