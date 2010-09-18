@@ -1,7 +1,7 @@
 package AI::Subjectivity::Seed::GI;
 
 use Modern::Perl;
-use Text::Thesaurus::GI;
+use Text::Lexicon::GI;
 use Moose;
 
 extends 'AI::Subjectivity::Seed';
@@ -9,9 +9,9 @@ with 'AI::Subjectivity::Seeder';
 
 has 'giobj' => (
    is => 'rw',
-   isa => 'Text::Thesaurus::GI',
+   isa => 'Text::Lexicon::GI',
    lazy => 1,
-   default => sub { Text::Thesaurus::GI->new }
+   default => sub { Text::Lexicon::GI->new }
 );
 
 sub init {
@@ -62,7 +62,7 @@ See L<AI::Subjectivity::Seed>.
 
 The General Inquirer lexicon was built by humans and is considered authorative,
 though is severely limited in size. This module is responsible for automating
-the download process through L<Text::Thesaurus::GI>. Once the B<build> method
+the download process through L<Text::Lexicon::GI>. Once the B<build> method
 is finished, the B<lexicon> attribute will have only I<POSITIV> and I<NEGATIV>
 tagged words. It is possible to load other tags by directly calling the
 B<build_tags> method; use with caution.
@@ -71,7 +71,7 @@ B<build_tags> method; use with caution.
 
 =head2 giobj
 
-L<Text::Thesaurus::GI> lexicon object that automates the downloading.
+L<Text::Lexicon::GI> lexicon object that automates the downloading.
 
 =head1 METHODS
 
