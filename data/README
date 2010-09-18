@@ -1,0 +1,48 @@
+=head1 SYNOPSIS
+
+MS of CS thesis data files.
+
+=head1 DESCRIPTION
+
+This part of the repository contains data files to use with the various applications
+provided in the entire repo. This data is not likely to ever change and so is stored
+in compressed format.
+
+=head1 LICENSE
+
+Each dataset may belong to someone other than the author of this this repository.
+All materials not owned by this author will have their own licenses. See their
+respective websites for more information. All other materials are licensed under
+the MIT liecense.
+
+=head1 FILES
+
+=head2 reports.tar.bz
+
+Sample reports from the NASA dataset.
+
+=head2 moby.sh
+
+Downloads the Moby thesaurus and prepares it for use.
+
+=head2 split.pl
+
+Splits the data from the reports.tar.bz into individual files.
+
+=head2 mpqa.tar.bz
+
+MPQA manually labelled lexicon. See L<>.
+
+=head2 text.tar.bz
+
+Complete set of sentences from the entire NASA dataset.
+
+=head2 affixes.dat
+
+Affix patterns used by the L<AI::Subjectivity::Seed::ASL> algorithm.
+
+=head1 AUTHOR
+
+Jason Switzer <jswitzer at voidreturn dot com>
+
+=cut
