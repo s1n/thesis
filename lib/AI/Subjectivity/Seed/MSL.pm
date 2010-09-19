@@ -125,7 +125,7 @@ structure is a hash with the key value pointing to an accessible local filename.
 
 =head1 AUTHOR
 
-Jason Switzer <s1n@voidreturn.com>
+Jason Switzer <s1n at voidreturn dot com>
 
 =head1 COPYRIGHT AND LICENSE
 
