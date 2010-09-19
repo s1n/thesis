@@ -87,8 +87,20 @@ has 'depth' => (
    cmd_aliases => 'e',
 );
 
+has 'mpqa' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => sub { 'mpqa.txt' },
+   documentation => 'Specify MPQA lexicon file.',
+   cmd_flag => 'mpqa',
+   cmd_aliases => 'm',
+);
+
+
 1;
 
+use lib '../lib';
 my $flag = 0;
 my $readdict = 0;
 my $readpat = 0;
@@ -110,6 +122,7 @@ for my $a(@{$arguments->algo}) {
                 dict => $arguments->dict,
                 affix => $arguments->affix,
                 wnhome => $arguments->wnhome,
+                mpqa => $arguments->mpqa,
                 depth => $arguments->depth});
    say "Building lexicon subjectivity scores with algorithm: $a ...";
    $seed->build($arguments->trace);
