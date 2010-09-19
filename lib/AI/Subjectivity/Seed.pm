@@ -100,6 +100,13 @@ sub signed {
    return -1;
 }
 
+sub _normalize {
+   my ($self, $string) = @_;
+   chomp $$string;
+   $$string =~ s/_/ /g;
+   $$string = lc $$string;
+}
+
 no Moose;
 1;
 
