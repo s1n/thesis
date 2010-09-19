@@ -65,7 +65,6 @@ Text::Thesaurus::Moby - loads the Moby thesaurus lexicon.
 
 =head1 SYNOPSIS
 
-FIXME
    #load the thesaurus
    my $mobyobj = Text::Thesaurus::Moby->new;
    $mobyobj->load('../data/moby/thes/mthesaur.txt');
@@ -81,8 +80,8 @@ FIXME
    }
 
    #example 2 - definition count
-   say "'accord' synset ", $giobj->synset('accord');
-   say "'accord' search ", $giobj->search('accord');
+   say "'accord' synset ", $mobyobj->synset('accord');
+   say "'accord' search ", $mobyobj->search('accord');
 
 =head1 DESCRIPTION
 
@@ -121,16 +120,16 @@ parameters:
 
 =head2 load(file)
 
-Begin processing the lexicon B<file>. This is fast as it only ties to the
+Begin processing the lexicon I<file>. This is fast as it only ties to the
 thesaurus.
 
 =head2 synset(root)
 
-Return the synset, or synonym set, relating to the root word B<root>.
+Return the synset, or synonym set, relating to the root word I<root>.
 
 =head2 search(word)
 
-Search for B<word> and return all root words that are associated to it.
+Search for I<word> and return all root words that are associated to it.
 
 =head2 file(setname)
 
@@ -147,12 +146,12 @@ This method returns the crucial lexicon and should be used with care. This will
 be in all lowercase seperated by commas. The first word is considered the 'root'
 word and all subsequent words are related to some degree.
 
-If no B<data> parameter is specified, this is an accessor. Otherwise, it will
-set the current raw data to B<data>.
+If no I<data> parameter is specified, this is an accessor. Otherwise, it will
+set the current raw data to I<data>.
 
 =head1 AUTHOR
 
-Jason Switzer <s1n@voidreturn.com>
+Jason Switzer <s1n at voidreturn dot com>
 
 =head1 COPYRIGHT AND LICENSE
 
