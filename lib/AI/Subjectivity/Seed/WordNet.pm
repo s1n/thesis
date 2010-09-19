@@ -47,19 +47,21 @@ sub build {
                               $senses{$pos},
                               \@relatedwords,
                               $self->depth);
-         #$self->_trace_word("$root\#$pos", $senses{$pos}, \@relatedwords);
       }
 
+      #finished tracing wordnet at this point, safe to modify @relatedwords
       my $rdelta = $self->signed($lexref->{$root});
       my $log = '';
       for my $w(@relatedwords) {
          next if !$w;
+         $self->_normalize(\$w);
          $rdelta += $self->signed($lexref->{$w} // 0);
       }
 
       my $delta = $self->signed($rdelta);
       $newscores{$root} += $delta;
       for my $w(@relatedwords) {
+         $self->_normalize(\$w);
          $newscores{$w} += $delta;
          my $temp = $lexref->{$w} // 0;
          my $upordown = '=';
@@ -83,6 +85,7 @@ sub build {
    undef $self->{wordnet};
 
    while(my ($key, $score) = each(%newscores)) {
+      $self->_normalize(\$key);
       say "lexicon adjust $key to $score" if $key eq $trace;
       $lexref->{$key} += $score
    }
@@ -91,7 +94,7 @@ sub build {
 
 sub _trace_word_r {
    my ($self, $root, $sense, $wordsref, $depth) = @_;
-   say "===========> tracing $root";
+   #say "===========> tracing $root";
    return if(0 >= $depth);
    if(1 >= $depth) {
       my @words = $self->_query_sense($root, $sense);
