@@ -20,11 +20,11 @@ has 'patterns' => (
 
 sub init {
    my ($self, $filesref) = @_;
-   if($filesref->{affix}) {
+   if(defined $filesref->{affix}) {
       $self->read_affixes($filesref->{affix});
    }
 
-   if($filesref->{dict}) {
+   if(defined $filesref->{dict}) {
       $self->read_dict($filesref->{dict});
    }
    return 1;
@@ -45,7 +45,7 @@ sub build {
             my $foo = eval "\"$negpat\"";
             #now check to see if it's a negative match
             if(exists($dictref->{$foo})) {
-               if($foo eq $trace) {
+               if($foo eq $trace or $key eq $trace) {
                   say "positive match of $key to $pospat with $1 finding $foo";
                }
                $lexref->{$foo}--;
