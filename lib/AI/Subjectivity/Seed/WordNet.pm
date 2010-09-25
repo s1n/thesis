@@ -17,8 +17,11 @@ has 'depth' => (
 has 'wordnet' => (
    is => 'rw',
    isa => 'WordNet::QueryData',
-   #lazy => 1,
-   #default => sub { WordNet::QueryData->new('/usr/share/wordnet/dict/') },
+);
+
+has 'aslalgo' => (
+   is => 'rw',
+   isa => 'AI::Subjectivity::Seed::ASL',
 );
 
 sub init {
@@ -28,11 +31,20 @@ sub init {
    }
    my $home = $filesref->{wnhome} // '/usr/share/wordnet/dict/';
    $self->wordnet(WordNet::QueryData->new($home));
+   if(defined $filesref->{dict} && @{$filesref->{dict}}) {
+      use AI::Subjectivity::Seed::ASL;
+      $self->aslalgo(AI::Subjectivity::Seed::ASL->new);
+      $self->aslalgo->init({dict => $filesref->{dict}});
+   }
    return 1;
 }
 
 sub build {
    my ($self, $trace) = @_;
+   my $wordsrc = $self->lexicon;
+   if(defined $self->aslalgo && $self->aslalgo->dictionary) {
+      $wordsrc = $self->aslalgo->dictionary;
+   }
    my $lexref = $self->lexicon;
    my %senses = ('n' => 'syns',
                  'v' => 'syns',
@@ -40,7 +52,9 @@ sub build {
    my %newscores;
 
    #loop over every word in the lexicon
-   while(my ($root, $score) = each(%$lexref)) {
+   #while(my ($root, $score) = each(%$lexref)) {
+   while(my ($root, $score) = each(%$wordsrc)) {
+      say "recursive root word trace: $root";
       my @relatedwords;
       for my $pos(qw/n v a/) {
          $self->_trace_word_r("$root\#$pos",
@@ -52,8 +66,10 @@ sub build {
       #finished tracing wordnet at this point, safe to modify @relatedwords
       my $rdelta = $self->signed($lexref->{$root});
       my $log = '';
+      $newscores{$root} = $lexref->{$root};
       for my $w(@relatedwords) {
          next if !$w;
+         $newscores{$w} = $lexref->{$w};
          $self->_normalize(\$w);
          $rdelta += $self->signed($lexref->{$w} // 0);
       }
@@ -87,7 +103,7 @@ sub build {
    while(my ($key, $score) = each(%newscores)) {
       $self->_normalize(\$key);
       say "lexicon adjust $key to $score" if $key eq $trace;
-      $lexref->{$key} += $score
+      $lexref->{$key} = $score
    }
    undef %newscores;
 }
