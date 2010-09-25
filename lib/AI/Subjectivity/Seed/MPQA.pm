@@ -19,6 +19,8 @@ sub init {
    my ($self, $filesref) = @_;
    if($filesref->{mpqa}) {
       $self->mpqaobj->load($filesref->{mpqa});
+   } else {
+      say "MPQA input data file not specified.";
    }
    return 1;
 }
