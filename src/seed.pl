@@ -30,7 +30,8 @@ has 'dict' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'ArrayRef',
-   default => sub { ['/usr/share/dict/words'] },
+   default => sub { [ ] },
+   #default => sub { ['/usr/share/dict/words'] },
    documentation => 'Dictionary file, one word per line',
    cmd_flag => 'dict',
    cmd_aliases => 'd',
@@ -91,19 +92,15 @@ has 'mpqa' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'Str',
-   default => sub { 'mpqa.txt' },
+   default => sub { '' },
    documentation => 'Specify MPQA lexicon file.',
    cmd_flag => 'mpqa',
    cmd_aliases => 'm',
 );
 
-
 1;
 
 use lib '../lib';
-my $flag = 0;
-my $readdict = 0;
-my $readpat = 0;
 my $arguments = SeedArgs->new_with_options;
 for my $a(@{$arguments->algo}) {
    #determine and load the Seed class
@@ -118,13 +115,15 @@ for my $a(@{$arguments->algo}) {
    if($@) {
       say "Failed to load lexicon ", $arguments->lexicon, " skipping";
    }
-   $seed->init({thes => $arguments->thes,
-                dict => $arguments->dict,
-                affix => $arguments->affix,
-                wnhome => $arguments->wnhome,
-                mpqa => $arguments->mpqa,
-                depth => $arguments->depth});
+
    say "Building lexicon subjectivity scores with algorithm: $a ...";
+   my $ret = $seed->init({thes => $arguments->thes,
+                          dict => $arguments->dict,
+                          affix => $arguments->affix,
+                          wnhome => $arguments->wnhome,
+                          mpqa => $arguments->mpqa,
+                          depth => $arguments->depth});
+   exit(-1) if !$ret;
    $seed->build($arguments->trace);
    $seed->save($arguments->lexicon);
    undef $seed;
@@ -185,6 +184,47 @@ None of the modules for the seeding algorithms are loaded by default. Only the
 the modules specified by the B<--algo> option will be loaded upon request and
 can only be used once per execution. Seeding algorithms currently supported all
 belong in the B<AI::Subjectivity::Seed> namespace and must be found in @INC.
+
+=head1 OPTIONS
+
+=head2 --dict|d
+
+Sets the dictionary file. Used by ASL and WordNet.
+
+=head2 --thes|h
+
+Sets the thesaurus file. Used by MSL.
+
+=head2 --trace|t
+
+Enables tracing of a word. Used by all algorithms.
+
+=head2 --affix|f
+
+Sets the affix pattern file. Used by ASL.
+
+=head2 --lexicon|l
+
+Sets the lexicon file name; if preexisting file, uses it as the basis for
+execution. Changes made to determine the subjectivity lexicon will be written
+to this file after each Seed algorithm finishes. Used by all algorithms.
+
+=head2 --wnhome|w
+
+Sets the WordNet data home directory. Used by WordNet.
+
+=head2 --algo|a
+
+Set the algorithm to use. May specify any number of algorithms to use, in the
+same order as specified on the command line.
+
+=head2 --depth|e
+
+Sets the word discovery depth. Used by WordNet.
+
+=head2 --mpqa|m
+
+Sets the MPQA source data file. Used by MPQA.
 
 =cut
 
