@@ -1,0 +1,4 @@
+{
+   "algo": [ "MPQA" ],
+   "mpqa": "../data/MPQA/subjclueslen1-HLTEMNLP05.tff"
+}
