@@ -4,6 +4,7 @@ package SeedArgs;
 use Modern::Perl;
 use Moose;
         
+with 'MooseX::SimpleConfig';
 with 'MooseX::Getopt';
 
 has 'trace' => (
@@ -31,7 +32,6 @@ has 'dict' => (
    is => 'ro',
    isa => 'ArrayRef',
    default => sub { [ ] },
-   #default => sub { ['/usr/share/dict/words'] },
    documentation => 'Dictionary file, one word per line',
    cmd_flag => 'dict',
    cmd_aliases => 'd',
@@ -76,6 +76,7 @@ has 'algo' => (
    documentation => 'Algorithm to use: GI, ASL, MSL, WordNet.',
    cmd_flag => 'algo',
    cmd_aliases => 'a',
+   required => 1,
 );
 
 has 'depth' => (
@@ -186,6 +187,11 @@ can only be used once per execution. Seeding algorithms currently supported all
 belong in the B<AI::Subjectivity::Seed> namespace and must be found in @INC.
 
 =head1 OPTIONS
+
+=head2 --configfile
+
+Sets the configuration file, that uses Config::Any formats, to load all
+options from.
 
 =head2 --dict|d
 
