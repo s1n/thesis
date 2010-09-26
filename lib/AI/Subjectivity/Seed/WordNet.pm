@@ -69,14 +69,15 @@ sub build {
       $newscores{$root} = $lexref->{$root};
       for my $w(@relatedwords) {
          next if !$w;
-         $newscores{$w} = $lexref->{$w};
          $self->_normalize(\$w);
+         $newscores{$w} = $lexref->{$w};
          $rdelta += $self->signed($lexref->{$w} // 0);
       }
 
       my $delta = $self->signed($rdelta);
       $newscores{$root} += $delta;
       for my $w(@relatedwords) {
+         next if !$w;
          $self->_normalize(\$w);
          $newscores{$w} += $delta;
          my $temp = $lexref->{$w} // 0;
