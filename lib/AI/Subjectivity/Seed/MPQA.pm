@@ -42,7 +42,7 @@ sub build {
 
       #print debug / trace code
       if($trace eq "*" || $root eq $trace) {
-         my $temp = $lexref->{$root} // 0;
+         my $temp = $lexref->{$root}->{score} // 0;
          my $newtemp = $temp + $delta;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
@@ -50,7 +50,7 @@ sub build {
          say "$root($temp|$newtemp|$delta|$upordown)";
       }
 
-      $lexref->{$root} += $delta;
+      $lexref->{$root}->{score} += $delta;
    }
    undef $self->{mpqaobj};
 }

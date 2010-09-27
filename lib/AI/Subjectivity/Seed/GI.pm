@@ -37,7 +37,7 @@ sub build_tags {
       my $text = $link->text;
       my @tokens = split /\#/, $text;
       $text = lc shift @tokens;
-      $lexref->{$text} += $delta;
+      $lexref->{$text}->{score} += $delta;
 
       if($text eq $trace) {
          say "adjusting score $text by $delta";

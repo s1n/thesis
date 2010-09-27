@@ -24,8 +24,10 @@ sub save {
       die "Unable to create lexicon: $!\n";
 
    #loop over every word in the lexicon 
-   while(my ($key, $sign) = each(%$lexref)) {
-      say LEX "$key, $sign" if 0 != $sign;
+   while(my ($key, $scoreref) = each(%$lexref)) {
+      if(0 != $scoreref->{score}) {
+         say LEX "$key, $scoreref->{score}, ", $scoreref->{weight} // 1;
+      }
    }
 
    close LEX;
@@ -41,12 +43,11 @@ sub load {
    while(my $line = <LEX>) {
       chomp $line;
       my @tokens = split /,/, $line;
-      next if @tokens != 2;
-      $tokens[0] =~ s/^\s+//;
-      $tokens[0] =~ s/.\s+$//;
-      $tokens[1] =~ s/^\s+//;
-      $tokens[1] =~ s/\s+//;
-      $lexref->{$tokens[0]} = $tokens[1];
+      next if @tokens != 3;
+      $tokens[$_] =~ s/^\s+// for 0..$#tokens;
+      $tokens[$_] =~ s/.\s+$// for 0..$#tokens;
+      $lexref->{$tokens[0]}->{score} = $tokens[1];
+      $lexref->{$tokens[0]}->{weight} = $tokens[2];
    } 
 
    close LEX;
@@ -57,7 +58,7 @@ sub accuracy {
    my $measref = Stats::Measure->new;
    my $reference_lexicon = $self->lexicon;
    my $check_lexicon = $other->lexicon;
-   while(my ($key, $sign) = each(%$reference_lexicon)) {
+   while(my ($key, $scoreref) = each(%$reference_lexicon)) {
       #false positive, missing results are considered mislabeled
       if(!defined $check_lexicon->{$key}) {
          say "unknown: $key";
@@ -66,8 +67,8 @@ sub accuracy {
          next;
       }
 
-      my $refsign = $self->signed($sign);
-      my $checksign = $self->signed($check_lexicon->{$key});
+      my $refsign = $self->signed($scoreref->{score});
+      my $checksign = $self->signed($check_lexicon->{$key}->{score});
       if(0 < $refsign) {
          if($refsign == $checksign) {
             #actual positive, true positive (correct label)

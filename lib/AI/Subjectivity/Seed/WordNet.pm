@@ -64,14 +64,14 @@ sub build {
       }
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
-      my $rdelta = $self->signed($lexref->{$root});
+      my $rdelta = $self->signed($lexref->{$root}->{score});
       my $log = '';
-      $newscores{$root} = $lexref->{$root};
+      $newscores{$root} = $lexref->{$root}->{score};
       for my $w(@relatedwords) {
          next if !$w;
          $self->_normalize(\$w);
-         $newscores{$w} = $lexref->{$w};
-         $rdelta += $self->signed($lexref->{$w} // 0);
+         $newscores{$w} = $lexref->{$w}->{score};
+         $rdelta += $self->signed($lexref->{$w}->{score} // 0);
       }
 
       my $delta = $self->signed($rdelta);
@@ -80,7 +80,7 @@ sub build {
          next if !$w;
          $self->_normalize(\$w);
          $newscores{$w} += $delta;
-         my $temp = $lexref->{$w} // 0;
+         my $temp = $lexref->{$w}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -91,7 +91,7 @@ sub build {
 
       if($trace eq "*" || $root eq $trace ||
          ($trace && grep {$_ eq $trace} @relatedwords)) {
-         my $temp = $lexref->{$root} // 0;
+         my $temp = $lexref->{$root}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -104,7 +104,7 @@ sub build {
    while(my ($key, $score) = each(%newscores)) {
       $self->_normalize(\$key);
       say "lexicon adjust $key to $score" if $key eq $trace;
-      $lexref->{$key} = $score
+      $lexref->{$key}->{score} = $score
    }
    undef %newscores;
 }

@@ -34,20 +34,20 @@ sub build {
       @relatedwords = undef && next if !$root;
       chomp @relatedwords;
       #say "rescoring root: $root";
-      $newscores{$root} = $lexref->{$root};
-      my $rdelta = $self->signed($lexref->{$root});
+      $newscores{$root} = $lexref->{$root}->{score};
+      my $rdelta = $self->signed($lexref->{$root}->{score});
       my $log = '';
       for my $w(@relatedwords) {
          next if !$w;
-         $newscores{$w} = $lexref->{$w};
-         $rdelta += $self->signed($lexref->{$w} // 0);
+         $newscores{$w} = $lexref->{$w}->{score};
+         $rdelta += $self->signed($lexref->{$w}->{score} // 0);
       }
 
       my $delta = $self->signed($rdelta);
       $newscores{$root} += $delta;
       for my $w(@relatedwords) {
          $newscores{$w} += $delta;
-         my $temp = $lexref->{$w} // 0;
+         my $temp = $lexref->{$w}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -58,7 +58,7 @@ sub build {
 
       if($trace eq "*" || $root eq $trace ||
          ($trace && grep {$_ eq $trace} @relatedwords)) {
-         my $temp = $lexref->{$root} // 0;
+         my $temp = $lexref->{$root}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -70,7 +70,7 @@ sub build {
 
    while(my ($key, $sign) = each(%newscores)) {
       say "lexicon adjust $key to $sign" if $key eq $trace;
-      $lexref->{$key} = $sign;
+      $lexref->{$key}->{score} = $sign;
    }
    undef %newscores;
 }
