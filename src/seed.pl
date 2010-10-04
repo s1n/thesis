@@ -4,7 +4,11 @@ package SeedArgs;
 use Modern::Perl;
 use Moose;
         
-with 'MooseX::SimpleConfig';
+eval {
+   require MooseX::SimpleConfig;
+   with 'MooseX::SimpleConfig' if !$@;
+};
+
 with 'MooseX::Getopt';
 
 has 'trace' => (
@@ -67,7 +71,6 @@ has 'wnhome' => (
    cmd_aliases => 'w',
 );
 
-
 has 'algo' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -99,9 +102,22 @@ has 'mpqa' => (
    cmd_aliases => 'm',
 );
 
+has 'boost' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Enables boosting by specifying a lexicon to boost from.',
+   cmd_flag => 'boost',
+   cmd_aliases => 'b',
+);
+
 1;
 
 use lib '../lib';
+use AI::Subjectivity::Seed;
+use AI::Subjectivity::Boost;
+
 my $arguments = SeedArgs->new_with_options;
 for my $a(@{$arguments->algo}) {
    #determine and load the Seed class
@@ -125,8 +141,22 @@ for my $a(@{$arguments->algo}) {
                           mpqa => $arguments->mpqa,
                           depth => $arguments->depth});
    exit(-1) if !$ret;
+
+   #build and save the lexicon
    $seed->build($arguments->trace);
+
+   #boost the results if asked for
+   if($arguments->boost) {
+      say "Boosting results against ", $arguments->boost;
+      my $ref = AI::Subjectivity::Seed->new;
+      $ref->load($arguments->boost);
+      my $b = AI::Subjectivity::Boost->new;
+      $b->offline_boost($seed, $ref);
+   }
+
+   say "Saving lexicon to ", $arguments->lexicon;
    $seed->save($arguments->lexicon);
+   
    undef $seed;
 }
 
