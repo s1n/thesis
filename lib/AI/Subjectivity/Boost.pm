@@ -1,4 +1,4 @@
-package AI::Subjectivity::Seed;
+package AI::Subjectivity::Boost;
 
 use Modern::Perl;
 use Moose;
@@ -16,8 +16,8 @@ has 'alpha' => (
 );
 
 sub offline_boost {
-   my ($self, $other) = @_;
-   my $reflex = $self->lexicon;
+   my ($self, $reference, $other) = @_;
+   my $reflex = $reference->lexicon;
    my $checklex = $other->lexicon;
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
@@ -39,11 +39,12 @@ sub offline_boost {
 
       #snag the signed score values
       my $refsign = $reflex->signed($scoreref->{score});
-      my $checksign = $reflex->signed($check_lexicon->{$key}->{score});
+      my $checksign = $reflex->signed($checklex->{$key}->{score});
 
       #identify correct classifications and recompute the weights
       my $expsign = $refsign == $checksign ? 1 : -1;
-      $scoreref->{weight} *= exp($self->alpha * $expsign;
+      $checklex->{$key}->{weight} *= exp($self->alpha * $expsign);
+      say "recomputed weights for '", $key, "' => ", $checklex->{$key}->{score}, ", ", $checklex->{$key}->{weight};
    }
 }
 
