@@ -24,9 +24,10 @@ sub save {
       die "Unable to create lexicon: $!\n";
 
    #loop over every word in the lexicon 
+   my $keycount = scalar keys %$lexref;
    while(my ($key, $scoreref) = each(%$lexref)) {
       if(0 != $scoreref->{score}) {
-         say LEX "$key, $scoreref->{score}, ", $scoreref->{weight} // 1;
+         say LEX "$key, $scoreref->{score}, ", $scoreref->{weight} // (1 / $keycount);
       }
    }
 
