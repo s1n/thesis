@@ -12,34 +12,42 @@ has 'error' => (
 has 'alpha' => (
    is => 'rw',
    isa => 'Num',
-   default => sub { 0.0 },
+   default => sub { 1.0 },
 );
 
 sub offline_boost {
    my ($self, $reference, $other) = @_;
    my $reflex = $reference->lexicon;
    my $checklex = $other->lexicon;
+   my $keycount = scalar keys %$reflex;
+
+   #mark all the errors
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
       next if !defined $checklex->{$key}->{score};
 
       #snag the signed score values
-      my $refsign = $reflex->signed($scoreref->{score});
-      my $checksign = $reflex->signed($checklex->{$key}->{score});
+      my $refsign = $reference->signed($scoreref->{score});
+      my $checksign = $reference->signed($checklex->{$key}->{score});
 
       #identify misclassifications and total the error
       if($refsign != $checksign) {
-         $self->error($self->error + $scoreref->{weight});
+         $self->error($self->error + ($scoreref->{weight} // (1 / $keycount)));
+         say "mislabeled '$key', error = ", $self->error;
       }
    }
 
+   #compute alpha
+   $self->alpha(0.5 * log((1 - $self->error) / $self->error));
+
+   #recompute weights
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
       next if !defined $checklex->{$key}->{score};
 
       #snag the signed score values
-      my $refsign = $reflex->signed($scoreref->{score});
-      my $checksign = $reflex->signed($checklex->{$key}->{score});
+      my $refsign = $reference->signed($scoreref->{score});
+      my $checksign = $reference->signed($checklex->{$key}->{score});
 
       #identify correct classifications and recompute the weights
       my $expsign = $refsign == $checksign ? 1 : -1;
