@@ -112,52 +112,64 @@ has 'boost' => (
    cmd_aliases => 'b',
 );
 
+has 'iter' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'rw',
+   isa => 'Str',
+   default => sub { 1 },
+   documentation => 'Sets the number of boosting iterations, useless otherwise.',
+   cmd_flag => 'boost-iter',
+   cmd_aliases => 'T',
+);
+
 1;
 
-use lib '../lib';
 use AI::Subjectivity::Seed;
 use AI::Subjectivity::Boost;
 
 my $arguments = SeedArgs->new_with_options;
+$arguments->iter(0) if !$arguments->boost;
 for my $a(@{$arguments->algo}) {
-   #determine and load the Seed class
-   my $seeder = "AI::Subjectivity::Seed::" . $a;
-   (my $filename = $seeder . '.pm') =~ s/::/\//g;
-   require $filename;
+   for(0..$arguments->iter) {
+      #determine and load the Seed class
+      my $seeder = "AI::Subjectivity::Seed::" . $a;
+      (my $filename = $seeder . '.pm') =~ s/::/\//g;
+      require $filename;
 
-   say "Preparing lexicon based on algorithm: $a ...";
-   my $seed;
-   $seed = $seeder->new;
-   eval { $seed->load($arguments->lexicon); };
-   if($@) {
-      say "Failed to load lexicon ", $arguments->lexicon, " skipping";
-   }
+      say "Preparing lexicon based on algorithm: $a ...";
+      my $seed;
+      $seed = $seeder->new;
+      eval { $seed->load($arguments->lexicon); };
+      if($@) {
+         say "Failed to load lexicon ", $arguments->lexicon, " skipping";
+      }
 
-   say "Building lexicon subjectivity scores with algorithm: $a ...";
-   my $ret = $seed->init({thes => $arguments->thes,
-                          dict => $arguments->dict,
-                          affix => $arguments->affix,
-                          wnhome => $arguments->wnhome,
-                          mpqa => $arguments->mpqa,
-                          depth => $arguments->depth});
-   exit(-1) if !$ret;
+      say "Building lexicon subjectivity scores with algorithm: $a ...";
+      my $ret = $seed->init({thes => $arguments->thes,
+                             dict => $arguments->dict,
+                             affix => $arguments->affix,
+                             wnhome => $arguments->wnhome,
+                             mpqa => $arguments->mpqa,
+                             depth => $arguments->depth});
+      exit(-1) if !$ret;
 
-   #build and save the lexicon
-   $seed->build($arguments->trace);
+      #build and save the lexicon
+      $seed->build($arguments->trace);
 
-   #boost the results if asked for
-   if($arguments->boost) {
-      say "Boosting results against ", $arguments->boost;
-      my $ref = AI::Subjectivity::Seed->new;
-      $ref->load($arguments->boost);
-      my $b = AI::Subjectivity::Boost->new;
-      $b->offline_boost($seed, $ref);
-   }
+      #boost the results if asked for
+      if($arguments->boost) {
+         say "Boosting results against ", $arguments->boost;
+         my $ref = AI::Subjectivity::Seed->new;
+         $ref->load($arguments->boost);
+         my $b = AI::Subjectivity::Boost->new;
+         $b->offline_boost($seed, $ref);
+      }
 
-   say "Saving lexicon to ", $arguments->lexicon;
-   $seed->save($arguments->lexicon);
+      say "Saving lexicon to ", $arguments->lexicon;
+      $seed->save($arguments->lexicon);
    
-   undef $seed;
+      undef $seed;
+   }
 }
 
 =pod

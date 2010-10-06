@@ -28,7 +28,6 @@ has 'test' => (
 
 1;
 
-use lib '../lib';
 use Data::Dumper;
 use AI::Subjectivity::Seed;
 
