@@ -44,11 +44,11 @@ sub load {
    while(my $line = <LEX>) {
       chomp $line;
       my @tokens = split /,/, $line;
-      next if @tokens != 3;
+      next if @tokens < 1;
       $tokens[$_] =~ s/^\s+// for 0..$#tokens;
       $tokens[$_] =~ s/.\s+$// for 0..$#tokens;
-      $lexref->{$tokens[0]}->{score} = $tokens[1];
-      $lexref->{$tokens[0]}->{weight} = $tokens[2];
+      $lexref->{$tokens[0]}->{score} = $tokens[1] // 0;
+      $lexref->{$tokens[0]}->{weight} = $tokens[2] // 0;
    } 
 
    close LEX;
