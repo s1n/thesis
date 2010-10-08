@@ -109,6 +109,22 @@ sub _normalize {
    $$string = lc $$string;
 }
 
+sub weigh {
+   my ($self, $wordref) = @_;
+   my $nom = $wordref->{score} // 0;
+   my $denom = $wordref->{weight} // 1;
+   return $nom / $denom;
+}
+
+sub normalize_weight {
+   my ($self, $weight, $precount, $postcount, $isnew) = @_;
+   my $newcount = $postcount - $precount;
+   return $weight * ($newcount / $postcount) if $isnew;
+   return $weight * ($precount / $postcount);
+   #return $weight * ($newwordcount / $newtotalwordcount) if $isnew;
+   #return $weight * (($newtotalwordcount - $newwordcount) / $newtotalwordcount);
+}
+
 no Moose;
 1;
 
