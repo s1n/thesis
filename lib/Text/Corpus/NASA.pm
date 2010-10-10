@@ -2,11 +2,7 @@ package Text::Corpus::NASA;
 
 use warnings;
 use strict;
-use Data::Dumper;
-use Fcntl qw/O_RDONLY/;
-use Tie::File;
 use Text::ExtractWords qw(words_list);
-use Text::Sentence qw(split_sentences);
 use POSIX qw(locale_h);
 
 sub new {
@@ -15,29 +11,36 @@ sub new {
    my $init = shift;
    my $self = {file => $init->{file},
                minwordlen => $init->{minwordlen} // 2,
-               maxwordlen => $init->{maxwordlen} // 30,
-               raw => []};
+               maxwordlen => $init->{maxwordlen} // 30};
    bless $self, $class;
-   $self->load($init->{file}) if $init->{file};
+   $self->open($init->{file}) if $init->{file};
    return $self;
 }
 
-sub load {
-   my ($self, $lex) = @_;
-   $self->file($lex);
-   my @filedata;
-   tie @filedata, 'Tie::File', $self->file, mode => O_RDONLY;
+sub fd {
+   my ($self, $fd) = @_;
+   $self->{fd} = $fd if $fd;
+   return $self->{fd};
+}
 
-   for my $line(@filedata) {
-      chomp $line;
-      my @words;
-      words_list(\@words, $line, {minwordlen => $self->minwordlen,
-                                  maxwordlen => $self->maxwordlen});
+sub open {
+   my ($self, $file) = @_;
+   $self->file($file);
+   open $self->{fd}, $file or die "Unable to open $file: $!\n";
+   return 1;
+}
 
-      push @{$self->rawdata}, @words;
+sub next {
+   my ($self, $array) = @_;
+   my $fd = $self->fd;
+   my $line = <$fd>;
+   if(!defined $line) {
+      close $self->fd;
+      return undef;
    }
-   untie @filedata;
-   undef @filedata;
+   words_list($array, $line, {minwordlen => $self->minwordlen,
+                              maxwordlen => $self->maxwordlen});
+   return @$array;
 }
 
 sub _normalize {
@@ -66,19 +69,13 @@ sub file {
    return $self->{file};
 }
 
-sub rawdata {
-   my ($self, $data) = @_;
-   $self->{raw} = $data if $data;
-   return $self->{raw};
-}
-
 1;
 
 =pod
 
 =head1 NAME
 
-Text::Lexicon::MPQA - loads the MPQA lexicon.
+Text::Corpus::NASA - loads the NASA flight log corpus.
 
 =head1 SYNOPSIS
 

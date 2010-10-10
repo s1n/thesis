@@ -34,17 +34,20 @@ use Text::Corpus::NASA;
 
 my $arguments = ScoreArgs->new_with_options;
 my $ref = AI::Subjectivity::Seed->new;
-my $corpus = Text::Corpus::NASA->new;
+my $corpus = Text::Corpus::NASA->new({file => $arguments->corpus});
 $ref->load($arguments->lexicon);
-$corpus->load($arguments->corpus);
 
-for my $cw(@{$corpus->rawdata}) {
-   say "Checking corpus word: $cw...";
-   if(defined $ref->lexicon->{$cw}) {
-      print "$cw => ";
-      print $ref->lexicon->{$cw}->{score}, ", ";
-      print $ref->lexicon->{$cw}->{weight}, "\n";
+my @words;
+while($corpus->next(\@words)) {
+   for my $cw(@words) {
+      say "Checking corpus word: $cw...";
+      if(defined $ref->lexicon->{$cw}) {
+         print "$cw => ";
+         print $ref->lexicon->{$cw}->{score}, ", ";
+         print $ref->lexicon->{$cw}->{weight}, "\n";
+      }
    }
+   @words = [];
 }
 
 =pod
