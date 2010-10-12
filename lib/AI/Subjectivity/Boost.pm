@@ -32,10 +32,18 @@ sub offline_boost {
 
       #identify misclassifications and total the error
       if($refsign != $checksign) {
+         my $junk = $self->error;
          $self->error($self->error + ($scoreref->{weight} // (1 / $keycount)));
-         say "mislabeled '$key', error = ", $self->error;
+         say "mislabeled '$key', ",
+             $scoreref->{score},
+             ", ",
+             $scoreref->{weight},
+             ", error = ",
+             $self->error;
       }
    }
+
+   die "Error: ", $self->error, "\n" if $self->error > 1;
 
    #compute alpha
    $self->alpha(0.5 * log((1 - $self->error) / $self->error));
