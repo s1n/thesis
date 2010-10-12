@@ -117,12 +117,10 @@ sub weigh {
 }
 
 sub normalize_weight {
-   my ($self, $weight, $precount, $postcount, $isnew) = @_;
+   my ($self, $weight, $precount, $postcount) = @_;
    my $newcount = $postcount - $precount;
-   return $weight * ($newcount / $postcount) if $isnew;
+   return ($newcount / $postcount) if !defined $weight;
    return $weight * ($precount / $postcount);
-   #return $weight * ($newwordcount / $newtotalwordcount) if $isnew;
-   #return $weight * (($newtotalwordcount - $newwordcount) / $newtotalwordcount);
 }
 
 no Moose;
