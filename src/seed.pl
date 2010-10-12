@@ -130,7 +130,6 @@ use AI::Subjectivity::Boost;
 my $arguments = SeedArgs->new_with_options;
 $arguments->iter(0) if !$arguments->boost;
 for my $a(@{$arguments->algo}) {
-   for(0..$arguments->iter) {
       #determine and load the Seed class
       my $seeder = "AI::Subjectivity::Seed::" . $a;
       (my $filename = $seeder . '.pm') =~ s/::/\//g;
@@ -144,32 +143,33 @@ for my $a(@{$arguments->algo}) {
          say "Failed to load lexicon ", $arguments->lexicon, " skipping";
       }
 
-      say "Building lexicon subjectivity scores with algorithm: $a ...";
-      my $ret = $seed->init({thes => $arguments->thes,
-                             dict => $arguments->dict,
-                             affix => $arguments->affix,
-                             wnhome => $arguments->wnhome,
-                             mpqa => $arguments->mpqa,
-                             depth => $arguments->depth});
-      exit(-1) if !$ret;
-
-      #build and save the lexicon
-      $seed->build($arguments->trace);
-
       #boost the results if asked for
       if($arguments->boost) {
-         say "Boosting results against ", $arguments->boost;
-         my $ref = AI::Subjectivity::Seed->new;
-         $ref->load($arguments->boost);
-         my $b = AI::Subjectivity::Boost->new;
-         $b->offline_boost($seed, $ref);
+         for(0..$arguments->iter) {
+            say "Building lexicon subjectivity scores with algorithm: $a ...";
+            my $ret = $seed->init({thes => $arguments->thes,
+                                   dict => $arguments->dict,
+                                   affix => $arguments->affix,
+                                   wnhome => $arguments->wnhome,
+                                   mpqa => $arguments->mpqa,
+                                   depth => $arguments->depth});
+            exit(-1) if !$ret;
+
+            #build and save the lexicon
+            $seed->build($arguments->trace);
+
+            say "Boosting results against ", $arguments->boost;
+            my $ref = AI::Subjectivity::Seed->new;
+            $ref->load($arguments->boost);
+            my $b = AI::Subjectivity::Boost->new;
+            $b->offline_boost($seed, $ref);
+         }
       }
 
       say "Saving lexicon to ", $arguments->lexicon;
       $seed->save($arguments->lexicon);
    
       undef $seed;
-   }
 }
 
 =pod
