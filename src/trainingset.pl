@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package ScoreArgs;
+package TrainingSetArgs;
 use Modern::Perl;
 use Moose;
         
@@ -51,7 +51,7 @@ has 'percent' => (
 use Data::Dumper;
 use AI::Subjectivity::Seed;
 
-my $arguments = ScoreArgs->new_with_options;
+my $arguments = TrainingSetArgs->new_with_options;
 my $ref = AI::Subjectivity::Seed->new;
 my $test = AI::Subjectivity::Seed->new;
 my $train = AI::Subjectivity::Seed->new;

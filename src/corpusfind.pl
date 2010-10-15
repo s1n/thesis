@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package ScoreArgs;
+package CorpusArgs;
 use Data::Dumper;
 use Modern::Perl;
 use Moose;
@@ -53,7 +53,7 @@ use Data::Dumper;
 use AI::Subjectivity::Seed;
 use Text::Corpus::NASA;
 
-my $arguments = ScoreArgs->new_with_options;
+my $arguments = CorpusArgs->new_with_options;
 my $ref = AI::Subjectivity::Seed->new;
 my $corpus = Text::Corpus::NASA->new({file => $arguments->corpus});
 $ref->load($arguments->lexicon);
