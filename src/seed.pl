@@ -122,13 +122,23 @@ has 'iter' => (
    cmd_aliases => 'T',
 );
 
+has 'apikey' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'rw',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Sets the Wordnik API key',
+   cmd_flag => 'apikey',
+   cmd_aliases => 'a',
+);
+
 1;
 
 use AI::Subjectivity::Seed;
 use AI::Subjectivity::Boost;
 
 my $arguments = SeedArgs->new_with_options;
-$arguments->iter(0) if !$arguments->boost;
+$arguments->iter(1) if !$arguments->boost;
 for my $a(@{$arguments->algo}) {
       #determine and load the Seed class
       my $seeder = "AI::Subjectivity::Seed::" . $a;
@@ -143,21 +153,22 @@ for my $a(@{$arguments->algo}) {
          say "Failed to load lexicon ", $arguments->lexicon, " skipping";
       }
 
-      #boost the results if asked for
-      if($arguments->boost) {
-         for(0..$arguments->iter) {
-            say "Building lexicon subjectivity scores with algorithm: $a ...";
-            my $ret = $seed->init({thes => $arguments->thes,
-                                   dict => $arguments->dict,
-                                   affix => $arguments->affix,
-                                   wnhome => $arguments->wnhome,
-                                   mpqa => $arguments->mpqa,
-                                   depth => $arguments->depth});
-            exit(-1) if !$ret;
+      for(1..$arguments->iter) {
+         say "Building lexicon subjectivity scores with algorithm: $a ...";
+         my $ret = $seed->init({thes => $arguments->thes,
+                                dict => $arguments->dict,
+                                affix => $arguments->affix,
+                                wnhome => $arguments->wnhome,
+                                mpqa => $arguments->mpqa,
+                                apikey => $arguments->apikey,
+                                depth => $arguments->depth});
+         exit(-1) if !$ret;
 
-            #build and save the lexicon
-            $seed->build($arguments->trace);
+         #build and save the lexicon
+         $seed->build($arguments->trace);
 
+         #boost the results if asked for
+         if($arguments->boost) {
             say "Boosting results against ", $arguments->boost;
             my $ref = AI::Subjectivity::Seed->new;
             $ref->load($arguments->boost);
