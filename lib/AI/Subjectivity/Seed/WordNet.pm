@@ -59,8 +59,8 @@ sub build {
       for my $pos(qw/n v a/) {
          $self->_trace_word_r("$root\#$pos",
                               $senses{$pos},
-                              \@relatedwords,
-                              $self->depth);
+                              $self->depth,
+                              \@relatedwords);
       }
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
@@ -110,7 +110,7 @@ sub build {
 }
 
 sub _trace_word_r {
-   my ($self, $root, $sense, $wordsref, $depth) = @_;
+   my ($self, $root, $sense, $depth, $wordsref) = @_;
    #say "===========> tracing $root";
    return if(0 >= $depth);
    if(1 >= $depth) {
@@ -124,7 +124,7 @@ sub _trace_word_r {
 
    my @words = $self->_query_sense($root, $sense);
    for my $w(@words) {
-      $self->_trace_word_r($w, $sense, $wordsref, $depth - 1);
+      $self->_trace_word_r($w, $sense, $depth - 1, $wordsref);
       my @wordparts = split /#/, $w;
       push @$wordsref, $wordparts[0] if !grep {$_ eq $w} @$wordsref;
    }
