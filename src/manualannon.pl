@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 package ManualAnnonArgs;
+use List::Util qw/shuffle/;
 use Modern::Perl;
 use Moose;
         
@@ -36,6 +37,16 @@ has 'lexicon' => (
    cmd_aliases => 'l',
 );
 
+has 'lookup' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Bool',
+   documentation => 'Lookup and prompt the user for the word label.',
+   default => sub { 0 },
+   cmd_flag => 'lookup',
+   cmd_aliases => 'k',
+);
+
 has 'many' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -61,12 +72,28 @@ $lex->load($arguments->lexicon);
 die "Cannot produce a lexicon of negative size" if 0 > $arguments->many;
 
 my $sofar = 0;
-while(my ($key, $scoreref) = each(%{$lex->lexicon})) {
-   my $whereto = int(rand(100));
-   if($whereto < 50 && !defined $ref->lexicon->{$key}) {
-      say "MANUAL(", $whereto, ") $key => ", $arguments->lexicon;
-      $output->lexicon->{$key} = {score => -1, weight => 0};
-      $sofar++;
+my @keys = shuffle(keys %{$lex->lexicon});
+for my $key(@keys) {
+   if(!defined $ref->lexicon->{$key}) {
+      say "word: $key";
+      my $input = 'n';
+      if($arguments->lookup) {
+         #print `$arguments->{dictcmd} '$key'`;
+         my $word = $key;
+         $word =~ s/ /\+/;
+         print `curl -sA"Opera" "http://www.google.com/search?q=define:$word"|grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities(\$_)' 2>/dev/null`;
+         print "Label [p|n|return-to-skip]: ";
+         $input = <STDIN>;
+         chomp $input;
+         $input = lc $input;
+         print "\n";
+      }
+      if($input eq 'p' || $input eq 'n') {
+         $output->lexicon->{$key} = {score => $input eq 'p' ? 1 : -1,
+                                     weight => 0};
+         $sofar++;
+      }
+      #say "MANUAL(", $whereto, ") $key => ", $arguments->lexicon;
    }
    last if $sofar >= $arguments->many;
 }
