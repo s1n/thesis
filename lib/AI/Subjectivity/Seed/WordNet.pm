@@ -183,9 +183,47 @@ See L<AI::Subjectivity::Seed>.
 
 =head1 DESCRIPTION
 
+WordNet is a manually created lexicon of associations that is peer
+reviewed by the academic community.
+
+For every word in either the dictionary or the lexicon (depending on if the ASL
+module is preloaded with dictionary data), it will trace words returned by
+WordNet. The I<depth> parameter will control how deep it will DFS traverse.
+
 =head1 ATTRIBUTES
 
+=head2 wordnet
+
+The L<WordNet::QueryData> object that assists with accessing the WordNet data.
+The WordNet data must be installed locally.
+
+=head2 depth
+
+How deep to traverse the WordNet results. Traversing the results is done as a
+depth first search (DFS).
+
+=head2 aslalgo
+
+L<AI::Subjectivity::Seed::ASL> object used to load the dictionary data. If
+this object is set, determined by the I<dictionary> parameter to the L<init>
+method, the L<build> method will traverse by those words rather than the
+preloaded lexicon words.
+
 =head1 METHODS
+
+=head2 build(trace)
+
+Builds the lexicon as described above.
+
+If a I<trace> word is provided, that word will be traced. Passing '*' will
+trace all words.
+
+=head2 init(options)
+
+Reads all files that are supported by this seeding algorithm. This should be
+run before B<build> as it's considered a setup function. The I<options>
+structure is a hash reference with the key value pointing to required and
+optional parameters, such as I<wnhome>, I<depth>, and I<dict>.
 
 =head1 AUTHOR
 
