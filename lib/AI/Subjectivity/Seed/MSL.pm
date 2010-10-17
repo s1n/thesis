@@ -18,7 +18,7 @@ sub init {
    my ($self, $filesref) = @_;
    if($filesref->{thes}) {
       $self->mobyobj(Text::Thesaurus::Moby->new) if !defined $self->mobyobj;
-      $self->mobyobj->load($filesref->{thes});
+      $self->mobyobj->open($filesref->{thes});
    }
    return 1;
 }
@@ -29,29 +29,30 @@ sub build {
    my %newscores;
    my $precount = scalar keys %$lexref;
 
-   for my $line(@{$self->mobyobj->rawdata}) {
-      chomp $line;
-      my @relatedwords = split /,/, $line;
-      my $root = shift @relatedwords;
-      @relatedwords = undef && next if !$root;
-      chomp @relatedwords;
+   my @words;
+   while($self->mobyobj->next(\@words)) {
+      my $root = shift @words;
       #say "rescoring root: $root";
       $newscores{$root}{score} = $lexref->{$root}->{score};
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
       my $rdelta = $self->weigh($lexref->{$root});
       my $log = '';
-      for my $w(@relatedwords) {
-         next if !$w;
-         my $wref = $lexref->{$w};
-         die if $w eq "145871383";
-         $newscores{$w}{score} = $lexref->{$w}->{score};
-         $newscores{$w}{weight} = $lexref->{$w}->{weight};
-         $rdelta += $self->weigh($lexref->{$w});
+      for my $cw(@words) {
+         if(UNIVERSAL::isa($cw, "ARRAY")) {
+            push @words, @$cw;
+            next;
+         }
+         next if !$cw;
+         my $wref = $lexref->{$cw};
+         die if $cw eq "145871383";
+         $newscores{$cw}{score} = $lexref->{$cw}->{score};
+         $newscores{$cw}{weight} = $lexref->{$cw}->{weight};
+         $rdelta += $self->weigh($lexref->{$cw});
       }
 
       my $delta = $self->signed($rdelta);
       $newscores{$root}{score} += $delta;
-      for my $w(@relatedwords) {
+      for my $w(@words) {
          $newscores{$w}{score} += $delta;
          my $temp = $self->weigh($lexref->{$w});
          my $upordown = '=';
@@ -63,14 +64,14 @@ sub build {
       }
 
       if($trace eq "*" || $root eq $trace ||
-         ($trace && grep {$_ eq $trace} @relatedwords)) {
+         ($trace && grep {$_ eq $trace} @words)) {
          my $temp = $self->weigh($lexref->{$root});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
          say "$root($temp|$newscores{$root}{score}|$rdelta|$upordown), $log";
       }
-      undef @relatedwords;
+      @words = [];
    }
    undef $self->{mobyobj};
 

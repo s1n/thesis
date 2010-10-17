@@ -11,9 +11,10 @@ sub new {
    $class = ref $class if ref $class;
    my $init = shift;
    my $self = {file => $init->{file},
+               fd => undef,
                raw => []};
    bless $self, $class;
-   $self->load($init->{file}) if $init->{file};
+   $self->open($init->{file}) if $init->{file};
    return $self;
 }
 
@@ -21,6 +22,32 @@ sub load {
    my ($self, $thes) = @_;
    $self->file($thes);
    tie @{$self->rawdata}, 'Tie::File', $self->file, mode => O_RDONLY;
+}
+
+sub fd {
+   my ($self, $fd) = @_;
+   $self->{fd} = $fd if $fd;
+   return $self->{fd};
+}
+
+sub open {
+   my ($self, $file) = @_;
+   $self->file($file);
+   open $self->{fd}, $file or die "Unable to open $file: $!\n";
+   return 1;
+}
+
+sub next {
+   my ($self, $array) = @_;
+   my $fd = $self->fd;
+   my $line = <$fd>;
+   if(!defined $line) {
+      close $self->fd;
+      return undef;
+   }
+   chomp $line;
+   push @$array, split /,/, $line;
+   return $line;
 }
 
 sub file {
