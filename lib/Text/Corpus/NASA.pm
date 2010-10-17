@@ -10,6 +10,7 @@ sub new {
    $class = ref $class if ref $class;
    my $init = shift;
    my $self = {file => $init->{file},
+               fd => undef,
                minwordlen => $init->{minwordlen} // 2,
                maxwordlen => $init->{maxwordlen} // 30};
    bless $self, $class;
