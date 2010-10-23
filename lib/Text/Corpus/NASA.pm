@@ -48,6 +48,7 @@ sub _normalize {
    my ($self, $string) = @_;
    return if !$string || !$$string;
    chomp $$string;
+   $$string =~ s/^\s+(.*)\s+//g;
    $$string =~ s/_/ /g;
    $$string = lc $$string;
 }
