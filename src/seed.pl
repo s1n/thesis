@@ -4,7 +4,11 @@ package SeedArgs;
 use Modern::Perl;
 use Moose;
         
-with 'MooseX::SimpleConfig';
+eval {
+   require MooseX::SimpleConfig;
+   with 'MooseX::SimpleConfig' if !$@;
+};
+
 with 'MooseX::Getopt';
 
 has 'trace' => (
@@ -67,7 +71,6 @@ has 'wnhome' => (
    cmd_aliases => 'w',
 );
 
-
 has 'algo' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -99,35 +102,97 @@ has 'mpqa' => (
    cmd_aliases => 'm',
 );
 
+has 'boost' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Enables boosting by specifying a lexicon to boost from.',
+   cmd_flag => 'boost',
+   cmd_aliases => 'b',
+);
+
+has 'iter' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'rw',
+   isa => 'Str',
+   default => sub { 1 },
+   documentation => 'Sets the number of boosting iterations, useless otherwise.',
+   cmd_flag => 'boost-iter',
+   cmd_aliases => 'T',
+);
+
+has 'apikey' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'rw',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Sets the Wordnik API key',
+   cmd_flag => 'apikey',
+   cmd_aliases => 'a',
+);
+
+has 'save' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Bool',
+   default => sub { 1 },
+   documentation => 'Toggles saving over the lexicon',
+   cmd_flag => 'save',
+   cmd_aliases => 's',
+);
+
 1;
 
-use lib '../lib';
+use AI::Subjectivity::Seed;
+use AI::Subjectivity::Boost;
+
 my $arguments = SeedArgs->new_with_options;
+$arguments->iter(1) if !$arguments->boost;
 for my $a(@{$arguments->algo}) {
-   #determine and load the Seed class
-   my $seeder = "AI::Subjectivity::Seed::" . $a;
-   (my $filename = $seeder . '.pm') =~ s/::/\//g;
-   require $filename;
+      #determine and load the Seed class
+      my $seeder = "AI::Subjectivity::Seed::" . $a;
+      (my $filename = $seeder . '.pm') =~ s/::/\//g;
+      require $filename;
 
-   say "Preparing lexicon based on algorithm: $a ...";
-   my $seed;
-   $seed = $seeder->new;
-   eval { $seed->load($arguments->lexicon); };
-   if($@) {
-      say "Failed to load lexicon ", $arguments->lexicon, " skipping";
-   }
+      say "Preparing lexicon based on algorithm: $a ...";
+      my $seed;
+      $seed = $seeder->new;
+      eval { $seed->load($arguments->lexicon); };
+      if($@) {
+         say "Failed to load lexicon ", $arguments->lexicon, " skipping";
+      }
 
-   say "Building lexicon subjectivity scores with algorithm: $a ...";
-   my $ret = $seed->init({thes => $arguments->thes,
-                          dict => $arguments->dict,
-                          affix => $arguments->affix,
-                          wnhome => $arguments->wnhome,
-                          mpqa => $arguments->mpqa,
-                          depth => $arguments->depth});
-   exit(-1) if !$ret;
-   $seed->build($arguments->trace);
-   $seed->save($arguments->lexicon);
-   undef $seed;
+      for(1..$arguments->iter) {
+         say "Building lexicon subjectivity scores with algorithm: $a ...";
+         my $ret = $seed->init({thes => $arguments->thes,
+                                dict => $arguments->dict,
+                                affix => $arguments->affix,
+                                wnhome => $arguments->wnhome,
+                                mpqa => $arguments->mpqa,
+                                apikey => $arguments->apikey,
+                                depth => $arguments->depth});
+         exit(-1) if !$ret;
+
+         #build and save the lexicon
+         $seed->build($arguments->trace);
+
+         #boost the results if asked for
+         if($arguments->boost) {
+            say "Boosting results against ", $arguments->boost;
+            my $ref = AI::Subjectivity::Seed->new;
+            $ref->load($arguments->boost);
+            my $b = AI::Subjectivity::Boost->new;
+            $b->offline_boost($ref, $seed);
+         }
+      }
+
+      if($arguments->save) {
+         say "Saving lexicon to ", $arguments->lexicon;
+         $seed->save($arguments->lexicon);
+      }
+   
+      undef $seed;
 }
 
 =pod

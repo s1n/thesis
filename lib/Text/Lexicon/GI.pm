@@ -1,4 +1,4 @@
-package Text::Thesaurus::GI;
+package Text::Lexicon::GI;
 
 use warnings;
 use strict;

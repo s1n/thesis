@@ -59,19 +59,19 @@ sub build {
       for my $pos(qw/n v a/) {
          $self->_trace_word_r("$root\#$pos",
                               $senses{$pos},
-                              \@relatedwords,
-                              $self->depth);
+                              $self->depth,
+                              \@relatedwords);
       }
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
-      my $rdelta = $self->signed($lexref->{$root});
+      my $rdelta = $self->signed($lexref->{$root}->{score});
       my $log = '';
-      $newscores{$root} = $lexref->{$root};
+      $newscores{$root} = $lexref->{$root}->{score};
       for my $w(@relatedwords) {
          next if !$w;
          $self->_normalize(\$w);
-         $newscores{$w} = $lexref->{$w};
-         $rdelta += $self->signed($lexref->{$w} // 0);
+         $newscores{$w} = $lexref->{$w}->{score};
+         $rdelta += $self->signed($lexref->{$w}->{score} // 0);
       }
 
       my $delta = $self->signed($rdelta);
@@ -80,7 +80,7 @@ sub build {
          next if !$w;
          $self->_normalize(\$w);
          $newscores{$w} += $delta;
-         my $temp = $lexref->{$w} // 0;
+         my $temp = $lexref->{$w}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -91,7 +91,7 @@ sub build {
 
       if($trace eq "*" || $root eq $trace ||
          ($trace && grep {$_ eq $trace} @relatedwords)) {
-         my $temp = $lexref->{$root} // 0;
+         my $temp = $lexref->{$root}->{score} // 0;
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
@@ -104,13 +104,13 @@ sub build {
    while(my ($key, $score) = each(%newscores)) {
       $self->_normalize(\$key);
       say "lexicon adjust $key to $score" if $key eq $trace;
-      $lexref->{$key} = $score
+      $lexref->{$key}->{score} = $score
    }
    undef %newscores;
 }
 
 sub _trace_word_r {
-   my ($self, $root, $sense, $wordsref, $depth) = @_;
+   my ($self, $root, $sense, $depth, $wordsref) = @_;
    #say "===========> tracing $root";
    return if(0 >= $depth);
    if(1 >= $depth) {
@@ -124,7 +124,7 @@ sub _trace_word_r {
 
    my @words = $self->_query_sense($root, $sense);
    for my $w(@words) {
-      $self->_trace_word_r($w, $sense, $wordsref, $depth - 1);
+      $self->_trace_word_r($w, $sense, $depth - 1, $wordsref);
       my @wordparts = split /#/, $w;
       push @$wordsref, $wordparts[0] if !grep {$_ eq $w} @$wordsref;
    }
@@ -183,9 +183,47 @@ See L<AI::Subjectivity::Seed>.
 
 =head1 DESCRIPTION
 
+WordNet is a manually created lexicon of associations that is peer
+reviewed by the academic community.
+
+For every word in either the dictionary or the lexicon (depending on if the ASL
+module is preloaded with dictionary data), it will trace words returned by
+WordNet. The I<depth> parameter will control how deep it will DFS traverse.
+
 =head1 ATTRIBUTES
 
+=head2 wordnet
+
+The L<WordNet::QueryData> object that assists with accessing the WordNet data.
+The WordNet data must be installed locally.
+
+=head2 depth
+
+How deep to traverse the WordNet results. Traversing the results is done as a
+depth first search (DFS).
+
+=head2 aslalgo
+
+L<AI::Subjectivity::Seed::ASL> object used to load the dictionary data. If
+this object is set, determined by the I<dictionary> parameter to the L<init>
+method, the L<build> method will traverse by those words rather than the
+preloaded lexicon words.
+
 =head1 METHODS
+
+=head2 build(trace)
+
+Builds the lexicon as described above.
+
+If a I<trace> word is provided, that word will be traced. Passing '*' will
+trace all words.
+
+=head2 init(options)
+
+Reads all files that are supported by this seeding algorithm. This should be
+run before B<build> as it's considered a setup function. The I<options>
+structure is a hash reference with the key value pointing to required and
+optional parameters, such as I<wnhome>, I<depth>, and I<dict>.
 
 =head1 AUTHOR
 

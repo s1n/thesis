@@ -48,8 +48,8 @@ sub build {
                if($foo eq $trace or $key eq $trace) {
                   say "positive match of $key to $pospat with $1 finding $foo";
                }
-               $lexref->{$foo}--;
-               $lexref->{$key}++;
+               $lexref->{$foo}->{score}--;
+               $lexref->{$key}->{score}++;
             } else {
                #say "no match of $key to $foo";
             }

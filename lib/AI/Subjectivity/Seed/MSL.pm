@@ -1,6 +1,7 @@
 package AI::Subjectivity::Seed::MSL;
 
 use Modern::Perl;
+use Data::Dumper;
 use Text::Thesaurus::Moby;
 use Moose;
 
@@ -17,7 +18,8 @@ has 'mobyobj' => (
 sub init {
    my ($self, $filesref) = @_;
    if($filesref->{thes}) {
-      $self->mobyobj->load($filesref->{thes});
+      $self->mobyobj(Text::Thesaurus::Moby->new) if !defined $self->mobyobj;
+      $self->mobyobj->open($filesref->{thes});
    }
    return 1;
 }
@@ -26,52 +28,67 @@ sub build {
    my ($self, $trace) = @_;
    my $lexref = $self->lexicon;
    my %newscores;
+   my $precount = scalar keys %$lexref;
+   #print Dumper($lexref);
 
-   for my $line(@{$self->mobyobj->rawdata}) {
-      chomp $line;
-      my @relatedwords = split /,/, $line;
-      my $root = shift @relatedwords;
-      @relatedwords = undef && next if !$root;
-      chomp @relatedwords;
+   my @words;
+   while($self->mobyobj->next(\@words)) {
+      my $root = shift @words;
       #say "rescoring root: $root";
-      $newscores{$root} = $lexref->{$root};
-      my $rdelta = $self->signed($lexref->{$root});
+      $newscores{$root}{score} = $lexref->{$root}->{score};
+      $newscores{$root}{weight} = $lexref->{$root}->{weight};
+      my $rdelta = $self->weigh($lexref->{$root});
       my $log = '';
-      for my $w(@relatedwords) {
-         next if !$w;
-         $newscores{$w} = $lexref->{$w};
-         $rdelta += $self->signed($lexref->{$w} // 0);
+      for my $cw(@words) {
+         if(UNIVERSAL::isa($cw, "ARRAY")) {
+            push @words, @$cw;
+            next;
+         }
+         next if !$cw;
+         my $wref = $lexref->{$cw};
+         $newscores{$cw}{score} = $lexref->{$cw}->{score};
+         $newscores{$cw}{weight} = $lexref->{$cw}->{weight};
+         $rdelta += $self->weigh($lexref->{$cw});
       }
 
       my $delta = $self->signed($rdelta);
-      $newscores{$root} += $delta;
-      for my $w(@relatedwords) {
-         $newscores{$w} += $delta;
-         my $temp = $lexref->{$w} // 0;
+      $newscores{$root}{score} += $delta;
+      for my $w(@words) {
+         $newscores{$w}{score} += $delta;
+         my $temp = $self->weigh($lexref->{$w});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
          if($temp != 0 || $w eq $trace) {
-            $log .= "$w($temp|$newscores{$w}|$delta|$upordown), ";
+            $log .= "$w($temp|$newscores{$w}{score}|$delta|$upordown), ";
          }
       }
 
       if($trace eq "*" || $root eq $trace ||
-         ($trace && grep {$_ eq $trace} @relatedwords)) {
-         my $temp = $lexref->{$root} // 0;
+         ($trace && grep {$_ eq $trace} @words)) {
+         my $temp = $self->weigh($lexref->{$root});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
-         say "$root($temp|$newscores{$root}|$rdelta|$upordown), $log";
+         say "$root($temp|$newscores{$root}{score}|$rdelta|$upordown), $log";
       }
-      undef @relatedwords;
+      @words = ();
    }
    undef $self->{mobyobj};
 
-   while(my ($key, $sign) = each(%newscores)) {
-      say "lexicon adjust $key to $sign" if $key eq $trace;
-      $lexref->{$key} = $sign;
+   my $postcount = scalar keys %newscores;
+   while(my ($key, $score) = each(%newscores)) {
+      say "lexicon adjust $key to $score" if $key eq $trace;
+      $lexref->{$key}->{score} = $score->{score};
+      print "    $key pre=", $lexref->{$key}->{weight} // 0;
+      $lexref->{$key}->{weight} = $self->normalize_weight($score->{weight},
+                                                          $precount,
+                                                          $postcount);
+      print " post=", $lexref->{$key}->{weight},
+            " score=", $lexref->{$key}->{score},
+            "\n";
    }
+   print "\n";
    undef %newscores;
 }
 

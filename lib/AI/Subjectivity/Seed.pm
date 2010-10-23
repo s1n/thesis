@@ -24,8 +24,11 @@ sub save {
       die "Unable to create lexicon: $!\n";
 
    #loop over every word in the lexicon 
-   while(my ($key, $sign) = each(%$lexref)) {
-      say LEX "$key, $sign" if 0 != $sign;
+   my $keycount = scalar keys %$lexref;
+   while(my ($key, $scoreref) = each(%$lexref)) {
+      if(0 != $scoreref->{score}) {
+         say LEX "$key, $scoreref->{score}, ", $scoreref->{weight} // (1 / $keycount);
+      }
    }
 
    close LEX;
@@ -41,12 +44,11 @@ sub load {
    while(my $line = <LEX>) {
       chomp $line;
       my @tokens = split /,/, $line;
-      next if @tokens != 2;
-      $tokens[0] =~ s/^\s+//;
-      $tokens[0] =~ s/.\s+$//;
-      $tokens[1] =~ s/^\s+//;
-      $tokens[1] =~ s/\s+//;
-      $lexref->{$tokens[0]} = $tokens[1];
+      next if @tokens < 1;
+      $tokens[$_] =~ s/^\s+// for 0..$#tokens;
+      $tokens[$_] =~ s/.\s+$// for 0..$#tokens;
+      $lexref->{$tokens[0]}->{score} = $tokens[1] // 0;
+      $lexref->{$tokens[0]}->{weight} = $tokens[2] // 0;
    } 
 
    close LEX;
@@ -57,7 +59,7 @@ sub accuracy {
    my $measref = Stats::Measure->new;
    my $reference_lexicon = $self->lexicon;
    my $check_lexicon = $other->lexicon;
-   while(my ($key, $sign) = each(%$reference_lexicon)) {
+   while(my ($key, $scoreref) = each(%$reference_lexicon)) {
       #false positive, missing results are considered mislabeled
       if(!defined $check_lexicon->{$key}) {
          say "unknown: $key";
@@ -66,8 +68,8 @@ sub accuracy {
          next;
       }
 
-      my $refsign = $self->signed($sign);
-      my $checksign = $self->signed($check_lexicon->{$key});
+      my $refsign = $self->signed($scoreref->{score});
+      my $checksign = $self->signed($check_lexicon->{$key}->{score});
       if(0 < $refsign) {
          if($refsign == $checksign) {
             #actual positive, true positive (correct label)
@@ -105,6 +107,26 @@ sub _normalize {
    chomp $$string;
    $$string =~ s/_/ /g;
    $$string = lc $$string;
+}
+
+sub weigh {
+   my ($self, $wordref) = @_;
+   my $nom = $wordref->{score} // 0;
+   my $denom = $wordref->{weight} // 1;
+   $denom = $denom != 0 ? $denom : 1;
+   return $nom * $denom;
+}
+
+sub normalize_weight {
+   my ($self, $weight, $precount, $postcount) = @_;
+   #die "$weight * ($precount / $postcount)" if $precount == $postcount;
+   return $weight if $precount == $postcount;
+   #die "$precount => $postcount\n" if $postcount < $precount;
+   my $newcount = $postcount - $precount;
+   #die "(1 / $newcount) * ($newcount / $postcount)" if !defined $weight;
+   return (1 / $newcount) * ($newcount / $postcount) if !defined $weight;
+   #die "$weight * ($precount / $postcount)";
+   return $weight * ($precount / $postcount);
 }
 
 no Moose;
