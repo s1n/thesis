@@ -35,6 +35,9 @@ sub init {
       die "An API key is required to use Wordnik.";
    }
 
+   if(!$self->wordnik) {
+      $self->wordnik(WWW::Wordnik::API->new());
+   }
    $self->wordnik->format('perl');
    $self->wordnik->api_key($filesref->{apikey});
    $self->wordnik->cache($filesref->{cache} // 1000);
@@ -57,76 +60,83 @@ sub build {
       $wordsrc = $self->aslalgo->dictionary;
    }
    my $lexref = $self->lexicon;
-   my %senses = ('s' => 'synonym',
-                 'a' => 'antonym',
-                 'f' => 'form',
-                 'e' => 'equivalent',
-                 'h' => 'hyponym',
-                 'v' => 'variant');
    my %newscores;
 
+   my $precount = scalar keys %$wordsrc;
+   my $sofar = 0;
+   say STDERR "tracing $precount words";
    #loop over every word in the lexicon
    while(my ($root, $score) = each(%$wordsrc)) {
-      say "recursive root word trace: $root";
+      say STDERR "recursive root word trace: $root";
       my @relatedwords;
-      for my $syn(values %senses) {
-         $self->_trace_word_r($root, $syn, $self->depth, \@relatedwords);
+      $self->_trace_word_r($root, $self->depth, \@relatedwords);
+      if((++$sofar % 100) == 0) {
+         say STDERR "Pausing.....";
+         sleep 300;
       }
-      die "Found ", scalar @relatedwords, " related words\n";
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
-      my $rdelta = $self->signed($lexref->{$root}->{score});
       my $log = '';
-      $newscores{$root} = $lexref->{$root}->{score};
+      $newscores{$root}{score} = $lexref->{$root}->{score};
+      $newscores{$root}{weight} = $lexref->{$root}->{weight};
+      my $rdelta = $self->weigh($lexref->{$root});
       for my $w(@relatedwords) {
          next if !$w;
          $self->_normalize(\$w);
-         $newscores{$w} = $lexref->{$w}->{score};
-         $rdelta += $self->signed($lexref->{$w}->{score} // 0);
+         $newscores{$w}{score} = $lexref->{$w}->{score};
+         $newscores{$w}{weight} = $lexref->{$w}->{weight};
+         $rdelta += $self->weigh($lexref->{$w});
       }
 
       my $delta = $self->signed($rdelta);
-      $newscores{$root} += $delta;
+      $newscores{$root}{score} += $delta;
       for my $w(@relatedwords) {
          next if !$w;
          $self->_normalize(\$w);
-         $newscores{$w} += $delta;
-         my $temp = $lexref->{$w}->{score} // 0;
+         $newscores{$w}{score} += $delta;
+         my $temp = $self->weigh($lexref->{$w});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
          if($temp != 0 || $w eq $trace) {
-            $log .= "$w($temp|$newscores{$w}|$upordown), ";
+            $log .= "$w($temp|$newscores{$w}{score}|$upordown), ";
          }
       }
 
       if($trace eq "*" || $root eq $trace ||
          ($trace && grep {$_ eq $trace} @relatedwords)) {
-         my $temp = $lexref->{$root}->{score} // 0;
+         my $temp = $self->weigh($lexref->{$root});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
-         say "$root($temp|$newscores{$root}|$upordown), $log";
+         say STDERR "$root($temp|$newscores{$root}{score}|$upordown), $log";
       }
       undef @relatedwords;
    }
    undef $self->{wordnik};
 
+   my $postcount = scalar keys %newscores;
    while(my ($key, $score) = each(%newscores)) {
       $self->_normalize(\$key);
-      say "lexicon adjust $key to $score" if $key eq $trace;
-      $lexref->{$key}->{score} = $score
+      say STDERR "lexicon adjust $key to $score->{score}" if $key eq $trace;
+      $lexref->{$key}->{score} = $score->{score};
+      print "    $key pre=", $lexref->{$key}->{weight} // 0;
+      $lexref->{$key}->{weight} = $self->normalize_weight($score->{weight},
+                                                          $precount,
+                                                          $postcount);
+      print " post=", $lexref->{$key}->{weight}, "\n";
    }
+   print "\n";
    undef %newscores;
 }
 
 sub _trace_word_r {
-   my ($self, $root, $sense, $depth, $wordsref) = @_;
-   say "===========> tracing $root @", $depth;
+   my ($self, $root, $depth, $wordsref) = @_;
+   say STDERR "===========> tracing $root @", $depth;
    return if(0 >= $depth);
    if(1 >= $depth) {
       my @words;
-      $self->_query_word($root, $sense, \@words);
+      $self->_query_word($root, \@words);
       for my $nw(@words) {
          my @wordparts = split /#/, $nw;
          push @$wordsref, $wordparts[0] if !grep {$_ eq $nw} @$wordsref;
@@ -135,21 +145,30 @@ sub _trace_word_r {
    }
 
    my @words;
-   $self->_query_word($root, $sense, \@words);
+   $self->_query_word($root, \@words);
    for my $w(@words) {
-      $self->_trace_word_r($w, $sense, $depth - 1, $wordsref);
+      $self->_trace_word_r($w, $depth - 1, $wordsref);
    }
 }
 
 sub _query_word {
-   my ($self, $word, $relation, $results) = @_;
-   my @api = $self->wordnik->related($word, limit => 1000, type => [$relation]);
+   my ($self, $word, $results) = @_;
+   my $senses = [qw/variant
+                    synonym
+                    antonym
+                    form
+                    hyponym
+                    verb-form
+                    verb-stem
+                    cross-reference
+                    same-context/];
+   my @api = $self->wordnik->related($word, limit => 1000, type => $senses);
    for my $sets(@api) {
       for my $synset(@$sets) {
-         say "reltype: ", $synset->{'relType'}, " versus $relation";
-         if($synset->{'relType'} eq $relation) {
-            for my $w(@{$synset->{'wordstrings'}}) {
-               push @$results, $w if !grep {$_ eq $w} @$results;
+         for my $w(@{$synset->{'wordstrings'}}) {
+            if($w !~ /[^ A-Za-z0-9]/ && !grep {$_ eq $w} @$results) {
+               push @$results, $w;
+               say STDERR "** new word discovererd: $w";
             }
          }
       }
