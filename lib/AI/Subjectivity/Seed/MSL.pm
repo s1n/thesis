@@ -1,6 +1,7 @@
 package AI::Subjectivity::Seed::MSL;
 
 use Modern::Perl;
+use Data::Dumper;
 use Text::Thesaurus::Moby;
 use Moose;
 
@@ -28,6 +29,7 @@ sub build {
    my $lexref = $self->lexicon;
    my %newscores;
    my $precount = scalar keys %$lexref;
+   #print Dumper($lexref);
 
    my @words;
    while($self->mobyobj->next(\@words)) {
@@ -44,7 +46,6 @@ sub build {
          }
          next if !$cw;
          my $wref = $lexref->{$cw};
-         die if $cw eq "145871383";
          $newscores{$cw}{score} = $lexref->{$cw}->{score};
          $newscores{$cw}{weight} = $lexref->{$cw}->{weight};
          $rdelta += $self->weigh($lexref->{$cw});
@@ -71,7 +72,7 @@ sub build {
          $upordown = '-' if $delta < 0;
          say "$root($temp|$newscores{$root}{score}|$rdelta|$upordown), $log";
       }
-      @words = [];
+      @words = ();
    }
    undef $self->{mobyobj};
 
@@ -79,10 +80,15 @@ sub build {
    while(my ($key, $score) = each(%newscores)) {
       say "lexicon adjust $key to $score" if $key eq $trace;
       $lexref->{$key}->{score} = $score->{score};
-      $lexref->{$key}->{weight} = $self->normalize_weight($lexref->{$key}->{weight},
+      print "    $key pre=", $lexref->{$key}->{weight} // 0;
+      $lexref->{$key}->{weight} = $self->normalize_weight($score->{weight},
                                                           $precount,
                                                           $postcount);
+      print " post=", $lexref->{$key}->{weight},
+            " score=", $lexref->{$key}->{score},
+            "\n";
    }
+   print "\n";
    undef %newscores;
 }
 
