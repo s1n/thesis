@@ -47,6 +47,16 @@ has 'lookup' => (
    cmd_aliases => 'k',
 );
 
+has 'apikey' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   documentation => 'Wordnik API key to use when looking up a word.',
+   default => sub { '' },
+   cmd_flag => 'apikey',
+   cmd_aliases => 'a',
+);
+
 has 'many' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
@@ -61,43 +71,80 @@ has 'many' => (
 
 use Data::Dumper;
 use AI::Subjectivity::Seed;
+use WWW::Wordnik::API;
 
 my $arguments = ManualAnnonArgs->new_with_options;
 my $ref = AI::Subjectivity::Seed->new;
 my $lex = AI::Subjectivity::Seed->new;
 my $output = AI::Subjectivity::Seed->new;
-$ref->load($arguments->reference);
-$lex->load($arguments->lexicon);
+
+#load the trained lexicon
+eval { $lex->load($arguments->lexicon); };
+if($@) {
+   say "Failed to load lexicon ", $arguments->lexicon, " skipping";
+}
+
+#load the reference lexicon
+eval { $ref->load($arguments->reference); };
+if($@) {
+   say "Failed to load lexicon ", $arguments->reference, " skipping";
+}
+
+#load the output file, in case previous data is present
+eval { $output->load($arguments->output); };
+if($@) {
+   say "Failed to load lexicon ", $arguments->output, " skipping";
+}
 
 die "Cannot produce a lexicon of negative size" if 0 > $arguments->many;
 
-my $sofar = 0;
+my $wordnik;
+if($arguments->lookup) {
+   die "Must provide an API key for Wordnik.\n" if !$arguments->apikey;
+   $wordnik = WWW::Wordnik::API->new();
+   $wordnik->api_key($arguments->apikey);
+   $wordnik->format('perl');
+   $wordnik->cache(1000);
+}
+
+my $sofar = scalar keys %{$output->lexicon};
 my @keys = shuffle(keys %{$lex->lexicon});
 for my $key(@keys) {
+   next if defined $output->lexicon->{$key};
    if(!defined $ref->lexicon->{$key}) {
       say "word: $key";
       my $input = 'n';
       if($arguments->lookup) {
-         #print `$arguments->{dictcmd} '$key'`;
-         my $word = $key;
-         $word =~ s/ /\+/;
-         print `curl -sA"Opera" "http://www.google.com/search?q=define:$word"|grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities(\$_)' 2>/dev/null`;
+         define($wordnik, $key);
          print "Label [p|n|return-to-skip]: ";
          $input = <STDIN>;
          chomp $input;
          $input = lc $input;
-         print "\n";
       }
       if($input eq 'p' || $input eq 'n') {
          $output->lexicon->{$key} = {score => $input eq 'p' ? 1 : -1,
                                      weight => 0};
          $sofar++;
       }
+      say "lexicon size: $sofar\n";
       #say "MANUAL(", $whereto, ") $key => ", $arguments->lexicon;
    }
+   $output->save($arguments->output);
    last if $sofar >= $arguments->many;
 }
-$output->save($arguments->output);
+
+sub define {
+   my ($wordnik, $word) = @_;
+   return "" if !$wordnik || !$word;
+   my @results = $wordnik->definitions($word);
+   my $i = 1;
+   for my $outer(@results) {
+      for my $inner(@$outer) {
+         say "    $i ) $inner->{text}";
+         $i++;
+      }
+   }
+}
 
 =pod
 
