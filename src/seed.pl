@@ -132,6 +132,16 @@ has 'apikey' => (
    cmd_aliases => 'a',
 );
 
+has 'save' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Bool',
+   default => sub { 1 },
+   documentation => 'Toggles saving over the lexicon',
+   cmd_flag => 'save',
+   cmd_aliases => 's',
+);
+
 1;
 
 use AI::Subjectivity::Seed;
@@ -173,12 +183,14 @@ for my $a(@{$arguments->algo}) {
             my $ref = AI::Subjectivity::Seed->new;
             $ref->load($arguments->boost);
             my $b = AI::Subjectivity::Boost->new;
-            $b->offline_boost($seed, $ref);
+            $b->offline_boost($ref, $seed);
          }
       }
 
-      say "Saving lexicon to ", $arguments->lexicon;
-      $seed->save($arguments->lexicon);
+      if($arguments->save) {
+         say "Saving lexicon to ", $arguments->lexicon;
+         $seed->save($arguments->lexicon);
+      }
    
       undef $seed;
 }
