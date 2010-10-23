@@ -113,13 +113,19 @@ sub weigh {
    my ($self, $wordref) = @_;
    my $nom = $wordref->{score} // 0;
    my $denom = $wordref->{weight} // 1;
-   return $nom / $denom;
+   $denom = $denom != 0 ? $denom : 1;
+   return $nom * $denom;
 }
 
 sub normalize_weight {
    my ($self, $weight, $precount, $postcount) = @_;
+   #die "$weight * ($precount / $postcount)" if $precount == $postcount;
+   return $weight if $precount == $postcount;
+   #die "$precount => $postcount\n" if $postcount < $precount;
    my $newcount = $postcount - $precount;
-   return ($newcount / $postcount) if !defined $weight;
+   #die "(1 / $newcount) * ($newcount / $postcount)" if !defined $weight;
+   return (1 / $newcount) * ($newcount / $postcount) if !defined $weight;
+   #die "$weight * ($precount / $postcount)";
    return $weight * ($precount / $postcount);
 }
 
