@@ -19,9 +19,11 @@ sub offline_boost {
    my ($self, $reference, $other) = @_;
    my $reflex = $reference->lexicon;
    my $checklex = $other->lexicon;
-   my $keycount = scalar keys %$reflex;
+   my $defweight = 1 / (scalar keys %$reflex);
 
    #mark all the errors
+   $self->error(0);
+   $self->alpha(0);
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
       next if !defined $checklex->{$key}->{score};
@@ -33,11 +35,18 @@ sub offline_boost {
       #identify misclassifications and total the error
       if($refsign != $checksign) {
          my $junk = $self->error;
-         $self->error($self->error + ($scoreref->{weight} // (1 / $keycount)));
+         $self->error($self->error + ($checklex->{$key}->{weight} // $defweight));
          say "mislabeled '$key', ",
-             $scoreref->{score},
+             $checklex->{$key}->{score},
              ", ",
-             $scoreref->{weight},
+             $checklex->{$key}->{weight},
+             ", error = ",
+             $self->error;
+      } else {
+         say "labeled '$key', ",
+             $checklex->{$key}->{score},
+             ", ",
+             $checklex->{$key}->{weight},
              ", error = ",
              $self->error;
       }
@@ -46,22 +55,37 @@ sub offline_boost {
    die "Error: ", $self->error, "\n" if $self->error > 1;
 
    #compute alpha
+   return if $self->error == 0;
    $self->alpha(0.5 * log((1 - $self->error) / $self->error));
+   say "alpha: ", $self->alpha;
 
    #recompute weights
+   my $totalw = 0;
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
+#FIXME what do we do with the weights of the words we dont have reference data?
       next if !defined $checklex->{$key}->{score};
 
       #snag the signed score values
       my $refsign = $reference->signed($scoreref->{score});
       my $checksign = $reference->signed($checklex->{$key}->{score});
 
-      #identify correct classifications and recompute the weights
+      #this increases weight of misclassifications, we want the opposite
+      #my $expsign = $refsign == $checksign ? -1 : 1;
       my $expsign = $refsign == $checksign ? 1 : -1;
+      #identify correct classifications and recompute the weights
       $checklex->{$key}->{weight} *= exp($self->alpha * $expsign);
-      say "recomputed weights for '", $key, "' => ", $checklex->{$key}->{score}, ", ", $checklex->{$key}->{weight};
+      $totalw += $checklex->{$key}->{weight};
+      say "recomputed weights for '",
+          $key,
+          "' => ",
+          $checklex->{$key}->{score},
+          ", ",
+          $checklex->{$key}->{weight},
+          " from ",
+          exp($self->alpha * $expsign);
    }
+   say "total weight: $totalw";
 }
 
 no Moose;
