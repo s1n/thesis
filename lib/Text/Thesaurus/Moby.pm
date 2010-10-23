@@ -2,6 +2,7 @@ package Text::Thesaurus::Moby;
 
 use warnings;
 use strict;
+use Data::Dumper;
 use Carp;
 use Fcntl qw/O_RDONLY/;
 use Tie::File;
@@ -47,6 +48,9 @@ sub next {
    }
    chomp $line;
    push @$array, split /,/, $line;
+   #my @words = split /,/, $line;
+   #print Dumper(\@$array);
+   #_normalize(\$words[$_]) for 0..@words;
    return $line;
 }
 
@@ -80,6 +84,15 @@ sub search {
       }
    }
    return @synset;
+}
+
+sub _normalize {
+   my ($self, $string) = @_;
+   return if !$string || !$$string;
+   chomp $$string;
+   $$string =~ s/^\s+(.*)\s+//g;
+   $$string =~ s/_/ /g;
+   $$string = lc $$string;
 }
 
 1;
