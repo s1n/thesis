@@ -21,13 +21,13 @@ sub new {
 sub unknown {
    my ($self, $unk) = @_;
    $self->{unknown} += $unk if $unk;
-   return $self->{unknown};
+   return $self->_normalize($self->{unknown});
 }
 
 sub truepositive {
    my ($self, $truepos) = @_;
    $self->{truepositive} += $truepos if $truepos;
-   return $self->{truepositive};
+   return $self->_normalize($self->{truepositive});
 }
 
 sub tp {
@@ -38,7 +38,7 @@ sub tp {
 sub truenegative {
    my ($self, $trueneg) = @_;
    $self->{truenegative} += $trueneg if $trueneg;
-   return $self->{truenegative};
+   return $self->_normalize($self->{truenegative});
 }
 
 sub tn {
@@ -49,7 +49,7 @@ sub tn {
 sub falsepositive {
    my ($self, $falsepos) = @_;
    $self->{falsepositive} += $falsepos if $falsepos;
-   return $self->{falsepositive};
+   return $self->{falsepositive} // 0;
 }
 
 sub fp {
@@ -60,7 +60,7 @@ sub fp {
 sub falsenegative {
    my ($self, $falseneg) = @_;
    $self->{falsenegative} += $falseneg if $falseneg;
-   return $self->{falsenegative};
+   return $self->_normalize($self->{falsenegative});
 }
 
 sub fn {
@@ -70,32 +70,42 @@ sub fn {
 
 sub precision {
    my ($self) = @_;
-   return $self->tp / ($self->tp + $self->fp);
+   my $denom = $self->tp + $self->fp;
+   return 0 if $denom == 0;
+   return $self->tp / $denom;
 }
 
 sub recall {
    my ($self) = @_;
-   return $self->tp / ($self->tp + $self->fn);
+   my $denom = $self->tp + $self->fn;
+   return 0 if $denom == 0;
+   return $self->tp / $denom;
 }
 
 sub sensitivity {
    my ($self) = @_;
-   return $self->tp / ($self->tp + $self->fn);
+   my $denom = $self->tp + $self->fn;
+   return 0 if $denom == 0;
+   return $self->tp / $denom;
 }
 
 sub specificity {
    my ($self) = @_;
-   return $self->tn / ($self->fp + $self->tn);
+   my $denom = $self->fp + $self->tn;
+   return 0 if $denom == 0;
+   return $self->tn / $denom;
 }
 
 sub accuracy {
    my ($self) = @_;
-   return ($self->tp + $self->tn) / ($self->tp + $self->fp + $self->fn + $self->tn);
+   my $denom = $self->tp + $self->fp + $self->fn + $self->tn;
+   return 0 if $denom == 0;
+   return ($self->tp + $self->tn) / $denom;
 }
 
 sub youden {
    my ($self) = @_;
-   return $self->sensitivity - (1 - $self->specificity);
+   return $self->_normalize($self->sensitivity - (1 - $self->specificity));
 }
 
 sub f_measure {
@@ -104,7 +114,9 @@ sub f_measure {
    my $betasq = $beta ** 2;
    my $precision = $self->precision;
    my $recall = $self->recall;
-   return (1 + $betasq) * (($precision * $recall) / ($betasq * $precision + $recall));
+   my $denom = $betasq * $precision + $recall;
+   return 0 if $denom == 0;
+   return (1 + $betasq) * (($precision * $recall) / $denom);
 }
 
 sub f1 {
@@ -114,17 +126,21 @@ sub f1 {
 
 sub e_measure {
    my ($self, $beta) = @_;
-   return 1 - $self->f_measure($beta);
+   return $self->_normalize(1 - $self->f_measure($beta));
 }
 
 sub p_minus {
    my ($self) = @_;
-   return $self->sensitivity / (1 - $self->specificity);
+   my $denom = 1 - $self->specificity;
+   return 0 if $denom == 0;
+   return $self->sensitivity / $denom;
 }
 
 sub p_plus {
    my ($self) = @_;
-   return (1 - $self->sensitivity) / $self->specificity;
+   my $denom = $self->specificity;
+   return 0 if $denom == 0;
+   return (1 - $self->sensitivity) / $denom;
 }
 
 sub discriminant_power {
@@ -145,6 +161,12 @@ sub dp {
 }
 
 #FIXME add cosine, lesk, dice
+
+sub _normalize {
+   my ($self, $number) = @_;
+   return $number // 0;
+}
+
 1;
 
 =pod
