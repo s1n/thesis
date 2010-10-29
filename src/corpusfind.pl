@@ -58,17 +58,11 @@ my $ref = AI::Subjectivity::Seed->new;
 my $corpus = Text::Corpus::NASA->new({file => $arguments->corpus});
 $ref->load($arguments->lexicon);
 
-my @words;
-while($corpus->next(\@words)) {
-   for my $cw(@words) {
-      if(UNIVERSAL::isa($cw, "ARRAY")) {
-         #die Dumper($cw);
-         push @words, @$cw;
-         next;
-      }
-      say "Checking corpus word: $cw..." if $arguments->verbose;
-      if(($arguments->matches && defined $ref->lexicon->{$cw}) ||
-         (!$arguments->matches && !defined $ref->lexicon->{$cw})) {
+while(my $cline = $corpus->nextline) {
+   for my $cw(keys %{$ref->lexicon}) {
+      say "Checking for $cw in corpus..." if $arguments->verbose;
+      if(($arguments->matches && $cline =~ /\W$cw\W/) ||
+         (!$arguments->matches && $cline !~ /\W$cw\W/)) {
          print "word=$cw";
          if($arguments->verbose) {
             print ", score=", $ref->lexicon->{$cw}->{score};
@@ -77,7 +71,6 @@ while($corpus->next(\@words)) {
          print "\n";
       }
    }
-   @words = [];
 }
 
 =pod
