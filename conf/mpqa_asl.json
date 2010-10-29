@@ -1,0 +1,7 @@
+{
+      "algo": [ "MPQA", "ASL" ],
+      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
+     "affix": "data/affixes.txt",
+      "dict": [ "data/moby/thes/moby.dat" ],
+   "lexicon": "results/mpqa_asl.dat"
+}
