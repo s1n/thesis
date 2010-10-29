@@ -148,7 +148,16 @@ use AI::Subjectivity::Seed;
 use AI::Subjectivity::Boost;
 
 my $arguments = SeedArgs->new_with_options;
+
+#pull in the Boosting algorithm, needs to support boost()
 $arguments->iter(1) if !$arguments->boost;
+my $booster;
+if($arguments->boost) {
+   $booster = "AI::Subjectivity::" . $arguments->boost;
+   (my $filename = $booster . '.pm') =~ s/::/\//g;
+   require $filename;
+}
+
 for my $a(@{$arguments->algo}) {
       #determine and load the Seed class
       my $seeder = "AI::Subjectivity::Seed::" . $a;
@@ -179,11 +188,16 @@ for my $a(@{$arguments->algo}) {
 
          #boost the results if asked for
          if($arguments->boost) {
-            say "Boosting results against ", $arguments->boost;
+            say "Boosting (",
+                $arguments->boost,
+                ") results against ",
+                $arguments->boost-ref;
+            #load the reference data
             my $ref = AI::Subjectivity::Seed->new;
             $ref->load($arguments->boost);
-            my $b = AI::Subjectivity::Boost->new;
-            $b->offline_boost($ref, $seed);
+            #load the booster and go
+            my $b = $booster->new;
+            $b->boost($ref, $seed);
          }
       }
 
