@@ -1,0 +1,7 @@
+{
+      "algo": [ "ASL", "MSL" ],
+     "affix": "data/affixes.txt",
+      "dict": [ "data/moby/thes/moby.dat" ],
+      "thes": "data/moby/thes/mthesaur.txt",
+   "lexicon": "results/asl_msl.dat"
+}
