@@ -31,6 +31,13 @@ sub open {
    return 1;
 }
 
+sub nextline {
+   my ($self) = @_;
+   my $fd = $self->fd;
+   my $line = <$fd>;
+   return $line;
+}
+
 sub next {
    my ($self, $array) = @_;
    my $fd = $self->fd;
