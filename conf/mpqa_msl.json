@@ -1,0 +1,6 @@
+{
+      "algo": [ "MPQA", "MSL" ],
+      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
+      "thes": "data/moby/thes/mthesaur.txt",
+   "lexicon": "results/mpqa_msl.dat"
+}
