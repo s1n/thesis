@@ -55,14 +55,14 @@ sub load {
 }
 
 sub accuracy {
-   my ($self, $other) = @_;
+   my ($self, $other, $verbose) = @_;
    my $measref = Stats::Measure->new;
    my $reference_lexicon = $self->lexicon;
    my $check_lexicon = $other->lexicon;
    while(my ($key, $scoreref) = each(%$reference_lexicon)) {
       #false positive, missing results are considered mislabeled
       if(!defined $check_lexicon->{$key}) {
-         say "unknown: $key";
+         say "unknown: $key" if $verbose;
          $measref->unknown(1);
          #$measref->falsenegative(1);
          next;
@@ -73,21 +73,21 @@ sub accuracy {
       if(0 < $refsign) {
          if($refsign == $checksign) {
             #actual positive, true positive (correct label)
-            say "true positive: $key => $refsign / $checksign";
+            say "true positive: $key => $refsign / $checksign" if $verbose;
             $measref->truepositive(1);
          } else {
             #actual positive, false negative (wrong label)
-            say "false negative: $key => $refsign / $checksign";
+            say "false negative: $key => $refsign / $checksign" if $verbose;
             $measref->falsenegative(1);
          }
       } else {
          if($refsign == $checksign) {
             #actual negative, true negative (correct label)
-            say "true negative: $key => $refsign / $checksign";
+            say "true negative: $key => $refsign / $checksign" if $verbose;
             $measref->truenegative(1);
          } else {
             #actual negative, false positive (wrong label)
-            say "false positive: $key => $refsign / $checksign";
+            say "false positive: $key => $refsign / $checksign" if $verbose;
             $measref->falsepositive(1);
          }
       }

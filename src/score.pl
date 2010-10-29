@@ -26,6 +26,16 @@ has 'test' => (
    cmd_aliases => 't',
 );
 
+has 'verbose' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Bool',
+   documentation => 'Enables verbosity when scoring.',
+   default => sub { 0 },
+   cmd_flag => 'verbose',
+   cmd_aliases => 'v',
+);
+
 1;
 
 use Data::Dumper;
@@ -36,19 +46,19 @@ my $ref = AI::Subjectivity::Seed->new;
 my $test = AI::Subjectivity::Seed->new;
 $ref->load($arguments->reference);
 $test->load($arguments->test);
-my $measure = $ref->accuracy($test);
+my $measure = $ref->accuracy($test, $arguments->verbose);
 say "   Accuracy: ", $measure->accuracy;
-say "  Precision: ", $measure->precision;
-say "     Recall: ", $measure->recall;
 say "   F1 Score: ", $measure->f1;
-say "Sensitivity: ", $measure->sensitivity;
-say "Specificity: ", $measure->specificity;
-say "     Youden: ", $measure->youden;
-say "         DP: ", $measure->dp;
-say "         p-: ", $measure->p_minus;
-say "         p+: ", $measure->p_plus, "\n";
-say "Raw Data:";
-print Dumper($measure);
+say "  Precision: ", $measure->precision if $arguments->verbose;
+say "     Recall: ", $measure->recall if $arguments->verbose;
+say "Sensitivity: ", $measure->sensitivity if $arguments->verbose;
+say "Specificity: ", $measure->specificity if $arguments->verbose;
+say "     Youden: ", $measure->youden if $arguments->verbose;
+say "         DP: ", $measure->dp if $arguments->verbose;
+say "         p-: ", $measure->p_minus if $arguments->verbose;
+say "         p+: ", $measure->p_plus, "\n" if $arguments->verbose;
+say "Raw Data:" if $arguments->verbose;
+print Dumper($measure) if $arguments->verbose;
 
 =pod
 
