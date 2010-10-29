@@ -1,4 +1,5 @@
 {
-   "algo": [ "MPQA" ],
-   "mpqa": "../data/MPQA/subjclueslen1-HLTEMNLP05.tff"
+      "algo": [ "MPQA" ],
+      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
+   "lexicon": "results/mpqa.dat"
 }

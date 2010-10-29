@@ -1,7 +1,8 @@
 {
-   "algo": [ "MPQA", "ASL", "MSL" ],
-   "mpqa": "../data/MPQA/subjclueslen1-HLTEMNLP05.tff",
-  "affix": "../data/affixes.txt",
-   "dict": [ "../data/moby/thes/moby.dat" ],
-   "thes": "../data/moby/thes/mthesaur.txt"
+      "algo": [ "MPQA", "ASL", "MSL" ],
+      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
+     "affix": "data/affixes.txt",
+      "dict": [ "data/moby/thes/moby.dat" ],
+      "thes": "data/moby/thes/mthesaur.txt",
+   "lexicon": "results/mpqa_asl_msl.dat"
 }
