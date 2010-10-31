@@ -160,6 +160,11 @@ sub dp {
    return $self->discriminant_power;
 }
 
+sub incommon {
+   my ($self) = @_;
+   return $self->tp + $self->tn + $self->fp + $self->fn;
+}
+
 #FIXME add cosine, lesk, dice
 
 sub _normalize {
