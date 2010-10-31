@@ -21,7 +21,7 @@ sub save {
    my $lexref = $self->lexicon;
 
    open(LEX, ">$lex") or
-      die "Unable to create lexicon: $!\n";
+      die "Unable to create '$lex': $!\n";
 
    #loop over every word in the lexicon 
    my $keycount = scalar keys %$lexref;
@@ -38,7 +38,7 @@ sub load {
    my ($self, $lex) = @_;
    my $lexref = $self->lexicon;
 
-   open(LEX, $lex) or die "Unable to open lexicon: $!\n";
+   open(LEX, $lex) or die "Unable to open '$lex': $!\n";
 
    #loop over every word in the lexicon
    while(my $line = <LEX>) {
@@ -93,6 +93,12 @@ sub accuracy {
       }
    }
    return $measref;
+}
+
+sub size {
+   my ($self) = @_;
+   my $lexref = $self->lexicon;
+   return scalar keys %$lexref;
 }
 
 sub signed {
