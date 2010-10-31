@@ -142,10 +142,21 @@ has 'save' => (
    cmd_aliases => 's',
 );
 
+has 'boostref' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Lexicon to boost against.',
+   cmd_flag => 'boost-ref',
+   cmd_aliases => 'r',
+);
+
+
 1;
 
 use AI::Subjectivity::Seed;
-use AI::Subjectivity::Boost;
+#use AI::Subjectivity::Boost;
 
 my $arguments = SeedArgs->new_with_options;
 
@@ -191,7 +202,7 @@ for my $a(@{$arguments->algo}) {
             say "Boosting (",
                 $arguments->boost,
                 ") results against ",
-                $arguments->boost-ref;
+                $arguments->boostref;
             #load the reference data
             my $ref = AI::Subjectivity::Seed->new;
             $ref->load($arguments->boost);
