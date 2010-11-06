@@ -63,17 +63,12 @@ sub build {
    my %newscores;
 
    my $precount = scalar keys %$wordsrc;
-   my $sofar = 0;
    say STDERR "tracing $precount words";
    #loop over every word in the lexicon
    while(my ($root, $score) = each(%$wordsrc)) {
       say STDERR "recursive root word trace: $root";
       my @relatedwords;
       $self->_trace_word_r($root, $self->depth, \@relatedwords);
-      if((++$sofar % 100) == 0) {
-         say STDERR "Pausing.....";
-         sleep 300;
-      }
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
       my $log = '';
@@ -162,7 +157,18 @@ sub _query_word {
                     verb-stem
                     cross-reference
                     same-context/];
-   my @api = $self->wordnik->related($word, limit => 1000, type => $senses);
+
+   my $delay = int(rand(10)) + 2;
+   REQUERY:
+   say STDERR "delaying query by $delay seconds...";
+   sleep $delay;
+   my @api;
+   eval {
+      @api = $self->wordnik->related($word,
+                                     limit => 1000,
+                                     type => $senses);
+   }
+   goto REQUERY if $@;
    for my $sets(@api) {
       for my $synset(@$sets) {
          for my $w(@{$synset->{'wordstrings'}}) {
