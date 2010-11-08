@@ -34,6 +34,7 @@ sub build {
    my @words;
    while($self->mobyobj->next(\@words)) {
       my $root = shift @words;
+      next if !$root || $self->is_stripwords($root);
       #say "rescoring root: $root";
       $newscores{$root}{score} = $lexref->{$root}->{score};
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
@@ -44,7 +45,7 @@ sub build {
             push @words, @$cw;
             next;
          }
-         next if !$cw;
+         next if !$cw || $self->is_stripwords($cw);
          my $wref = $lexref->{$cw};
          $newscores{$cw}{score} = $lexref->{$cw}->{score};
          $newscores{$cw}{weight} = $lexref->{$cw}->{weight};

@@ -32,7 +32,7 @@ sub build {
    for my $line(@{$self->mpqaobj->rawdata}) {
       #die Dumper($line);
       my $root = $line->{word1};
-      next if !$root;
+      next if !$root || $self->is_stripwords($root);
       my $delta = 0;
       if($line->{priorpolarity} eq "negative") {
          $delta = -1;

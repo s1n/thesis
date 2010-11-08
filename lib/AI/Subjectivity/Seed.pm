@@ -16,6 +16,12 @@ has 'trace' => (
    default => sub { "" },
 );
 
+has '_sw' => (
+   is => 'rw',
+   isa => 'Str',
+   default => sub { "" },
+);
+
 sub save {
    my ($self, $lex) = @_;
    my $lexref = $self->lexicon;
@@ -108,13 +114,6 @@ sub signed {
    return -1;
 }
 
-sub _normalize {
-   my ($self, $string) = @_;
-   chomp $$string;
-   $$string =~ s/_/ /g;
-   $$string = lc $$string;
-}
-
 sub weigh {
    my ($self, $wordref) = @_;
    my $nom = $wordref->{score} // 0;
@@ -134,6 +133,29 @@ sub normalize_weight {
    #die "$weight * ($precount / $postcount)";
    return $weight * ($precount / $postcount);
 }
+
+sub stripwords {
+   my ($self, $file) = @_;
+   return $self->_sw if !$file;
+   open SW, $file or die "Unable to load '$file': $!\n";
+   @{$self->_sw} = <SW>;
+   chomp @{$self->_sw};
+   close SW;
+}
+
+sub is_stripword {
+   my ($self, $word) = @_;
+   return 0 if !$word;
+   return grep /^$word$/, @{$self->_sw};
+}
+
+sub _normalize {
+   my ($self, $string) = @_;
+   chomp $$string;
+   $$string =~ s/_/ /g;
+   $$string = lc $$string;
+}
+
 
 no Moose;
 1;
