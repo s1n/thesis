@@ -10,6 +10,7 @@ rm -f mword10.zip
 dos2unix *
 cd ../thes
 unzip mthes10.zip
+perl -ne '@a = split /,/; print join "\n", @a' -f mthesaur.txt >../dict/moby.dat
 rm -f mthes10.zip
 dos2unix *
 cd ../../
