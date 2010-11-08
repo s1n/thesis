@@ -26,8 +26,4 @@ for f in `ls conf/*.json`; do
    echo "Running test: $TEST"
    perl -Ilib src/seed.pl --configfile "$f" >& "log/$TEST.log"
    score "$TEST"
-   #echo "Performance against GI:"
-   #perl -Ilib src/score.pl --reference results/gi.dat --test "results/$TEST.dat"
-   #echo "Performance against SSL:"
-   #perl -Ilib src/score.pl --reference results/manual.dat --test "results/$TEST.dat"
 done
