@@ -152,6 +152,15 @@ has 'boostref' => (
    cmd_aliases => 'r',
 );
 
+has 'strip' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   default => sub { '' },
+   documentation => 'Strip the words in this file at discovery.',
+   cmd_flag => 'strip',
+   cmd_aliases => 'p',
+);
 
 1;
 
@@ -178,9 +187,17 @@ for my $a(@{$arguments->algo}) {
       say "Preparing lexicon based on algorithm: $a ...";
       my $seed;
       $seed = $seeder->new;
+
+      #load preexisiting file
       eval { $seed->load($arguments->lexicon); };
-      if($@) {
-         say "Failed to load lexicon ", $arguments->lexicon, " skipping";
+      say "Failed to load lexicon ", $arguments->lexicon, " skipping" if $@;
+
+      #load the stripwords
+      if($arguments->strip) {
+         eval { $seed->stripwords($arguments->strip); };
+         if($@) {
+            say "Failed to load stripwords ", $arguments->strip, ", skipping";
+         }
       }
 
       for(1..$arguments->iter) {
