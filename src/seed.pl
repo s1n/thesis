@@ -147,7 +147,7 @@ has 'boostref' => (
    is => 'ro',
    isa => 'Str',
    default => sub { '' },
-   documentation => 'Lexicon to boost against.',
+   documentation => 'Lexicon to train the boosting algorithm against.',
    cmd_flag => 'boost-ref',
    cmd_aliases => 'r',
 );
@@ -222,7 +222,7 @@ for my $a(@{$arguments->algo}) {
                 $arguments->boostref;
             #load the reference data
             my $ref = AI::Subjectivity::Seed->new;
-            $ref->load($arguments->boost);
+            $ref->load($arguments->boostref);
             #load the booster and go
             my $b = $booster->new;
             $b->boost($ref, $seed);
