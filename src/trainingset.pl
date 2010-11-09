@@ -22,7 +22,7 @@ has 'testing' => (
    isa => 'Str',
    documentation => 'Output testing lexicon.',
    default => 'testing.dat',
-   cmd_flag => 'testint',
+   cmd_flag => 'testing',
    cmd_aliases => 'e',
 );
 
