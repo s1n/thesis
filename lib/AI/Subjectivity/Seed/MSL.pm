@@ -34,7 +34,7 @@ sub build {
    my @words;
    while($self->mobyobj->next(\@words)) {
       my $root = shift @words;
-      next if !$root || $self->is_stripwords($root);
+      next if !$root || $self->is_stripword($root);
       #say "rescoring root: $root";
       $newscores{$root}{score} = $lexref->{$root}->{score};
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
@@ -45,7 +45,7 @@ sub build {
             push @words, @$cw;
             next;
          }
-         next if !$cw || $self->is_stripwords($cw);
+         next if !$cw || $self->is_stripword($cw);
          my $wref = $lexref->{$cw};
          $newscores{$cw}{score} = $lexref->{$cw}->{score};
          $newscores{$cw}{weight} = $lexref->{$cw}->{weight};
@@ -79,17 +79,17 @@ sub build {
 
    my $postcount = scalar keys %newscores;
    while(my ($key, $score) = each(%newscores)) {
-      say "lexicon adjust $key to $score" if $key eq $trace;
+      #say "lexicon adjust $key to $score" if $key eq $trace;
       $lexref->{$key}->{score} = $score->{score};
-      print "    $key pre=", $lexref->{$key}->{weight} // 0;
+      #print "    $key pre=", $lexref->{$key}->{weight} // 0;
       $lexref->{$key}->{weight} = $self->normalize_weight($score->{weight},
                                                           $precount,
                                                           $postcount);
-      print " post=", $lexref->{$key}->{weight},
-            " score=", $lexref->{$key}->{score},
-            "\n";
+      #print " post=", $lexref->{$key}->{weight},
+      #      " score=", $lexref->{$key}->{score},
+      #      "\n";
    }
-   print "\n";
+   #print "\n";
    undef %newscores;
 }
 
