@@ -15,7 +15,7 @@ has 'alpha' => (
    default => sub { 1.0 },
 );
 
-sub offline_boost {
+sub boost {
    my ($self, $reference, $other) = @_;
    my $reflex = $reference->lexicon;
    my $checklex = $other->lexicon;
@@ -26,11 +26,16 @@ sub offline_boost {
    $self->alpha(0);
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
-      next if !defined $checklex->{$key}->{score};
+      next if !defined $checklex->{$key} || !defined $checklex->{$key}->{score};
 
       #snag the signed score values
       my $refsign = $reference->signed($scoreref->{score});
       my $checksign = $reference->signed($checklex->{$key}->{score});
+
+      #fix the weight of the words if they have no weight assigned
+      if(!defined $checklex->{$key}->{weight}) {
+         $checklex->{$key}->{weight} = $defweight;
+      }
 
       #identify misclassifications and total the error
       if($refsign != $checksign) {
@@ -39,14 +44,14 @@ sub offline_boost {
          say "mislabeled '$key', ",
              $checklex->{$key}->{score},
              ", ",
-             $checklex->{$key}->{weight},
+             $checklex->{$key}->{weight} // $defweight,
              ", error = ",
              $self->error;
       } else {
          say "labeled '$key', ",
              $checklex->{$key}->{score},
              ", ",
-             $checklex->{$key}->{weight},
+             $checklex->{$key}->{weight} // $defweight,
              ", error = ",
              $self->error;
       }
@@ -64,7 +69,7 @@ sub offline_boost {
    while(my ($key, $scoreref) = each(%$reflex)) {
       #skip missing labels, cannot reweight
 #FIXME what do we do with the weights of the words we dont have reference data?
-      next if !defined $checklex->{$key}->{score};
+      next if !defined $checklex->{$key} || !defined $checklex->{$key}->{score};
 
       #snag the signed score values
       my $refsign = $reference->signed($scoreref->{score});
