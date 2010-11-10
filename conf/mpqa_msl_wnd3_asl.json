@@ -1,0 +1,8 @@
+{
+      "algo": [ "MPQA", "MSL", "WordNet", "ASL" ],
+      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
+     "affix": "data/affixes.txt",
+      "dict": [ "data/moby/dict/moby.dat" ],
+      "thes": "data/moby/thes/mthesaur.txt",
+     "depth": "3"
+}
