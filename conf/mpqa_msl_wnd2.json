@@ -2,6 +2,5 @@
       "algo": [ "MPQA", "MSL", "WordNet" ],
       "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
       "thes": "data/moby/thes/mthesaur.txt",
-     "depth": "2",
-   "lexicon": "results/mpqa_msl_wnd2.dat"
+     "depth": "2"
 }

@@ -4,6 +4,5 @@
      "affix": "data/affixes.txt",
       "dict": [ "data/moby/dict/moby.dat" ],
       "thes": "data/moby/thes/mthesaur.txt",
-     "depth": "2",
-   "lexicon": "results/mpqa_asl_wnd2_msl.dat"
+     "depth": "2"
 }

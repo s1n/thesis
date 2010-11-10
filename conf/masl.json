@@ -1,6 +1,5 @@
 {
       "algo": [ "ASL" ],
      "affix": "data/affixes.txt",
-      "dict": [ "data/moby/dict/SINGLE.TXT", "data/moby/dict/COMPOUND.TXT" ],
-   "lexicon": "results/masl.dat"
+      "dict": [ "data/moby/dict/SINGLE.TXT", "data/moby/dict/COMPOUND.TXT" ]
 }

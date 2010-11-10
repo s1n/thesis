@@ -1,4 +1,3 @@
 {
-      "algo": [ "GI" ],
-   "lexicon": "results/gi.dat"
+      "algo": [ "GI" ]
 }

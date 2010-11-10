@@ -1,6 +1,5 @@
 {
       "algo": [ "ASL" ],
      "affix": "data/affixes.txt",
-      "dict": [ "data/moby/dict/moby.dat" ],
-   "lexicon": "results/asl.dat"
+      "dict": [ "data/moby/dict/moby.dat" ]
 }
