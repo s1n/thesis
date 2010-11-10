@@ -64,6 +64,7 @@ my %wordsfound;
 my $sentancesfound = 0;
 my $ccount = `wc -l $arguments->{corpus}`;
 chomp $ccount;
+say "Checking $ccount sentances for matches...";
 my $pb = Term::ProgressBar->new({count => $ccount,
                                  name => "Searching",
                                  ETA => 'linear'});
