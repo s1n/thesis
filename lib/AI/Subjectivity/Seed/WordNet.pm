@@ -55,7 +55,7 @@ sub build {
    #loop over every word in the lexicon
    #while(my ($root, $score) = each(%$lexref)) {
    while(my ($root, $score) = each(%$wordsrc)) {
-      next if !$root || $self->is_stripwords($root);
+      next if !$root || $self->is_stripword($root);
       say "recursive root word trace: $root";
       my @relatedwords;
       while(my ($pos, $sens) = each(%senses)) {
@@ -71,7 +71,7 @@ sub build {
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
       my $rdelta = $self->weigh($lexref->{$root});
       for my $w(@relatedwords) {
-         next if !$w || $self->is_stripwords($w);
+         next if !$w || $self->is_stripword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} = $lexref->{$w}->{score};
          $newscores{$w}{weight} = $lexref->{$w}->{weight};
