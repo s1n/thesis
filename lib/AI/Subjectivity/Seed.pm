@@ -1,5 +1,6 @@
 package AI::Subjectivity::Seed;
 
+use Data::Dumper;
 use Stats::Measure;
 use Modern::Perl;
 use Moose;
@@ -18,8 +19,8 @@ has 'trace' => (
 
 has '_sw' => (
    is => 'rw',
-   isa => 'Str',
-   default => sub { "" },
+   isa => 'ArrayRef',
+   default => sub { [] },
 );
 
 sub save {
@@ -32,6 +33,10 @@ sub save {
    #loop over every word in the lexicon 
    my $keycount = scalar keys %$lexref;
    while(my ($key, $scoreref) = each(%$lexref)) {
+      #skip the junk
+      next if !defined $scoreref || !defined $scoreref->{score};
+
+      #skip neutral words/phrases
       if(0 != $scoreref->{score}) {
          say LEX "$key, $scoreref->{score}, ", $scoreref->{weight} // (1 / $keycount);
       }
