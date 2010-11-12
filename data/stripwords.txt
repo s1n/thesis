@@ -1,4 +1,5 @@
 I
+a
 about
 above
 absent
@@ -13,6 +14,8 @@ amid
 amidst
 among
 amongst
+an
+and
 apart
 around
 as
@@ -32,6 +35,7 @@ besides
 between
 betwixt
 beyond
+both
 but
 by
 circa
@@ -39,6 +43,7 @@ concerning
 despite
 down
 during
+either
 except
 excluding
 failing
@@ -68,7 +73,10 @@ minus
 my
 myself
 near
+neither
 next
+nor
+not only
 notwithstanding
 of
 off
@@ -78,6 +86,7 @@ one's
 oneself
 onto
 opposite
+or
 our
 ours
 ourselves
@@ -95,6 +104,7 @@ round
 save
 she
 since
+so
 than
 thee
 their
@@ -124,6 +134,7 @@ versus
 via
 vice
 we
+whether
 while
 with
 withal
@@ -132,6 +143,7 @@ without
 worth
 y'all
 y'all's selves
+yet
 you
 you all
 your
