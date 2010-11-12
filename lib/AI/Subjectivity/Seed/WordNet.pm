@@ -1,5 +1,7 @@
 package AI::Subjectivity::Seed::WordNet;
 
+use Hash::Util qw/lock_keys unlock_keys/;
+use Data::Dumper;
 use Modern::Perl;
 use WordNet::QueryData;
 use Moose;
@@ -31,11 +33,11 @@ sub init {
    }
    my $home = $filesref->{wnhome} // '/usr/share/wordnet/dict/';
    $self->wordnet(WordNet::QueryData->new($home));
-   if(defined $filesref->{dict} && @{$filesref->{dict}}) {
-      use AI::Subjectivity::Seed::ASL;
-      $self->aslalgo(AI::Subjectivity::Seed::ASL->new);
-      $self->aslalgo->init({dict => $filesref->{dict}});
-   }
+   #if(defined $filesref->{dict} && @{$filesref->{dict}}) {
+   #   use AI::Subjectivity::Seed::ASL;
+   #   $self->aslalgo(AI::Subjectivity::Seed::ASL->new);
+   #   $self->aslalgo->init({dict => $filesref->{dict}});
+   #}
    return 1;
 }
 
@@ -50,19 +52,19 @@ sub build {
                  'v' => 'syns',
                  'a' => 'also');
    my %newscores;
+   my @words = keys %$wordsrc;
    my $precount = scalar keys %$wordsrc;
 
    #loop over every word in the lexicon
-   #while(my ($root, $score) = each(%$lexref)) {
    while(my ($root, $score) = each(%$wordsrc)) {
       next if !$root || $self->is_stripword($root);
       say "recursive root word trace: $root";
-      my @relatedwords;
+      my %relatedwords;
       while(my ($pos, $sens) = each(%senses)) {
          $self->_trace_word_r("$root\#$pos",
                               $sens,
                               $self->depth,
-                              \@relatedwords);
+                              \%relatedwords);
       }
 
       #finished tracing wordnet at this point, safe to modify @relatedwords
@@ -70,7 +72,7 @@ sub build {
       $newscores{$root}{score} = $lexref->{$root}->{score};
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
       my $rdelta = $self->weigh($lexref->{$root});
-      for my $w(@relatedwords) {
+      for my $w(keys %relatedwords) {
          next if !$w || $self->is_stripword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} = $lexref->{$w}->{score};
@@ -80,56 +82,58 @@ sub build {
 
       my $delta = $self->signed($rdelta);
       $newscores{$root}{score} += $delta;
-      for my $w(@relatedwords) {
-         next if !$w;
+      for my $w(keys %relatedwords) {
+         next if !$w || $self->is_stripword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} += $delta;
          my $temp = $self->weigh($lexref->{$w});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
-         if($temp != 0 || $w eq $trace) {
+         if($temp != 0 || $w eq $trace || $trace eq "*") {
             $log .= "$w($temp|$newscores{$w}{score}|$upordown), ";
          }
       }
 
       if($trace eq "*" || $root eq $trace ||
-         ($trace && grep {$_ eq $trace} @relatedwords)) {
+         ($trace && grep {$_ eq $trace} keys %relatedwords)) {
          my $temp = $self->weigh($lexref->{$root});
          my $upordown = '=';
          $upordown = '+' if $delta > 0;
          $upordown = '-' if $delta < 0;
          say STDERR "$root($temp|$newscores{$root}{score}|$upordown), $log";
       }
-      undef @relatedwords;
+      undef %relatedwords;
    }
    undef $self->{wordnet};
 
    my $postcount = scalar keys %newscores;
    while(my ($key, $score) = each(%newscores)) {
       $self->_normalize(\$key);
-      say STDERR "lexicon adjust $key to $score->{score}" if $key eq $trace;
+      #say STDERR "lexicon adjust $key to $score->{score}" if $key eq $trace;
       $lexref->{$key}->{score} = $score->{score};
-      print "    $key pre=", $lexref->{$key}->{weight} // 0;
+      #print "    $key pre=", $lexref->{$key}->{weight} // 0;
       $lexref->{$key}->{weight} = $self->normalize_weight($score->{weight},
                                                           $precount,
                                                           $postcount);
-      print " post=", $lexref->{$key}->{weight}, "\n";
+      #print " post=", $lexref->{$key}->{weight}, "\n";
    }
-   print "\n";
+   #print "\n";
    undef %newscores;
 }
 
 sub _trace_word_r {
    my ($self, $root, $sense, $depth, $wordsref) = @_;
-   #say "===========> tracing $root";
+   say "===========> tracing $root @ $depth";
    return if(0 >= $depth);
    if(1 >= $depth) {
       my @words;
       $self->_query_sense($root, $sense, \@words);
       for my $nw(@words) {
-         my @wordparts = split /#/, $nw;
-         push @$wordsref, $wordparts[0] if !grep {$_ eq $nw} @$wordsref;
+         $self->_normalize(\$nw);
+         next if !$nw || $self->is_stripword($nw);
+         next if defined $wordsref->{$nw};
+         $wordsref->{$nw} = 1;
       }
       return $depth;
    }
@@ -137,9 +141,12 @@ sub _trace_word_r {
    my @words;
    $self->_query_sense($root, $sense, \@words);
    for my $w(@words) {
-      $self->_trace_word_r($w, $sense, $depth - 1, $wordsref);
-      my @wordparts = split /#/, $w;
-      push @$wordsref, $wordparts[0] if !grep {$_ eq $w} @$wordsref;
+      my $newd = $depth;
+      $newd-- if $w =~ /#\d+$/;
+      $self->_trace_word_r($w, $sense, $newd, $wordsref);
+      $self->_normalize(\$w);
+      next if defined $wordsref->{$w};
+      $wordsref->{$w} = 1;
    }
 }
 
@@ -147,11 +154,6 @@ sub _query_sense {
    my ($self, $phrase, $sense, $results) = @_;
    #say "query phrase $phrase sense $sense";
    push @$results, $self->wordnet->querySense($phrase, $sense);
-}
-
-sub _query_word {
-   my ($self, $phrase, $word, $results) = @_;
-   push @$results, $self->wordnet->queryWord($phrase, $word);
 }
 
 no Moose;
