@@ -157,6 +157,7 @@ sub is_stripword {
 sub _normalize {
    my ($self, $string) = @_;
    chomp $$string;
+   $$string =~ s/#.*$//g;
    $$string =~ s/_/ /g;
    $$string = lc $$string;
 }
