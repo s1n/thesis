@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use Time::Interval;
+
+my $boost = @ARGV && ($ARGV[0] eq "--boost" || $ARGV[0] eq "-b") ? 1 : 0;
 
 sub score {
    my ($test, $reflex) = @_;
@@ -18,8 +21,13 @@ sub runtest {
    $extraargs //= "";
    say "";
    say "Running test: $test $extraargs to $test\.dat > $logfile";
+   my $start = time();
    `perl -Ilib src/seed.pl --configfile conf/$test\.json --lexicon results/$test\.dat --stripwords data/stripwords.txt $extraargs >& $logfile`;
+   my $end = time();
    score $test;
+   say "Time of execution: ", parseInterval(seconds => $end - $start,
+                                            String => 1);
+   print "  Size of Lexicon: ", `wc -l results/$test\.dat`;
    #score $test, $extraargs;
 }
 
@@ -57,10 +65,10 @@ for my $f(@files) {
    if(-f "results/$test\.dat") {
       say "Previously run test: $test";
       score $test;
-      #runboosting $test;
+      runboosting $test if $boost;
       next;
    }
 
    runtest $test;
-   #runboosting $test;
+   runboosting $test if $boost;
 }
