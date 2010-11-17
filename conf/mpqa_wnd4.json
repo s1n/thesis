@@ -1,6 +1,0 @@
-{
-      "algo": [ "MPQA", "WordNet" ],
-      "mpqa": "data/MPQA/subjclueslen1-HLTEMNLP05.tff",
-     "depth": "4",
-   "lexicon": "results/mpqa_wnd4.dat"
-}

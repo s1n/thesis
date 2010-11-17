@@ -1,7 +1,0 @@
-{
-      "algo": [ "ASL", "WordNet" ],
-     "affix": "data/affixes.txt",
-      "dict": [ "data/moby/dict/moby.dat" ],
-     "depth": "4",
-   "lexicon": "results/asl_wnd4.dat"
-}
