@@ -12,17 +12,27 @@ has 'corpus' => (
    is => 'ro',
    isa => 'Str',
    default => 'corpus.dat',
-   documentation => 'Corpus file with words, sentances, or paragraphs.',
+   documentation => 'Corpus file with words, sentences, or paragraphs.',
    cmd_flag => 'corpus',
    cmd_aliases => 'c',
+);
+
+has 'reference' => (
+   metaclass => 'MooseX::Getopt::Meta::Attribute',
+   is => 'ro',
+   isa => 'Str',
+   documentation => 'Lexicon to use as reference.',
+   default => 'lexicon.dat',
+   cmd_flag => 'reference',
+   cmd_aliases => 'r',
 );
 
 has 'lexicon' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'Str',
-   documentation => 'Lexicon to use as reference.',
-   default => 'lexicon.dat',
+   documentation => 'Lexicon to write the matches to.',
+   default => 'output.dat',
    cmd_flag => 'lexicon',
    cmd_aliases => 'l',
 );
@@ -55,47 +65,47 @@ use Text::Corpus::NASA;
 use Term::ProgressBar;
 
 my $arguments = CorpusArgs->new_with_options;
+my $output = AI::Subjectivity::Seed->new;
 my $ref = AI::Subjectivity::Seed->new;
 my $corpus = Text::Corpus::NASA->new({file => $arguments->corpus});
-$ref->load($arguments->lexicon);
+$ref->load($arguments->reference);
+eval { $output->load($arguments->lexicon); };
 
-my $wordsfound = 0;
 my %wordsfound;
-my $sentancesfound = 0;
+my $sentencesfound = 0;
 my $ccount = `wc -l $arguments->{corpus}`;
 chomp $ccount;
-say "Checking $ccount sentances for matches...";
-my $pb = Term::ProgressBar->new({count => $ccount,
-                                 name => "Searching",
+say "Checking $ccount sentences for matches...";
+my $pb = Term::ProgressBar->new({count => $ref->size,
+                                 name => "Preprocessing",
                                  ETA => 'linear'});
-while(my $cline = $corpus->nextline) {
-   my $prevwfound = scalar keys %wordsfound;
-   say "Checking line $sentancesfound...";
-   for my $cw(keys %{$ref->lexicon}) {
-      #say "Checking for $cw in corpus..." if $arguments->verbose;
-      if(($arguments->matches && $cline =~ /\W$cw\W/) ||
-         (!$arguments->matches && $cline !~ /\W$cw\W/)) {
-         $wordsfound{$cw}++;
-         if($arguments->verbose) {
-            print "word=$cw";
-            print ", score=", $ref->lexicon->{$cw}->{score};
-            print ", weight=", $ref->lexicon->{$cw}->{weight};
-            print "\n";
-         }
-      }
+$pb->minor(0);
+$pb->max_update_rate(1);
+my $sent = 0;
+while(my ($word, $scoreref) = each %{$ref->lexicon}) {
+   my $args = !$arguments->matches ? "-v" : "";
+   #say "checking $word...";
+   my $lc = `egrep "\\W$word\\W" $arguments->{corpus} | wc -l`;
+   if($lc > 0) {
+      #say "FOUND $word";
+      $output->lexicon->{$word}->{score} = $ref->lexicon->{$word}->{score};
+      $output->lexicon->{$word}->{weight} = $ref->lexicon->{$word}->{weight};
+      $wordsfound{$word} += $lc;
    }
-   $sentancesfound ++ if (scalar keys %wordsfound) > $prevwfound;
-   $pb->update($sentancesfound);
+   $pb->update(++$sent);
 }
-$pb->update($ccount);
+$output->save($arguments->lexicon);
+$pb->update($ref->size);
 
+#print the results
 my $count = 0;
 while(my ($w, $c) = each %wordsfound) {
    $count += $c;
 }
-say "Total Word Matches:", $count;
+say "sentences Searched: $sent";
+say "Total Word Matches: $count";
 say "Unique Word Matches:", scalar keys %wordsfound;
-say "Total Sentance Matches:", $sentancesfound;
+#say "Total sentence Matches: $sentencesfound";
 
 =pod
 
