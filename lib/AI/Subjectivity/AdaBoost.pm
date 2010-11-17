@@ -41,19 +41,19 @@ sub boost {
       if($refsign != $checksign) {
          my $junk = $self->error;
          $self->error($self->error + ($checklex->{$key}->{weight} // $defweight));
-         say "mislabeled '$key', ",
-             $checklex->{$key}->{score},
-             ", ",
-             $checklex->{$key}->{weight} // $defweight,
-             ", error = ",
-             $self->error;
+         #say "mislabeled '$key', ",
+         #    $checklex->{$key}->{score},
+         #    ", ",
+         #    $checklex->{$key}->{weight} // $defweight,
+         #    ", error = ",
+         #    $self->error;
       } else {
-         say "labeled '$key', ",
-             $checklex->{$key}->{score},
-             ", ",
-             $checklex->{$key}->{weight} // $defweight,
-             ", error = ",
-             $self->error;
+         #say "labeled '$key', ",
+         #    $checklex->{$key}->{score},
+         #    ", ",
+         #    $checklex->{$key}->{weight} // $defweight,
+         #    ", error = ",
+         #    $self->error;
       }
    }
 
@@ -80,14 +80,14 @@ sub boost {
       #identify correct classifications and recompute the weights
       $checklex->{$key}->{weight} *= exp($self->alpha * $expsign);
       $totalw += $checklex->{$key}->{weight};
-      say "recomputed weights for '",
-          $key,
-          "' => ",
-          $checklex->{$key}->{score},
-          ", ",
-          $checklex->{$key}->{weight},
-          " from ",
-          exp($self->alpha * $expsign);
+      #say "recomputed weights for '",
+      #    $key,
+      #    "' => ",
+      #    $checklex->{$key}->{score},
+      #    ", ",
+      #    $checklex->{$key}->{weight},
+      #    " from ",
+      #    exp($self->alpha * $expsign);
    }
    say "total weight: $totalw";
 }
