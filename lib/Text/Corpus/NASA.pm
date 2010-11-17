@@ -41,13 +41,17 @@ sub nextline {
 sub next {
    my ($self, $array) = @_;
    my $fd = $self->fd;
-   my $line = <$fd>;
-   if(!defined $line) {
-      close $self->fd;
-      return undef;
+   while(!@$array) {
+      my $line = <$fd>;
+      if(!defined $line) {
+         close $self->fd;
+         return undef;
+      }
+      words_list($array,
+                 $line,
+                 {minwordlen => $self->minwordlen,
+                  maxwordlen => $self->maxwordlen});
    }
-   words_list($array, $line, {minwordlen => $self->minwordlen,
-                              maxwordlen => $self->maxwordlen});
    return @$array;
 }
 
