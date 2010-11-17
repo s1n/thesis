@@ -152,13 +152,13 @@ has 'boostref' => (
    cmd_aliases => 'r',
 );
 
-has 'stripwords' => (
+has 'stopwords' => (
    metaclass => 'MooseX::Getopt::Meta::Attribute',
    is => 'ro',
    isa => 'Str',
    default => sub { '' },
    documentation => 'Strip the words in this file at discovery.',
-   cmd_flag => 'stripwords',
+   cmd_flag => 'stopwords',
    cmd_aliases => 'p',
 );
 
@@ -192,11 +192,11 @@ for my $a(@{$arguments->algo}) {
       eval { $seed->load($arguments->lexicon); };
       say "Failed to load lexicon ", $arguments->lexicon, " skipping" if $@;
 
-      #load the stripwords
-      if($arguments->stripwords) {
-         eval { $seed->stripwords($arguments->stripwords); };
+      #load the stopwords
+      if($arguments->stopwords) {
+         eval { $seed->stopwords($arguments->stopwords); };
          if($@) {
-            say "Failed to load stripwords ", $arguments->stripwords, ", skipping";
+            say "Failed to load stopwords ", $arguments->stopwords, ", skipping";
          }
       }
 
