@@ -41,19 +41,19 @@ sub boost {
       if($refsign != $checksign) {
          my $junk = $self->error;
          $self->error($self->error + ($checklex->{$key}->{weight} // $defweight));
-         say "mislabeled '$key', ",
-             $checklex->{$key}->{score},
-             ", ",
-             $checklex->{$key}->{weight},
-             ", error = ",
-             $self->error;
+         #say "mislabeled '$key', ",
+         #    $checklex->{$key}->{score},
+         #    ", ",
+         #    $checklex->{$key}->{weight},
+         #    ", error = ",
+         #    $self->error;
       } else {
-         say "labeled '$key', ",
-             $checklex->{$key}->{score},
-             ", ",
-             $checklex->{$key}->{weight},
-             ", error = ",
-             $self->error;
+         #say "labeled '$key', ",
+         #    $checklex->{$key}->{score},
+         #    ", ",
+         #    $checklex->{$key}->{weight},
+         #    ", error = ",
+         #    $self->error;
       }
    }
 
@@ -63,6 +63,7 @@ sub boost {
    return if $self->error == 0;
    $self->alpha(0.5 * log((1 - $self->error) / $self->error));
    say "alpha: ", $self->alpha;
+   say "error: ", $self->error;
 
    #recompute weights
    my $totalw = 0;
@@ -78,16 +79,16 @@ sub boost {
       #this increases weight of misclassifications, we want the opposite
       my $expsign = $refsign == $checksign ? 1 : -1;
       #identify correct classifications and recompute the weights
-      $checklex->{$key}->{weight} *= exp($self->alpha * $expsign);
+      $checklex->{$key}->{weight} *= exp(log($self->alpha) * $refsign * $checksign);
       $totalw += $checklex->{$key}->{weight};
-      say "recomputed weights for '",
-          $key,
-          "' => ",
-          $checklex->{$key}->{score},
-          ", ",
-          $checklex->{$key}->{weight},
-          " from ",
-          exp($self->alpha * $expsign);
+      #say "recomputed weights for '",
+      #    $key,
+      #    "' => ",
+      #    $checklex->{$key}->{score},
+      #    ", ",
+      #    $checklex->{$key}->{weight},
+      #    " from ",
+      #    exp($self->alpha * $expsign);
    }
    say "total weight: $totalw";
 }
