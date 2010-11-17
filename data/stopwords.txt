@@ -1,4 +1,5 @@
 I
+i
 a
 about
 above
@@ -16,6 +17,7 @@ among
 amongst
 an
 and
+anyone
 apart
 around
 as
@@ -26,6 +28,7 @@ athwart
 atop
 away
 barring
+be
 before
 behind
 below
@@ -43,6 +46,8 @@ concerning
 despite
 down
 during
+each
+each other
 either
 except
 excluding
@@ -57,6 +62,8 @@ her
 herself
 him
 himself
+his
+if
 in
 including
 inside
@@ -75,6 +82,7 @@ myself
 near
 neither
 next
+nobody
 nor
 not only
 notwithstanding
@@ -105,6 +113,7 @@ save
 she
 since
 so
+some
 than
 thee
 their
@@ -112,6 +121,7 @@ theirs
 them
 themself
 themselves
+then
 they
 thine
 thou
@@ -134,8 +144,14 @@ versus
 via
 vice
 we
+what
 whether
+when
+where
+which
 while
+who
+whom
 with
 withal
 within
