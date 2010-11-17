@@ -61,13 +61,13 @@ has 'verbose' => (
 
 use Data::Dumper;
 use AI::Subjectivity::Seed;
-use Text::Corpus::NASA;
+use Text::Corpus::ASRS;
 use Term::ProgressBar;
 
 my $arguments = CorpusArgs->new_with_options;
 my $output = AI::Subjectivity::Seed->new;
 my $ref = AI::Subjectivity::Seed->new;
-my $corpus = Text::Corpus::NASA->new({file => $arguments->corpus});
+my $corpus = Text::Corpus::ASRS->new({file => $arguments->corpus});
 $ref->load($arguments->reference);
 eval { $output->load($arguments->lexicon); };
 

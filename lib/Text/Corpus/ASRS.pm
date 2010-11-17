@@ -1,4 +1,4 @@
-package Text::Corpus::NASA;
+package Text::Corpus::ASRS;
 
 use warnings;
 use strict;
@@ -88,7 +88,7 @@ sub file {
 
 =head1 NAME
 
-Text::Corpus::NASA - loads the NASA flight log corpus.
+Text::Corpus::ASRS - loads the ASRS flight log corpus.
 
 =head1 SYNOPSIS
 
