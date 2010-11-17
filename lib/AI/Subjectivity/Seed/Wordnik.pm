@@ -66,7 +66,7 @@ sub build {
    say STDERR "tracing $precount words";
    #loop over every word in the lexicon
    while(my ($root, $score) = each(%$wordsrc)) {
-      next if !$root || $self->is_stripword($root);
+      next if !$root || $self->is_stopword($root);
       say STDERR "recursive root word trace: $root";
       my %otherrelatedwords;
       $self->_trace_word_r($root, $self->depth, \%otherrelatedwords);
@@ -78,7 +78,7 @@ sub build {
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
       my $rdelta = $self->weigh($lexref->{$root});
       for my $w(keys %otherrelatedwords) {
-         next if !$w || $self->is_stripword($w);
+         next if !$w || $self->is_stopword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} = $lexref->{$w}->{score};
          $newscores{$w}{weight} = $lexref->{$w}->{weight};
@@ -88,7 +88,7 @@ sub build {
       my $delta = $self->signed($rdelta);
       $newscores{$root}{score} += $delta;
       for my $w(keys %otherrelatedwords) {
-         next if !$w || $self->is_stripword($w);
+         next if !$w || $self->is_stopword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} += $delta;
          my $temp = $self->weigh($lexref->{$w});
@@ -133,7 +133,7 @@ sub _trace_word_r {
    return if(0 >= $depth);
    if(1 >= $depth) {
       my @words;
-      return $depth if !$root || $self->is_stripword($root);
+      return $depth if !$root || $self->is_stopword($root);
       $self->_query_word($root, \@words);
       for my $nw(@words) {
          $self->_normalize(\$nw);
@@ -147,7 +147,7 @@ sub _trace_word_r {
    my @words;
    $self->_query_word($root, \@words);
    for my $w(@words) {
-      next if !$w || $self->is_stripword($w);
+      next if !$w || $self->is_stopword($w);
       $self->_trace_word_r($w, $depth - 1, $wordsref);
    }
 }
