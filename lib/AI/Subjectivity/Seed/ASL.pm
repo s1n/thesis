@@ -38,13 +38,13 @@ sub build {
 
    #loop over every word in the dictionary
    while(my ($key, $sign) = each(%$dictref)) {
-      next if !$key || $self->is_stripword($key);
+      next if !$key || $self->is_stopword($key);
       #first check if it's a positive word
       while(my ($negpat, $pospat) = each(%$patref)) {
          if($key =~ /$pospat/) {
             #say "checking ASL match for: ", $key;
             my $foo = eval "\"$negpat\"";
-            next if !$foo || $self->is_stripword($foo);
+            next if !$foo || $self->is_stopword($foo);
             #now check to see if it's a negative match
             if(exists($dictref->{$foo})) {
                if($foo eq $trace or $key eq $trace) {

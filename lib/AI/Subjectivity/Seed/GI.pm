@@ -37,7 +37,7 @@ sub build_tags {
       my $text = $link->text;
       my @tokens = split /\#/, $text;
       $text = lc shift @tokens;
-      next if !$text || $self->is_stripword($text);
+      next if !$text || $self->is_stopword($text);
       $lexref->{$text}->{score} += $delta;
 
       if($text eq $trace) {

@@ -50,6 +50,7 @@ sub build {
    my $lexref = $self->lexicon;
    my %senses = ('n' => 'syns',
                  'v' => 'syns',
+                 'r' => 'syns',
                  'a' => 'also');
    my %newscores;
    my @words = keys %$wordsrc;
@@ -57,8 +58,8 @@ sub build {
 
    #loop over every word in the lexicon
    while(my ($root, $score) = each(%$wordsrc)) {
-      next if !$root || $self->is_stripword($root);
-      say "recursive root word trace: $root";
+      next if !$root || $self->is_stopword($root);
+      #say "recursive root word trace: $root";
       my %relatedwords;
       while(my ($pos, $sens) = each(%senses)) {
          $self->_trace_word_r("$root\#$pos",
@@ -73,7 +74,7 @@ sub build {
       $newscores{$root}{weight} = $lexref->{$root}->{weight};
       my $rdelta = $self->weigh($lexref->{$root});
       for my $w(keys %relatedwords) {
-         next if !$w || $self->is_stripword($w);
+         next if !$w || $self->is_stopword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} = $lexref->{$w}->{score};
          $newscores{$w}{weight} = $lexref->{$w}->{weight};
@@ -83,7 +84,7 @@ sub build {
       my $delta = $self->signed($rdelta);
       $newscores{$root}{score} += $delta;
       for my $w(keys %relatedwords) {
-         next if !$w || $self->is_stripword($w);
+         next if !$w || $self->is_stopword($w);
          $self->_normalize(\$w);
          $newscores{$w}{score} += $delta;
          my $temp = $self->weigh($lexref->{$w});
@@ -124,14 +125,14 @@ sub build {
 
 sub _trace_word_r {
    my ($self, $root, $sense, $depth, $wordsref) = @_;
-   say "===========> tracing $root @ $depth";
+   #say "===========> tracing $root @ $depth";
    return if(0 >= $depth);
    if(1 >= $depth) {
       my @words;
       $self->_query_sense($root, $sense, \@words);
       for my $nw(@words) {
          $self->_normalize(\$nw);
-         next if !$nw || $self->is_stripword($nw);
+         next if !$nw || $self->is_stopword($nw);
          next if defined $wordsref->{$nw};
          $wordsref->{$nw} = 1;
       }

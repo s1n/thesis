@@ -17,10 +17,10 @@ has 'trace' => (
    default => sub { "" },
 );
 
-has '_sw' => (
+has '_stop' => (
    is => 'rw',
-   isa => 'ArrayRef',
-   default => sub { [] },
+   isa => 'HashRef',
+   default => sub { { } },
 );
 
 sub save {
@@ -134,25 +134,35 @@ sub normalize_weight {
    #die "$precount => $postcount\n" if $postcount < $precount;
    my $newcount = $postcount - $precount;
    #die "(1 / $newcount) * ($newcount / $postcount)" if !defined $weight;
-   return (1 / $newcount) * ($newcount / $postcount) if !defined $weight;
+   return $newcount / ($newcount * $postcount) if !defined $weight;
+   #return (1 / $newcount) * ($newcount / $postcount) if !defined $weight;
    #die "$weight * ($precount / $postcount)";
    return $weight * ($precount / $postcount);
 }
 
-sub stripwords {
-   my ($self, $file) = @_;
-   return $self->_sw if !$file;
-   open SW, $file or die "Unable to load '$file': $!\n";
-   @{$self->_sw} = <SW>;
-   chomp @{$self->_sw};
-   close SW;
-}
-
-sub is_stripword {
+sub is_stopword {
    my ($self, $word) = @_;
    return 0 if !$word;
-   return grep /^$word$/, @{$self->_sw};
+   return defined $self->_stop->{lc $word};
 }
+
+sub stopwords {
+   my ($self, $file) = @_;
+   my $swref = $self->_stop;
+
+   open(STOP, $file) or die "Unable to open '$file': $!\n";
+
+   #loop over every word in the stopwords file
+   while(my $line = <STOP>) {
+      chomp $line;
+      $line =~ s/^\s+//;
+      $line =~ s/.\s+$//;
+      $swref->{$line} = 1;
+   }
+
+   close STOP;
+}
+
 
 sub _normalize {
    my ($self, $string) = @_;
