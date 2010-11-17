@@ -12,22 +12,21 @@ sub score {
    say "Performance against GI ($reflex):";
    print `perl -Ilib src/score.pl --reference $reflex --test results/$test.dat`;
    say "Performance against PCMA:";
-   print `perl -Ilib src/score.pl --reference results/manual.dat --test results/$test\.dat`;
+   print `perl -Ilib src/score.pl --reference results/pcma.dat --test results/$test\.dat`;
+   say "  Size of Lexicon: ", `wc -l results/$test\.dat`;
 }
 
 sub runtest {
    my ($test, $extraargs, $logfile) = @_;
    $logfile //= "log/$test.log";
    $extraargs //= "";
-   say "";
    say "Running test: $test $extraargs to $test\.dat > $logfile";
    my $start = time();
    `perl -Ilib src/seed.pl --configfile conf/$test\.json --lexicon results/$test\.dat --stripwords data/stripwords.txt $extraargs >& $logfile`;
    my $end = time();
-   score $test;
    say "Time of execution: ", parseInterval(seconds => $end - $start,
                                             String => 1);
-   print "  Size of Lexicon: ", `wc -l results/$test\.dat`;
+   score $test;
    #score $test, $extraargs;
 }
 
@@ -40,13 +39,12 @@ sub runboosting {
          chomp $boostalgo;
          my $booster = $boostalgo . "Boost";
          if(-f "results/$boosttest.dat") {
-            say "";
             say "Previously run test: $boosttest";
-            score $boosttest, "results/manual.dat";
+            score $boosttest, "results/pcma.dat";
             continue
          }
          runtest $test, "--boost-iter $iter --lexicon results/$boosttest\.dat --boost $booster --boost-ref results/gi.dat", "log/$boosttest.log";
-         score $boosttest, "results/manual.dat";
+         score $boosttest, "results/pcma.dat";
       }
    }
 }
