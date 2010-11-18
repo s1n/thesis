@@ -22,7 +22,7 @@ sub runtest {
    $extraargs //= "";
    say "Running test: $test $extraargs to $test\.dat > $logfile";
    my $start = time();
-   `perl -Ilib src/seed.pl --configfile conf/$test\.json --lexicon results/$test\.dat --stripwords data/stripwords.txt $extraargs >& $logfile`;
+   `perl -Ilib src/seed.pl --configfile conf/$test\.json --lexicon results/$test\.dat --stopwords data/smartstop.txt $extraargs >& $logfile`;
    my $end = time();
    say "Time of execution: ", parseInterval(seconds => $end - $start,
                                             String => 1);
