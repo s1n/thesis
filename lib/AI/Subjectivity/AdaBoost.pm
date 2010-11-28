@@ -80,6 +80,21 @@ sub boost {
       #identify correct classifications and recompute the weights
       $checklex->{$key}->{weight} *= exp($self->alpha * $expsign);
       $totalw += $checklex->{$key}->{weight};
+   }
+   say "total weight: $totalw";
+
+   #normalize the weights to a probability distribution
+   while(my ($key, $scoreref) = each(%$reflex)) {
+      #skip missing labels, cannot reweight
+#FIXME what do we do with the weights of the words we dont have reference data?
+      next if !defined $checklex->{$key} || !defined $checklex->{$key}->{score};
+
+      #snag the signed score values
+      my $refsign = $reference->signed($scoreref->{score});
+      my $checksign = $reference->signed($checklex->{$key}->{score});
+      my $expsign = $refsign == $checksign ? -1 : 1;
+      $checklex->{$key}->{weight} /= $totalw;
+
       #say "recomputed weights for '",
       #    $key,
       #    "' => ",
@@ -89,7 +104,6 @@ sub boost {
       #    " from ",
       #    exp($self->alpha * $expsign);
    }
-   say "total weight: $totalw";
 }
 
 no Moose;
