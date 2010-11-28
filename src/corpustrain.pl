@@ -76,6 +76,18 @@ sub doit {
    return $ret;
 }
 
+sub div {
+   my ($num, $dem) = @_;
+   return 0 if !$dem;
+   return $num / $dem;
+}
+
+sub mult {
+   my ($num, $dem) = @_;
+   return 0 if !$dem;
+   return $num * $dem;
+}
+
 my $arguments = CorpusArgs->new_with_options;
 my $ref = AI::Subjectivity::Seed->new;
 $ref->load($arguments->reference);
@@ -110,10 +122,11 @@ my %p_of_notcj_given_notw;
 my $p_of_w;
 my $p_of_notw;
 my $size_of_cj;
-while(my ($word, $scoreref) = each %{$ref->lexicon}) {
+while(my ($w, $scoreref) = each %{$ref->lexicon}) {
    #say "checking $word...";
-   $p_of_w = doit("$grep '\\b$word\\b' $corp | $wcl");
-   $p_of_notw = doit("$ungrep '\\b$word\\b' $corp | $wcl");
+   my $word = quotemeta $w;
+   $p_of_w = doit("$grep \"\\b$word\\b\" $corp | $wcl");
+   $p_of_notw = doit("$ungrep \"\\b$word\\b\" $corp | $wcl");
    next if $p_of_w == 0;
 
    say "P(w=$word) = $p_of_w" if $arguments->verbose;
@@ -122,18 +135,11 @@ while(my ($word, $scoreref) = each %{$ref->lexicon}) {
    for my $c(@classes) {
       my ($clause1, $clause2, $clause3) = (0, 0, 0);
       $p_of_cj{$c} = doit("$grep ',.*$c' $corp | $wcl");
-      $p_of_cj_given_w{$c} = doit("$grep ',.*$c' $corp | $grep '\\b$word\\b' | $wcl");
-      $p_of_cj_given_notw{$c} = doit("$grep ',.*$c' $corp | $ungrep '\\b$word\\b' | $wcl");
+      $p_of_cj_given_w{$c} = doit("$grep ',.*$c' $corp | $grep \"\\b$word\\b\" | $wcl");
+      $p_of_cj_given_notw{$c} = doit("$grep ',.*$c' $corp | $ungrep \"\\b$word\\b\" | $wcl");
       $p_of_notcj{$c} = doit("$ungrep ',.*$c' $corp | $wcl");
-      $p_of_notcj_given_w{$c} = doit("$ungrep ',.*$c' $corp | $grep '\\b$word\\b' | $wcl");
-      $p_of_notcj_given_notw{$c} = doit("$ungrep ',.*$c' $corp | $ungrep '\\b$word\\b' | $wcl");
-
-      $clause1 -= ($p_of_cj{$c}/$ccount) * log2($p_of_cj{$c} / $ccount);
-      $clause1 -= ($p_of_notcj{$c}/$ccount) * log2($p_of_notcj{$c} / $ccount);
-      $clause2 -= ($p_of_cj_given_w{$c}/$p_of_w) * log2($p_of_cj_given_w{$c}/$p_of_w);
-      $clause2 -= ($p_of_notcj_given_w{$c}/$p_of_w) * log2($p_of_notcj_given_w{$c}/$p_of_w);
-      $clause3 -= ($p_of_cj_given_notw{$c}/$p_of_notw) * log2($p_of_cj_given_notw{$c}/$p_of_notw);
-      $clause3 -= ($p_of_notcj_given_notw{$c}/$p_of_notw) * log2($p_of_notcj_given_notw{$c}/$p_of_notw);
+      $p_of_notcj_given_w{$c} = doit("$ungrep ',.*$c' $corp | $grep \"\\b$word\\b\" | $wcl");
+      $p_of_notcj_given_notw{$c} = doit("$ungrep ',.*$c' $corp | $ungrep \"\\b$word\\b\" | $wcl");
 
       say "P(cj=$c) = $p_of_cj{$c}" if $arguments->verbose;
       say "P(cj!=$c) = $p_of_notcj{$c}" if $arguments->verbose;
@@ -141,6 +147,20 @@ while(my ($word, $scoreref) = each %{$ref->lexicon}) {
       say "P(cj=$c|w!=$word) = $p_of_cj_given_notw{$c}" if $arguments->verbose;
       say "P(cj!=$c|w=$word) = $p_of_notcj_given_w{$c}" if $arguments->verbose;
       say "P(cj!=$c|w!=$word) = $p_of_notcj_given_notw{$c}" if $arguments->verbose;
+
+      $clause1 -= div($p_of_cj{$c}, $ccount) * log2(div($p_of_cj{$c}, $ccount));
+      $clause1 -= div($p_of_notcj{$c}, $ccount) * log2(div($p_of_notcj{$c}, $ccount));
+      $clause2 -= div($p_of_cj_given_w{$c}, $p_of_w) * log2(div($p_of_cj_given_w{$c}, $p_of_w));
+      $clause2 -= div($p_of_notcj_given_w{$c}, $p_of_w) * log2(div($p_of_notcj_given_w{$c}, $p_of_w));
+      $clause3 -= div($p_of_cj_given_notw{$c}, $p_of_notw) * log2(div($p_of_cj_given_notw{$c}, $p_of_notw));
+      $clause3 -= div($p_of_notcj_given_notw{$c}, $p_of_notw) * log2(div($p_of_notcj_given_notw{$c}, $p_of_notw));
+      #$clause1 -= ($p_of_cj{$c}/$ccount) * log2($p_of_cj{$c} / $ccount);
+      #$clause1 -= ($p_of_notcj{$c}/$ccount) * log2($p_of_notcj{$c} / $ccount);
+      #$clause2 -= ($p_of_cj_given_w{$c}/$p_of_w) * log2($p_of_cj_given_w{$c}/$p_of_w);
+      #$clause2 -= ($p_of_notcj_given_w{$c}/$p_of_w) * log2($p_of_notcj_given_w{$c}/$p_of_w);
+      #$clause3 -= ($p_of_cj_given_notw{$c}/$p_of_notw) * log2($p_of_cj_given_notw{$c}/$p_of_notw);
+      #$clause3 -= ($p_of_notcj_given_notw{$c}/$p_of_notw) * log2($p_of_notcj_given_notw{$c}/$p_of_notw);
+
       say "Entropy(cj=$c) = $clause1" if $arguments->verbose;
       say "Entropy(w=$word) = $clause2" if $arguments->verbose;
       say "Entropy(w!=$word) = $clause3" if $arguments->verbose;
@@ -148,7 +168,7 @@ while(my ($word, $scoreref) = each %{$ref->lexicon}) {
       say "Entropy(cj=$c|w=$word) = $clause4" if $arguments->verbose;
       my $gain = $clause1 - $clause4;
       say "IG(cj=$c,w=$word) = $clause1 - $clause4 = $gain" if $arguments->verbose;
-      say OUTPUT "$c, $word, $gain";
+      say OUTPUT "$c, $w, $gain";
       $pb->update(++$sent);
    }
 }
