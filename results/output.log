@@ -1,0 +1,1225 @@
+Previously run test: asl
+Performance against GI (results/gi.dat):
+  Words in Common: 1025 out of 3617
+         Accuracy: 0.784390243902439
+         F1 Score: 0.836417468541821
+Performance against PCMA:
+  Words in Common: 86 out of 500
+         Accuracy: 0.895348837209302
+         F1 Score: 0.88
+  Size of Lexicon: 8189 results/asl.dat
+
+Running test: asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_ada3.dat > log/asl_ada3.log
+Time of execution: 1 minute, 37 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 1025 out of 3617
+         Accuracy: 0.784390243902439
+         F1 Score: 0.836417468541821
+Performance against PCMA:
+  Words in Common: 86 out of 500
+         Accuracy: 0.895348837209302
+         F1 Score: 0.88
+  Size of Lexicon: 8189 results/asl_ada3.dat
+
+Running test: asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_inv3.dat > log/asl_inv3.log
+Time of execution: 1 minute, 37 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 1025 out of 3617
+         Accuracy: 0.784390243902439
+         F1 Score: 0.836417468541821
+Performance against PCMA:
+  Words in Common: 86 out of 500
+         Accuracy: 0.895348837209302
+         F1 Score: 0.88
+  Size of Lexicon: 8189 results/asl_inv3.dat
+
+Previously run test: asl_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3276 out of 3617
+         Accuracy: 0.632173382173382
+         F1 Score: 0.703712810425375
+Performance against PCMA:
+  Words in Common: 411 out of 500
+         Accuracy: 0.605839416058394
+         F1 Score: 0.653846153846154
+  Size of Lexicon: 87528 results/asl_msl.dat
+
+Running test: asl_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_msl_ada3.dat > log/asl_msl_ada3.log
+Time of execution: 4 minutes, 21 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3426 out of 3617
+         Accuracy: 0.509632224168126
+         F1 Score: 0.642248722316865
+Performance against PCMA:
+  Words in Common: 432 out of 500
+         Accuracy: 0.509259259259259
+         F1 Score: 0.608856088560886
+  Size of Lexicon: 99868 results/asl_msl_ada3.dat
+
+Running test: asl_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_msl_inv3.dat > log/asl_msl_inv3.log
+Time of execution: 4 minutes, 22 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3436 out of 3617
+         Accuracy: 0.687427240977881
+         F1 Score: 0.731634182908546
+Performance against PCMA:
+  Words in Common: 435 out of 500
+         Accuracy: 0.662068965517241
+         F1 Score: 0.685224839400428
+  Size of Lexicon: 100154 results/asl_msl_inv3.dat
+
+Previously run test: asl_msl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3239 out of 3617
+         Accuracy: 0.628897807965421
+         F1 Score: 0.712164750957854
+Performance against PCMA:
+  Words in Common: 446 out of 500
+         Accuracy: 0.596412556053812
+         F1 Score: 0.645669291338583
+  Size of Lexicon: 107598 results/asl_msl_wnd2.dat
+
+Running test: asl_msl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_msl_wnd2_ada3.dat > log/asl_msl_wnd2_ada3.log
+Time of execution: 6 minutes, 33 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3501 out of 3617
+         Accuracy: 0.511568123393316
+         F1 Score: 0.640454163162321
+Performance against PCMA:
+  Words in Common: 471 out of 500
+         Accuracy: 0.490445859872611
+         F1 Score: 0.595959595959596
+  Size of Lexicon: 123750 results/asl_msl_wnd2_ada3.dat
+
+Running test: asl_msl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_msl_wnd2_inv3.dat > log/asl_msl_wnd2_inv3.log
+Time of execution: 6 minutes, 30 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3296 out of 3617
+         Accuracy: 0.742415048543689
+         F1 Score: 0.78010878010878
+Performance against PCMA:
+  Words in Common: 463 out of 500
+         Accuracy: 0.676025917926566
+         F1 Score: 0.701195219123506
+  Size of Lexicon: 122641 results/asl_msl_wnd2_inv3.dat
+
+Previously run test: asl_msl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3223 out of 3617
+         Accuracy: 0.6310890474713
+         F1 Score: 0.713976425306712
+Performance against PCMA:
+  Words in Common: 446 out of 500
+         Accuracy: 0.596412556053812
+         F1 Score: 0.645669291338583
+  Size of Lexicon: 107581 results/asl_msl_wnd3.dat
+
+Running test: asl_msl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_msl_wnd3_ada3.dat > log/asl_msl_wnd3_ada3.log
+Time of execution: 8 minutes, 54 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3497 out of 3617
+         Accuracy: 0.509579639691164
+         F1 Score: 0.639327024185068
+Performance against PCMA:
+  Words in Common: 471 out of 500
+         Accuracy: 0.490445859872611
+         F1 Score: 0.595959595959596
+  Size of Lexicon: 123742 results/asl_msl_wnd3_ada3.dat
+
+Running test: asl_msl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_msl_wnd3_inv3.dat > log/asl_msl_wnd3_inv3.log
+Time of execution: 8 minutes, 49 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3288 out of 3617
+         Accuracy: 0.743917274939173
+         F1 Score: 0.78141225337487
+Performance against PCMA:
+  Words in Common: 463 out of 500
+         Accuracy: 0.673866090712743
+         F1 Score: 0.699801192842942
+  Size of Lexicon: 122611 results/asl_msl_wnd3_inv3.dat
+
+Previously run test: asl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 1847 out of 3617
+         Accuracy: 0.698971304818625
+         F1 Score: 0.762798634812287
+Performance against PCMA:
+  Words in Common: 119 out of 500
+         Accuracy: 0.848739495798319
+         F1 Score: 0.839285714285714
+  Size of Lexicon: 15118 results/asl_wnd2.dat
+
+Running test: asl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_wnd2_ada3.dat > log/asl_wnd2_ada3.log
+Time of execution: 2 minutes, 14 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2617 out of 3617
+         Accuracy: 0.611004967520061
+         F1 Score: 0.691888619854722
+Performance against PCMA:
+  Words in Common: 174 out of 500
+         Accuracy: 0.724137931034483
+         F1 Score: 0.724137931034483
+  Size of Lexicon: 26829 results/asl_wnd2_ada3.dat
+
+Running test: asl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_wnd2_inv3.dat > log/asl_wnd2_inv3.log
+Time of execution: 2 minutes, 16 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2607 out of 3617
+         Accuracy: 0.682777138473341
+         F1 Score: 0.736204146730463
+Performance against PCMA:
+  Words in Common: 172 out of 500
+         Accuracy: 0.767441860465116
+         F1 Score: 0.759036144578313
+  Size of Lexicon: 26798 results/asl_wnd2_inv3.dat
+
+Previously run test: asl_wnd2_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3376 out of 3617
+         Accuracy: 0.619075829383886
+         F1 Score: 0.6981220657277
+Performance against PCMA:
+  Words in Common: 440 out of 500
+         Accuracy: 0.597727272727273
+         F1 Score: 0.64950495049505
+  Size of Lexicon: 98792 results/asl_wnd2_msl.dat
+
+Running test: asl_wnd2_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_wnd2_msl_ada3.dat > log/asl_wnd2_msl_ada3.log
+Time of execution: 5 minutes, 12 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3489 out of 3617
+         Accuracy: 0.539409572943537
+         F1 Score: 0.652239774940489
+Performance against PCMA:
+  Words in Common: 458 out of 500
+         Accuracy: 0.543668122270742
+         F1 Score: 0.620689655172414
+  Size of Lexicon: 107537 results/asl_wnd2_msl_ada3.dat
+
+Running test: asl_wnd2_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_wnd2_msl_inv3.dat > log/asl_wnd2_msl_inv3.log
+Time of execution: 5 minutes, 13 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3431 out of 3617
+         Accuracy: 0.682016904692509
+         F1 Score: 0.732794513837864
+Performance against PCMA:
+  Words in Common: 458 out of 500
+         Accuracy: 0.663755458515284
+         F1 Score: 0.684426229508197
+  Size of Lexicon: 107211 results/asl_wnd2_msl_inv3.dat
+
+Previously run test: asl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 1848 out of 3617
+         Accuracy: 0.701298701298701
+         F1 Score: 0.763496143958869
+Performance against PCMA:
+  Words in Common: 120 out of 500
+         Accuracy: 0.858333333333333
+         F1 Score: 0.846846846846847
+  Size of Lexicon: 15151 results/asl_wnd3.dat
+
+Running test: asl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_wnd3_ada3.dat > log/asl_wnd3_ada3.log
+Time of execution: 3 minutes, 3 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2610 out of 3617
+         Accuracy: 0.613793103448276
+         F1 Score: 0.695652173913043
+Performance against PCMA:
+  Words in Common: 174 out of 500
+         Accuracy: 0.724137931034483
+         F1 Score: 0.724137931034483
+  Size of Lexicon: 26841 results/asl_wnd3_ada3.dat
+
+Running test: asl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_wnd3_inv3.dat > log/asl_wnd3_inv3.log
+Time of execution: 3 minutes, 4 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2608 out of 3617
+         Accuracy: 0.679064417177914
+         F1 Score: 0.734201333756748
+Performance against PCMA:
+  Words in Common: 172 out of 500
+         Accuracy: 0.761627906976744
+         F1 Score: 0.754491017964072
+  Size of Lexicon: 26806 results/asl_wnd3_inv3.dat
+
+Previously run test: asl_wnd3_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3365 out of 3617
+         Accuracy: 0.62109955423477
+         F1 Score: 0.700070571630205
+Performance against PCMA:
+  Words in Common: 440 out of 500
+         Accuracy: 0.604545454545454
+         F1 Score: 0.654761904761905
+  Size of Lexicon: 98712 results/asl_wnd3_msl.dat
+
+Running test: asl_wnd3_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to asl_wnd3_msl_ada3.dat > log/asl_wnd3_msl_ada3.log
+Time of execution: 6 minutes
+Performance against GI (results/gi.dat):
+  Words in Common: 3499 out of 3617
+         Accuracy: 0.537582166333238
+         F1 Score: 0.652938652938653
+Performance against PCMA:
+  Words in Common: 458 out of 500
+         Accuracy: 0.54585152838428
+         F1 Score: 0.623188405797101
+  Size of Lexicon: 107592 results/asl_wnd3_msl_ada3.dat
+
+Running test: asl_wnd3_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to asl_wnd3_msl_inv3.dat > log/asl_wnd3_msl_inv3.log
+Time of execution: 6 minutes, 5 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3426 out of 3617
+         Accuracy: 0.682136602451839
+         F1 Score: 0.733545387815023
+Performance against PCMA:
+  Words in Common: 459 out of 500
+         Accuracy: 0.662309368191721
+         F1 Score: 0.683026584867076
+  Size of Lexicon: 107231 results/asl_wnd3_msl_inv3.dat
+
+Previously run test: masl
+Performance against GI (results/gi.dat):
+  Words in Common: 2168 out of 3617
+         Accuracy: 0.620387453874539
+         F1 Score: 0.728651500164853
+Performance against PCMA:
+  Words in Common: 158 out of 500
+         Accuracy: 0.772151898734177
+         F1 Score: 0.795454545454545
+  Size of Lexicon: 56696 results/masl.dat
+
+Running test: masl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to masl_ada3.dat > log/masl_ada3.log
+Time of execution: 9 minutes, 56 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2168 out of 3617
+         Accuracy: 0.620387453874539
+         F1 Score: 0.728651500164853
+Performance against PCMA:
+  Words in Common: 158 out of 500
+         Accuracy: 0.772151898734177
+         F1 Score: 0.795454545454545
+  Size of Lexicon: 56696 results/masl_ada3.dat
+
+Running test: masl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to masl_inv3.dat > log/masl_inv3.log
+Time of execution: 10 minutes, 1 second
+Performance against GI (results/gi.dat):
+  Words in Common: 2168 out of 3617
+         Accuracy: 0.620387453874539
+         F1 Score: 0.728651500164853
+Performance against PCMA:
+  Words in Common: 158 out of 500
+         Accuracy: 0.772151898734177
+         F1 Score: 0.795454545454545
+  Size of Lexicon: 56696 results/masl_inv3.dat
+
+Previously run test: mpqa
+Performance against GI (results/gi.dat):
+  Words in Common: 2863 out of 3617
+         Accuracy: 0.984282221446036
+         F1 Score: 0.981052631578947
+Performance against PCMA:
+  Words in Common: 58 out of 500
+         Accuracy: 0.982758620689655
+         F1 Score: 0.967741935483871
+  Size of Lexicon: 6436 results/mpqa.dat
+
+Running test: mpqa_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_ada3.dat > log/mpqa_ada3.log
+Time of execution: 5 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2863 out of 3617
+         Accuracy: 0.984282221446036
+         F1 Score: 0.981052631578947
+Performance against PCMA:
+  Words in Common: 58 out of 500
+         Accuracy: 0.982758620689655
+         F1 Score: 0.967741935483871
+  Size of Lexicon: 6436 results/mpqa_ada3.dat
+
+Running test: mpqa_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_inv3.dat > log/mpqa_inv3.log
+Time of execution: 4 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2863 out of 3617
+         Accuracy: 0.984282221446036
+         F1 Score: 0.981052631578947
+Performance against PCMA:
+  Words in Common: 58 out of 500
+         Accuracy: 0.982758620689655
+         F1 Score: 0.967741935483871
+  Size of Lexicon: 6436 results/mpqa_inv3.dat
+
+Previously run test: mpqa_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 2875 out of 3617
+         Accuracy: 0.968695652173913
+         F1 Score: 0.964925954793453
+Performance against PCMA:
+  Words in Common: 128 out of 500
+         Accuracy: 0.921875
+         F1 Score: 0.895833333333333
+  Size of Lexicon: 12720 results/mpqa_asl.dat
+
+Running test: mpqa_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_ada3.dat > log/mpqa_asl_ada3.log
+Time of execution: 1 minute, 42 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2875 out of 3617
+         Accuracy: 0.968695652173913
+         F1 Score: 0.964925954793453
+Performance against PCMA:
+  Words in Common: 128 out of 500
+         Accuracy: 0.921875
+         F1 Score: 0.895833333333333
+  Size of Lexicon: 12720 results/mpqa_asl_ada3.dat
+
+Running test: mpqa_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_inv3.dat > log/mpqa_asl_inv3.log
+Time of execution: 1 minute, 42 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 2875 out of 3617
+         Accuracy: 0.968695652173913
+         F1 Score: 0.964925954793453
+Performance against PCMA:
+  Words in Common: 128 out of 500
+         Accuracy: 0.921875
+         F1 Score: 0.895833333333333
+  Size of Lexicon: 12720 results/mpqa_asl_inv3.dat
+
+Previously run test: mpqa_asl_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3198 out of 3617
+         Accuracy: 0.91400875547217
+         F1 Score: 0.909330695680844
+Performance against PCMA:
+  Words in Common: 439 out of 500
+         Accuracy: 0.804100227790433
+         F1 Score: 0.772486772486772
+  Size of Lexicon: 94337 results/mpqa_asl_msl.dat
+
+Running test: mpqa_asl_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_msl_ada3.dat > log/mpqa_asl_msl_ada3.log
+Time of execution: 4 minutes, 31 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3189 out of 3617
+         Accuracy: 0.897146440890561
+         F1 Score: 0.886111111111111
+Performance against PCMA:
+  Words in Common: 441 out of 500
+         Accuracy: 0.775510204081633
+         F1 Score: 0.727272727272727
+  Size of Lexicon: 100240 results/mpqa_asl_msl_ada3.dat
+
+Running test: mpqa_asl_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_msl_inv3.dat > log/mpqa_asl_msl_inv3.log
+Time of execution: 4 minutes, 35 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3230 out of 3617
+         Accuracy: 0.917956656346749
+         F1 Score: 0.912685337726524
+Performance against PCMA:
+  Words in Common: 446 out of 500
+         Accuracy: 0.807174887892377
+         F1 Score: 0.774869109947644
+  Size of Lexicon: 100206 results/mpqa_asl_msl_inv3.dat
+
+Previously run test: mpqa_asl_msl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3359 out of 3617
+         Accuracy: 0.91336707353379
+         F1 Score: 0.908056872037915
+Performance against PCMA:
+  Words in Common: 464 out of 500
+         Accuracy: 0.825431034482759
+         F1 Score: 0.791773778920309
+  Size of Lexicon: 113366 results/mpqa_asl_msl_wnd2.dat
+
+Running test: mpqa_asl_msl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_msl_wnd2_ada3.dat > log/mpqa_asl_msl_wnd2_ada3.log
+Time of execution: 7 minutes, 1 second
+Performance against GI (results/gi.dat):
+  Words in Common: 3410 out of 3617
+         Accuracy: 0.888563049853372
+         F1 Score: 0.877813504823151
+Performance against PCMA:
+  Words in Common: 475 out of 500
+         Accuracy: 0.781052631578947
+         F1 Score: 0.73469387755102
+  Size of Lexicon: 122377 results/mpqa_asl_msl_wnd2_ada3.dat
+
+Running test: mpqa_asl_msl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_msl_wnd2_inv3.dat > log/mpqa_asl_msl_wnd2_inv3.log
+Time of execution: 7 minutes, 4 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3401 out of 3617
+         Accuracy: 0.925022052337548
+         F1 Score: 0.918970448045758
+Performance against PCMA:
+  Words in Common: 475 out of 500
+         Accuracy: 0.825263157894737
+         F1 Score: 0.789873417721519
+  Size of Lexicon: 122090 results/mpqa_asl_msl_wnd2_inv3.dat
+
+Previously run test: mpqa_asl_msl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3360 out of 3617
+         Accuracy: 0.914880952380952
+         F1 Score: 0.90960809102402
+Performance against PCMA:
+  Words in Common: 462 out of 500
+         Accuracy: 0.829004329004329
+         F1 Score: 0.795865633074935
+  Size of Lexicon: 113370 results/mpqa_asl_msl_wnd3.dat
+
+Running test: mpqa_asl_msl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_msl_wnd3_ada3.dat > log/mpqa_asl_msl_wnd3_ada3.log
+Time of execution: 9 minutes, 26 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3411 out of 3617
+         Accuracy: 0.88830255057168
+         F1 Score: 0.877531340405015
+Performance against PCMA:
+  Words in Common: 473 out of 500
+         Accuracy: 0.784355179704017
+         F1 Score: 0.738461538461539
+  Size of Lexicon: 122364 results/mpqa_asl_msl_wnd3_ada3.dat
+
+Running test: mpqa_asl_msl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_msl_wnd3_inv3.dat > log/mpqa_asl_msl_wnd3_inv3.log
+Time of execution: 9 minutes, 19 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3401 out of 3617
+         Accuracy: 0.92443399000294
+         F1 Score: 0.918334922148078
+Performance against PCMA:
+  Words in Common: 474 out of 500
+         Accuracy: 0.827004219409283
+         F1 Score: 0.791878172588833
+  Size of Lexicon: 122079 results/mpqa_asl_msl_wnd3_inv3.dat
+
+Previously run test: mpqa_asl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3196 out of 3617
+         Accuracy: 0.944931163954944
+         F1 Score: 0.939643347050754
+Performance against PCMA:
+  Words in Common: 186 out of 500
+         Accuracy: 0.919354838709677
+         F1 Score: 0.893617021276596
+  Size of Lexicon: 22892 results/mpqa_asl_wnd2.dat
+
+Running test: mpqa_asl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_wnd2_ada3.dat > log/mpqa_asl_wnd2_ada3.log
+Time of execution: 2 minutes, 37 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3341 out of 3617
+         Accuracy: 0.931457647410955
+         F1 Score: 0.925913943707538
+Performance against PCMA:
+  Words in Common: 209 out of 500
+         Accuracy: 0.870813397129187
+         F1 Score: 0.838323353293413
+  Size of Lexicon: 31648 results/mpqa_asl_wnd2_ada3.dat
+
+Running test: mpqa_asl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_wnd2_inv3.dat > log/mpqa_asl_wnd2_inv3.log
+Time of execution: 2 minutes, 31 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3345 out of 3617
+         Accuracy: 0.94559043348281
+         F1 Score: 0.940249507550886
+Performance against PCMA:
+  Words in Common: 208 out of 500
+         Accuracy: 0.875
+         F1 Score: 0.839506172839506
+  Size of Lexicon: 31642 results/mpqa_asl_wnd2_inv3.dat
+
+Previously run test: mpqa_asl_wnd2_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3469 out of 3617
+         Accuracy: 0.929374459498415
+         F1 Score: 0.923365655301845
+Performance against PCMA:
+  Words in Common: 449 out of 500
+         Accuracy: 0.828507795100223
+         F1 Score: 0.794666666666667
+  Size of Lexicon: 101113 results/mpqa_asl_wnd2_msl.dat
+
+Running test: mpqa_asl_wnd2_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_wnd2_msl_ada3.dat > log/mpqa_asl_wnd2_msl_ada3.log
+Time of execution: 5 minutes, 32 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3488 out of 3617
+         Accuracy: 0.914850917431193
+         F1 Score: 0.907158487027196
+Performance against PCMA:
+  Words in Common: 469 out of 500
+         Accuracy: 0.788912579957356
+         F1 Score: 0.745501285347044
+  Size of Lexicon: 107811 results/mpqa_asl_wnd2_msl_ada3.dat
+
+Running test: mpqa_asl_wnd2_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_wnd2_msl_inv3.dat > log/mpqa_asl_wnd2_msl_inv3.log
+Time of execution: 5 minutes, 40 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3499 out of 3617
+         Accuracy: 0.935410117176336
+         F1 Score: 0.929064657878217
+Performance against PCMA:
+  Words in Common: 465 out of 500
+         Accuracy: 0.838709677419355
+         F1 Score: 0.803149606299213
+  Size of Lexicon: 107765 results/mpqa_asl_wnd2_msl_inv3.dat
+
+Previously run test: mpqa_asl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3193 out of 3617
+         Accuracy: 0.94487942373943
+         F1 Score: 0.939435650378527
+Performance against PCMA:
+  Words in Common: 186 out of 500
+         Accuracy: 0.919354838709677
+         F1 Score: 0.893617021276596
+  Size of Lexicon: 22910 results/mpqa_asl_wnd3.dat
+
+Running test: mpqa_asl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_wnd3_ada3.dat > log/mpqa_asl_wnd3_ada3.log
+Time of execution: 3 minutes, 43 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3340 out of 3617
+         Accuracy: 0.930538922155689
+         F1 Score: 0.924821775761504
+Performance against PCMA:
+  Words in Common: 209 out of 500
+         Accuracy: 0.870813397129187
+         F1 Score: 0.838323353293413
+  Size of Lexicon: 31637 results/mpqa_asl_wnd3_ada3.dat
+
+Running test: mpqa_asl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_wnd3_inv3.dat > log/mpqa_asl_wnd3_inv3.log
+Time of execution: 3 minutes, 38 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3345 out of 3617
+         Accuracy: 0.944394618834081
+         F1 Score: 0.938936309914642
+Performance against PCMA:
+  Words in Common: 209 out of 500
+         Accuracy: 0.880382775119617
+         F1 Score: 0.848484848484848
+  Size of Lexicon: 31635 results/mpqa_asl_wnd3_inv3.dat
+
+Previously run test: mpqa_asl_wnd3_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3468 out of 3617
+         Accuracy: 0.929065743944637
+         F1 Score: 0.923028785982478
+Performance against PCMA:
+  Words in Common: 449 out of 500
+         Accuracy: 0.826280623608018
+         F1 Score: 0.792553191489362
+  Size of Lexicon: 101115 results/mpqa_asl_wnd3_msl.dat
+
+Running test: mpqa_asl_wnd3_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_asl_wnd3_msl_ada3.dat > log/mpqa_asl_wnd3_msl_ada3.log
+Time of execution: 6 minutes, 47 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3488 out of 3617
+         Accuracy: 0.91427752293578
+         F1 Score: 0.90641627543036
+Performance against PCMA:
+  Words in Common: 469 out of 500
+         Accuracy: 0.784648187633262
+         F1 Score: 0.741687979539642
+  Size of Lexicon: 107750 results/mpqa_asl_wnd3_msl_ada3.dat
+
+Running test: mpqa_asl_wnd3_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_asl_wnd3_msl_inv3.dat > log/mpqa_asl_wnd3_msl_inv3.log
+Time of execution: 6 minutes, 41 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3501 out of 3617
+         Accuracy: 0.934590117109397
+         F1 Score: 0.92823566280163
+Performance against PCMA:
+  Words in Common: 466 out of 500
+         Accuracy: 0.839055793991416
+         F1 Score: 0.804177545691906
+  Size of Lexicon: 107747 results/mpqa_asl_wnd3_msl_inv3.dat
+
+Previously run test: mpqa_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3215 out of 3617
+         Accuracy: 0.92348367029549
+         F1 Score: 0.908618127786033
+Performance against PCMA:
+  Words in Common: 436 out of 500
+         Accuracy: 0.821100917431193
+         F1 Score: 0.75625
+  Size of Lexicon: 90391 results/mpqa_msl.dat
+
+Running test: mpqa_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_ada3.dat > log/mpqa_msl_ada3.log
+Time of execution: 2 minutes, 51 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3161 out of 3617
+         Accuracy: 0.897500790888959
+         F1 Score: 0.867647058823529
+Performance against PCMA:
+  Words in Common: 456 out of 500
+         Accuracy: 0.75219298245614
+         F1 Score: 0.658610271903323
+  Size of Lexicon: 101344 results/mpqa_msl_ada3.dat
+
+Running test: mpqa_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_inv3.dat > log/mpqa_msl_inv3.log
+Time of execution: 2 minutes, 51 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3249 out of 3617
+         Accuracy: 0.919052016004925
+         F1 Score: 0.904119577105359
+Performance against PCMA:
+  Words in Common: 456 out of 500
+         Accuracy: 0.804824561403509
+         F1 Score: 0.749295774647887
+  Size of Lexicon: 101556 results/mpqa_msl_inv3.dat
+
+Previously run test: mpqa_msl_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3237 out of 3617
+         Accuracy: 0.92678405931418
+         F1 Score: 0.915266356810869
+Performance against PCMA:
+  Words in Common: 426 out of 500
+         Accuracy: 0.828638497652582
+         F1 Score: 0.765273311897106
+  Size of Lexicon: 88765 results/mpqa_msl_asl.dat
+
+Running test: mpqa_msl_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_asl_ada3.dat > log/mpqa_msl_asl_ada3.log
+Time of execution: 4 minutes, 27 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3227 out of 3617
+         Accuracy: 0.906724511930586
+         F1 Score: 0.88637221593054
+Performance against PCMA:
+  Words in Common: 435 out of 500
+         Accuracy: 0.786206896551724
+         F1 Score: 0.702875399361022
+  Size of Lexicon: 99585 results/mpqa_msl_asl_ada3.dat
+
+Running test: mpqa_msl_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_asl_inv3.dat > log/mpqa_msl_asl_inv3.log
+Time of execution: 4 minutes, 31 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3259 out of 3617
+         Accuracy: 0.923596195151887
+         F1 Score: 0.911983032873807
+Performance against PCMA:
+  Words in Common: 445 out of 500
+         Accuracy: 0.813483146067416
+         F1 Score: 0.75801749271137
+  Size of Lexicon: 99537 results/mpqa_msl_asl_inv3.dat
+
+Previously run test: mpqa_msl_asl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3375 out of 3617
+         Accuracy: 0.922074074074074
+         F1 Score: 0.910023947998632
+Performance against PCMA:
+  Words in Common: 458 out of 500
+         Accuracy: 0.849344978165939
+         F1 Score: 0.788990825688073
+  Size of Lexicon: 107490 results/mpqa_msl_asl_wnd2.dat
+
+Running test: mpqa_msl_asl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_asl_wnd2_ada3.dat > log/mpqa_msl_asl_wnd2_ada3.log
+Time of execution: 6 minutes, 39 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3436 out of 3617
+         Accuracy: 0.884749708963911
+         F1 Score: 0.862595419847328
+Performance against PCMA:
+  Words in Common: 472 out of 500
+         Accuracy: 0.807203389830508
+         F1 Score: 0.73469387755102
+  Size of Lexicon: 122181 results/mpqa_msl_asl_wnd2_ada3.dat
+
+Running test: mpqa_msl_asl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_asl_wnd2_inv3.dat > log/mpqa_msl_asl_wnd2_inv3.log
+Time of execution: 6 minutes, 44 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3429 out of 3617
+         Accuracy: 0.925342665500146
+         F1 Score: 0.914609739826551
+Performance against PCMA:
+  Words in Common: 475 out of 500
+         Accuracy: 0.829473684210526
+         F1 Score: 0.774373259052925
+  Size of Lexicon: 121869 results/mpqa_msl_asl_wnd2_inv3.dat
+
+Previously run test: mpqa_msl_asl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3374 out of 3617
+         Accuracy: 0.922643746295199
+         F1 Score: 0.910647038685382
+Performance against PCMA:
+  Words in Common: 456 out of 500
+         Accuracy: 0.853070175438597
+         F1 Score: 0.793846153846154
+  Size of Lexicon: 107491 results/mpqa_msl_asl_wnd3.dat
+
+Running test: mpqa_msl_asl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_asl_wnd3_ada3.dat > log/mpqa_msl_asl_wnd3_ada3.log
+Time of execution: 8 minutes, 59 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3437 out of 3617
+         Accuracy: 0.88478324119872
+         F1 Score: 0.862785862785863
+Performance against PCMA:
+  Words in Common: 470 out of 500
+         Accuracy: 0.81063829787234
+         F1 Score: 0.73900293255132
+  Size of Lexicon: 122165 results/mpqa_msl_asl_wnd3_ada3.dat
+
+Running test: mpqa_msl_asl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_asl_wnd3_inv3.dat > log/mpqa_msl_asl_wnd3_inv3.log
+Time of execution: 8 minutes, 54 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3431 out of 3617
+         Accuracy: 0.924803264354416
+         F1 Score: 0.914
+Performance against PCMA:
+  Words in Common: 474 out of 500
+         Accuracy: 0.831223628691983
+         F1 Score: 0.776536312849162
+  Size of Lexicon: 121862 results/mpqa_msl_asl_wnd3_inv3.dat
+
+Previously run test: mpqa_msl_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3351 out of 3617
+         Accuracy: 0.917934944792599
+         F1 Score: 0.902378416755414
+Performance against PCMA:
+  Words in Common: 464 out of 500
+         Accuracy: 0.844827586206897
+         F1 Score: 0.780487804878049
+  Size of Lexicon: 108711 results/mpqa_msl_wnd2.dat
+
+Running test: mpqa_msl_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_wnd2_ada3.dat > log/mpqa_msl_wnd2_ada3.log
+Time of execution: 5 minutes, 5 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3410 out of 3617
+         Accuracy: 0.870381231671554
+         F1 Score: 0.837738619676946
+Performance against PCMA:
+  Words in Common: 481 out of 500
+         Accuracy: 0.775467775467775
+         F1 Score: 0.684210526315789
+  Size of Lexicon: 123335 results/mpqa_msl_wnd2_ada3.dat
+
+Running test: mpqa_msl_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_wnd2_inv3.dat > log/mpqa_msl_wnd2_inv3.log
+Time of execution: 5 minutes, 9 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3404 out of 3617
+         Accuracy: 0.927144535840188
+         F1 Score: 0.914951989026063
+Performance against PCMA:
+  Words in Common: 482 out of 500
+         Accuracy: 0.823651452282158
+         F1 Score: 0.765840220385675
+  Size of Lexicon: 123098 results/mpqa_msl_wnd2_inv3.dat
+
+Previously run test: mpqa_msl_wnd2_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3387 out of 3617
+         Accuracy: 0.917035724830233
+         F1 Score: 0.902801798685576
+Performance against PCMA:
+  Words in Common: 468 out of 500
+         Accuracy: 0.844017094017094
+         F1 Score: 0.782089552238806
+  Size of Lexicon: 109159 results/mpqa_msl_wnd2_asl.dat
+
+Running test: mpqa_msl_wnd2_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_wnd2_asl_ada3.dat > log/mpqa_msl_wnd2_asl_ada3.log
+Time of execution: 6 minutes, 48 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3428 out of 3617
+         Accuracy: 0.880688448074679
+         F1 Score: 0.853562477622628
+Performance against PCMA:
+  Words in Common: 487 out of 500
+         Accuracy: 0.7782340862423
+         F1 Score: 0.693181818181818
+  Size of Lexicon: 123566 results/mpqa_msl_wnd2_asl_ada3.dat
+
+Running test: mpqa_msl_wnd2_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_wnd2_asl_inv3.dat > log/mpqa_msl_wnd2_asl_inv3.log
+Time of execution: 6 minutes, 52 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3437 out of 3617
+         Accuracy: 0.924643584521385
+         F1 Score: 0.913116403891312
+Performance against PCMA:
+  Words in Common: 485 out of 500
+         Accuracy: 0.824742268041237
+         F1 Score: 0.769647696476965
+  Size of Lexicon: 123358 results/mpqa_msl_wnd2_asl_inv3.dat
+
+Previously run test: mpqa_msl_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3354 out of 3617
+         Accuracy: 0.918306499701849
+         F1 Score: 0.902836879432624
+Performance against PCMA:
+  Words in Common: 464 out of 500
+         Accuracy: 0.844827586206897
+         F1 Score: 0.780487804878049
+  Size of Lexicon: 108694 results/mpqa_msl_wnd3.dat
+
+Running test: mpqa_msl_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_wnd3_ada3.dat > log/mpqa_msl_wnd3_ada3.log
+Time of execution: 7 minutes, 22 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3410 out of 3617
+         Accuracy: 0.870674486803519
+         F1 Score: 0.838402345181385
+Performance against PCMA:
+  Words in Common: 481 out of 500
+         Accuracy: 0.775467775467775
+         F1 Score: 0.684210526315789
+  Size of Lexicon: 123308 results/mpqa_msl_wnd3_ada3.dat
+
+Running test: mpqa_msl_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_wnd3_inv3.dat > log/mpqa_msl_wnd3_inv3.log
+Time of execution: 7 minutes, 27 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3404 out of 3617
+         Accuracy: 0.926556991774383
+         F1 Score: 0.914266117969822
+Performance against PCMA:
+  Words in Common: 482 out of 500
+         Accuracy: 0.823651452282158
+         F1 Score: 0.765840220385675
+  Size of Lexicon: 123081 results/mpqa_msl_wnd3_inv3.dat
+
+Previously run test: mpqa_msl_wnd3_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3389 out of 3617
+         Accuracy: 0.917084685748008
+         F1 Score: 0.902868994123747
+Performance against PCMA:
+  Words in Common: 467 out of 500
+         Accuracy: 0.843683083511777
+         F1 Score: 0.782089552238806
+  Size of Lexicon: 109146 results/mpqa_msl_wnd3_asl.dat
+
+Running test: mpqa_msl_wnd3_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_msl_wnd3_asl_ada3.dat > log/mpqa_msl_wnd3_asl_ada3.log
+Time of execution: 9 minutes, 7 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3430 out of 3617
+         Accuracy: 0.87930029154519
+         F1 Score: 0.852248394004283
+Performance against PCMA:
+  Words in Common: 486 out of 500
+         Accuracy: 0.777777777777778
+         F1 Score: 0.693181818181818
+  Size of Lexicon: 123559 results/mpqa_msl_wnd3_asl_ada3.dat
+
+Running test: mpqa_msl_wnd3_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_msl_wnd3_asl_inv3.dat > log/mpqa_msl_wnd3_asl_inv3.log
+Time of execution: 9 minutes, 5 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3439 out of 3617
+         Accuracy: 0.923524280314045
+         F1 Score: 0.911892797319933
+Performance against PCMA:
+  Words in Common: 485 out of 500
+         Accuracy: 0.822680412371134
+         F1 Score: 0.767567567567567
+  Size of Lexicon: 123355 results/mpqa_msl_wnd3_asl_inv3.dat
+
+Previously run test: mpqa_wnd2
+Performance against GI (results/gi.dat):
+  Words in Common: 3145 out of 3617
+         Accuracy: 0.964069952305246
+         F1 Score: 0.957310162448054
+Performance against PCMA:
+  Words in Common: 114 out of 500
+         Accuracy: 0.93859649122807
+         F1 Score: 0.901408450704225
+  Size of Lexicon: 14379 results/mpqa_wnd2.dat
+
+Running test: mpqa_wnd2_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd2_ada3.dat > log/mpqa_wnd2_ada3.log
+Time of execution: 43 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3357 out of 3617
+         Accuracy: 0.938039916592195
+         F1 Score: 0.928571428571429
+Performance against PCMA:
+  Words in Common: 148 out of 500
+         Accuracy: 0.858108108108108
+         F1 Score: 0.803738317757009
+  Size of Lexicon: 25086 results/mpqa_wnd2_ada3.dat
+
+Running test: mpqa_wnd2_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd2_inv3.dat > log/mpqa_wnd2_inv3.log
+Time of execution: 43 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3365 out of 3617
+         Accuracy: 0.950074294205052
+         F1 Score: 0.941948859709744
+Performance against PCMA:
+  Words in Common: 149 out of 500
+         Accuracy: 0.852348993288591
+         F1 Score: 0.792452830188679
+  Size of Lexicon: 25113 results/mpqa_wnd2_inv3.dat
+
+Previously run test: mpqa_wnd2_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3211 out of 3617
+         Accuracy: 0.96013702896294
+         F1 Score: 0.954022988505747
+Performance against PCMA:
+  Words in Common: 174 out of 500
+         Accuracy: 0.925287356321839
+         F1 Score: 0.897637795275591
+  Size of Lexicon: 19813 results/mpqa_wnd2_asl.dat
+
+Running test: mpqa_wnd2_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd2_asl_ada3.dat > log/mpqa_wnd2_asl_ada3.log
+Time of execution: 2 minutes, 28 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3388 out of 3617
+         Accuracy: 0.939492325855962
+         F1 Score: 0.931689436854382
+Performance against PCMA:
+  Words in Common: 203 out of 500
+         Accuracy: 0.87192118226601
+         F1 Score: 0.831168831168831
+  Size of Lexicon: 29978 results/mpqa_wnd2_asl_ada3.dat
+
+Running test: mpqa_wnd2_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd2_asl_inv3.dat > log/mpqa_wnd2_asl_inv3.log
+Time of execution: 2 minutes, 25 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3397 out of 3617
+         Accuracy: 0.949072711215779
+         F1 Score: 0.941965783294197
+Performance against PCMA:
+  Words in Common: 203 out of 500
+         Accuracy: 0.87192118226601
+         F1 Score: 0.828947368421053
+  Size of Lexicon: 30003 results/mpqa_wnd2_asl_inv3.dat
+
+Previously run test: mpqa_wnd2_asl_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3478 out of 3617
+         Accuracy: 0.938182863714779
+         F1 Score: 0.930801416157065
+Performance against PCMA:
+  Words in Common: 446 out of 500
+         Accuracy: 0.84304932735426
+         F1 Score: 0.80225988700565
+  Size of Lexicon: 98489 results/mpqa_wnd2_asl_msl.dat
+
+Running test: mpqa_wnd2_asl_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd2_asl_msl_ada3.dat > log/mpqa_wnd2_asl_msl_ada3.log
+Time of execution: 5 minutes, 22 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3508 out of 3617
+         Accuracy: 0.930444697833523
+         F1 Score: 0.921137685843568
+Performance against PCMA:
+  Words in Common: 452 out of 500
+         Accuracy: 0.794247787610619
+         F1 Score: 0.731988472622478
+  Size of Lexicon: 105966 results/mpqa_wnd2_asl_msl_ada3.dat
+
+Running test: mpqa_wnd2_asl_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd2_asl_msl_inv3.dat > log/mpqa_wnd2_asl_msl_inv3.log
+Time of execution: 5 minutes, 27 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3524 out of 3617
+         Accuracy: 0.944097616345062
+         F1 Score: 0.93696
+Performance against PCMA:
+  Words in Common: 455 out of 500
+         Accuracy: 0.835164835164835
+         F1 Score: 0.789915966386555
+  Size of Lexicon: 105963 results/mpqa_wnd2_asl_msl_inv3.dat
+
+Previously run test: mpqa_wnd2_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3485 out of 3617
+         Accuracy: 0.933715925394548
+         F1 Score: 0.922974324774925
+Performance against PCMA:
+  Words in Common: 450 out of 500
+         Accuracy: 0.846666666666667
+         F1 Score: 0.787692307692308
+  Size of Lexicon: 98805 results/mpqa_wnd2_msl.dat
+
+Running test: mpqa_wnd2_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd2_msl_ada3.dat > log/mpqa_wnd2_msl_ada3.log
+Time of execution: 3 minutes, 53 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3488 out of 3617
+         Accuracy: 0.922591743119266
+         F1 Score: 0.909819639278557
+Performance against PCMA:
+  Words in Common: 466 out of 500
+         Accuracy: 0.759656652360515
+         F1 Score: 0.674418604651163
+  Size of Lexicon: 107440 results/mpqa_wnd2_msl_ada3.dat
+
+Running test: mpqa_wnd2_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd2_msl_inv3.dat > log/mpqa_wnd2_msl_inv3.log
+Time of execution: 3 minutes, 54 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3521 out of 3617
+         Accuracy: 0.939789832433968
+         F1 Score: 0.930309007232084
+Performance against PCMA:
+  Words in Common: 465 out of 500
+         Accuracy: 0.81505376344086
+         F1 Score: 0.752873563218391
+  Size of Lexicon: 107480 results/mpqa_wnd2_msl_inv3.dat
+
+Previously run test: mpqa_wnd2_msl_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3462 out of 3617
+         Accuracy: 0.939341421143847
+         F1 Score: 0.930093209054594
+Performance against PCMA:
+  Words in Common: 442 out of 500
+         Accuracy: 0.852941176470588
+         F1 Score: 0.796238244514107
+  Size of Lexicon: 97185 results/mpqa_wnd2_msl_asl.dat
+
+Running test: mpqa_wnd2_msl_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd2_msl_asl_ada3.dat > log/mpqa_wnd2_msl_asl_ada3.log
+Time of execution: 5 minutes, 32 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3501 out of 3617
+         Accuracy: 0.927163667523565
+         F1 Score: 0.916420845624385
+Performance against PCMA:
+  Words in Common: 451 out of 500
+         Accuracy: 0.787139689578714
+         F1 Score: 0.712574850299401
+  Size of Lexicon: 105954 results/mpqa_wnd2_msl_asl_ada3.dat
+
+Running test: mpqa_wnd2_msl_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd2_msl_asl_inv3.dat > log/mpqa_wnd2_msl_asl_inv3.log
+Time of execution: 5 minutes, 28 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3517 out of 3617
+         Accuracy: 0.943133352288883
+         F1 Score: 0.93485342019544
+Performance against PCMA:
+  Words in Common: 458 out of 500
+         Accuracy: 0.825327510917031
+         F1 Score: 0.767441860465116
+  Size of Lexicon: 105896 results/mpqa_wnd2_msl_asl_inv3.dat
+
+Previously run test: mpqa_wnd3
+Performance against GI (results/gi.dat):
+  Words in Common: 3148 out of 3617
+         Accuracy: 0.963468869123253
+         F1 Score: 0.956620143342135
+Performance against PCMA:
+  Words in Common: 116 out of 500
+         Accuracy: 0.939655172413793
+         F1 Score: 0.904109589041096
+  Size of Lexicon: 14452 results/mpqa_wnd3.dat
+
+Running test: mpqa_wnd3_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd3_ada3.dat > log/mpqa_wnd3_ada3.log
+Time of execution: 1 minute, 42 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3357 out of 3617
+         Accuracy: 0.937742031575812
+         F1 Score: 0.928351045594789
+Performance against PCMA:
+  Words in Common: 148 out of 500
+         Accuracy: 0.864864864864865
+         F1 Score: 0.811320754716981
+  Size of Lexicon: 25109 results/mpqa_wnd3_ada3.dat
+
+Running test: mpqa_wnd3_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd3_inv3.dat > log/mpqa_wnd3_inv3.log
+Time of execution: 1 minute, 41 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3367 out of 3617
+         Accuracy: 0.95010395010395
+         F1 Score: 0.9421088904204
+Performance against PCMA:
+  Words in Common: 148 out of 500
+         Accuracy: 0.864864864864865
+         F1 Score: 0.807692307692308
+  Size of Lexicon: 25150 results/mpqa_wnd3_inv3.dat
+
+Previously run test: mpqa_wnd3_asl_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3481 out of 3617
+         Accuracy: 0.93852341281241
+         F1 Score: 0.931233933161954
+Performance against PCMA:
+  Words in Common: 443 out of 500
+         Accuracy: 0.844243792325056
+         F1 Score: 0.803418803418803
+  Size of Lexicon: 98505 results/mpqa_wnd3_asl_msl.dat
+
+Running test: mpqa_wnd3_asl_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd3_asl_msl_ada3.dat > log/mpqa_wnd3_asl_msl_ada3.log
+Time of execution: 6 minutes, 34 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3506 out of 3617
+         Accuracy: 0.928978893325727
+         F1 Score: 0.919651500484027
+Performance against PCMA:
+  Words in Common: 451 out of 500
+         Accuracy: 0.798226164079823
+         F1 Score: 0.737752161383285
+  Size of Lexicon: 105934 results/mpqa_wnd3_asl_msl_ada3.dat
+
+Running test: mpqa_wnd3_asl_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd3_asl_msl_inv3.dat > log/mpqa_wnd3_asl_msl_inv3.log
+Time of execution: 6 minutes, 36 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3523 out of 3617
+         Accuracy: 0.943514050525121
+         F1 Score: 0.936401406200064
+Performance against PCMA:
+  Words in Common: 453 out of 500
+         Accuracy: 0.841059602649007
+         F1 Score: 0.797752808988764
+  Size of Lexicon: 105956 results/mpqa_wnd3_asl_msl_inv3.dat
+
+Previously run test: mpqa_wnd3_msl
+Performance against GI (results/gi.dat):
+  Words in Common: 3482 out of 3617
+         Accuracy: 0.934520390580126
+         F1 Score: 0.92379679144385
+Performance against PCMA:
+  Words in Common: 449 out of 500
+         Accuracy: 0.850779510022272
+         F1 Score: 0.793846153846154
+  Size of Lexicon: 98828 results/mpqa_wnd3_msl.dat
+
+Running test: mpqa_wnd3_msl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd3_msl_ada3.dat > log/mpqa_wnd3_msl_ada3.log
+Time of execution: 4 minutes, 44 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3491 out of 3617
+         Accuracy: 0.920653107991979
+         F1 Score: 0.907635878626209
+Performance against PCMA:
+  Words in Common: 465 out of 500
+         Accuracy: 0.759139784946237
+         F1 Score: 0.672514619883041
+  Size of Lexicon: 107409 results/mpqa_wnd3_msl_ada3.dat
+
+Running test: mpqa_wnd3_msl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd3_msl_inv3.dat > log/mpqa_wnd3_msl_inv3.log
+Time of execution: 4 minutes, 46 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3520 out of 3617
+         Accuracy: 0.940056818181818
+         F1 Score: 0.930660532369372
+Performance against PCMA:
+  Words in Common: 463 out of 500
+         Accuracy: 0.818574514038877
+         F1 Score: 0.757225433526012
+  Size of Lexicon: 107453 results/mpqa_wnd3_msl_inv3.dat
+
+Previously run test: mpqa_wnd3_msl_asl
+Performance against GI (results/gi.dat):
+  Words in Common: 3465 out of 3617
+         Accuracy: 0.939393939393939
+         F1 Score: 0.930139720558882
+Performance against PCMA:
+  Words in Common: 440 out of 500
+         Accuracy: 0.859090909090909
+         F1 Score: 0.805031446540881
+  Size of Lexicon: 97201 results/mpqa_wnd3_msl_asl.dat
+
+Running test: mpqa_wnd3_msl_asl_ada3 --boost-iter 3 --boost AdaBoost --boost-ref results/gi.dat to mpqa_wnd3_msl_asl_ada3.dat > log/mpqa_wnd3_msl_asl_ada3.log
+Time of execution: 6 minutes, 30 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3501 out of 3617
+         Accuracy: 0.925449871465296
+         F1 Score: 0.914510317720275
+Performance against PCMA:
+  Words in Common: 450 out of 500
+         Accuracy: 0.788888888888889
+         F1 Score: 0.712990936555891
+  Size of Lexicon: 105901 results/mpqa_wnd3_msl_asl_ada3.dat
+
+Running test: mpqa_wnd3_msl_asl_inv3 --boost-iter 3 --boost InvBoost --boost-ref results/gi.dat to mpqa_wnd3_msl_asl_inv3.dat > log/mpqa_wnd3_msl_asl_inv3.log
+Time of execution: 6 minutes, 31 seconds
+Performance against GI (results/gi.dat):
+  Words in Common: 3516 out of 3617
+         Accuracy: 0.942832764505119
+         F1 Score: 0.934591604295477
+Performance against PCMA:
+  Words in Common: 456 out of 500
+         Accuracy: 0.828947368421053
+         F1 Score: 0.771929824561403
+  Size of Lexicon: 105856 results/mpqa_wnd3_msl_asl_inv3.dat
+
