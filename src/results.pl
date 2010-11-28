@@ -2,8 +2,10 @@
 
 use Modern::Perl;
 use Time::Interval;
+use Getopt::Long;
 
-my $boost = @ARGV && ($ARGV[0] eq "--boost" || $ARGV[0] eq "-b") ? 1 : 0;
+my ($boost, $experiment) = ('', '');
+GetOptions('boost=i' => \$boost, 'test=s' => \$experiment);
 
 sub score {
    my ($test, $reflex) = @_;
@@ -17,12 +19,12 @@ sub score {
 }
 
 sub runtest {
-   my ($test, $extraargs, $logfile) = @_;
-   $logfile //= "log/$test.log";
+   my ($test, $conffile, $extraargs) = @_;
+   $conffile //= "conf/$test.json";
    $extraargs //= "";
-   say "Running test: $test $extraargs to $test\.dat > $logfile";
+   say "Running test: $test $extraargs to $test\.dat > log/$test\.log";
    my $start = time();
-   `perl -Ilib src/seed.pl --configfile conf/$test\.json --lexicon results/$test\.dat --stopwords data/smartstop.txt $extraargs >& $logfile`;
+   `perl -Ilib src/seed.pl --configfile $conffile --lexicon results/$test\.dat --stopwords data/smartstop.txt $extraargs >& log/$test.log`;
    my $end = time();
    say "Time of execution: ", parseInterval(seconds => $end - $start,
                                             String => 1);
@@ -33,26 +35,31 @@ sub runtest {
 sub runboosting {
    my ($test) = @_;
    for my $algo(qw/ada inv/) {
-      for my $iter(qw/3 10/) {
+      my $iter = $boost;
+      #for my $iter(qw/3 10/) {
          my $boosttest = $test . "_" . "$algo$iter";
          my $boostalgo = `echo "$algo" | { dd bs=1 count=1 conv=ucase 2>/dev/null; cat; }`;
          chomp $boostalgo;
          my $booster = $boostalgo . "Boost";
          if(-f "results/$boosttest.dat") {
             say "Previously run test: $boosttest";
-            score $boosttest, "results/pcma.dat";
-            continue
+            score $boosttest;
+            next;
          }
-         runtest $test, "--boost-iter $iter --lexicon results/$boosttest\.dat --boost $booster --boost-ref results/gi.dat", "log/$boosttest.log";
-         score $boosttest, "results/pcma.dat";
-      }
+         runtest $boosttest, "conf/$test\.json", "--boost-iter $iter --boost $booster --boost-ref results/gi.dat";
+         #score $boosttest;
+      #}
    }
 }
 
 `mkdir -p log`;
 my @files;
-while(<conf/*.json>) {
-   push @files, $_ if -f $_;
+if($experiment) {
+   push @files, $experiment;
+} else {
+   while(<conf/*.json>) {
+      push @files, $_ if -f $_;
+   }
 }
 
 #for my $f(`ls conf/*.json`) {
