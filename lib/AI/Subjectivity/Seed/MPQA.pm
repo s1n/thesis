@@ -18,6 +18,9 @@ has 'mpqaobj' => (
 sub init {
    my ($self, $filesref) = @_;
    if($filesref->{mpqa}) {
+      if(!defined $self->mpqaobj) {
+         $self->mpqaobj(Text::Lexicon::MPQA->new);
+      }
       $self->mpqaobj->load($filesref->{mpqa});
    } else {
       say "MPQA input data file not specified.";
