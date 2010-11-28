@@ -57,7 +57,8 @@ sub build {
    my $precount = scalar keys %$wordsrc;
 
    #loop over every word in the lexicon
-   while(my ($root, $score) = each(%$wordsrc)) {
+   #while(my ($root, $score) = each(%$wordsrc)) {
+   for my $root(@words) {
       next if !$root || $self->is_stopword($root);
       #say "recursive root word trace: $root";
       my %relatedwords;
@@ -75,6 +76,7 @@ sub build {
       my $rdelta = $self->weigh($lexref->{$root});
       for my $w(keys %relatedwords) {
          next if !$w || $self->is_stopword($w);
+         #say $w;
          $self->_normalize(\$w);
          $newscores{$w}{score} = $lexref->{$w}->{score};
          $newscores{$w}{weight} = $lexref->{$w}->{weight};
